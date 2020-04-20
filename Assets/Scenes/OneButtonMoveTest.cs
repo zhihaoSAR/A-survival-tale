@@ -81,7 +81,7 @@ public class OneButtonMoveTest : MonoBehaviour
         {
             Vector3 dis = objective - transform.position;
             Vector3 step = (dir * speed * Time.deltaTime);
-            Debug.Log(step.magnitude);
+            Debug.Log(dis.magnitude);
             if (step.magnitude > dis.magnitude)
             {
                 Debug.Log("acabado");

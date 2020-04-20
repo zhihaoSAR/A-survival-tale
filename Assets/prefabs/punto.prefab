@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6612823571860989948}
   - component: {fileID: 3864187726744756500}
+  - component: {fileID: 3118944817902042938}
   m_Layer: 0
   m_Name: punto
   m_TagString: Untagged
@@ -80,3 +81,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &3118944817902042938
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19644041900068126}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.75, y: 0.7500002, z: 0.027256146}
+  m_Center: {x: 0, y: -3.5798193e-17, z: -0.013105922}
