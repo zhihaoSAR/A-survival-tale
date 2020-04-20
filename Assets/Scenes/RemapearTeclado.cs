@@ -40,6 +40,7 @@ public class RemapearTeclado : MonoBehaviour
         if(!registrando)
         {
             inputModule.canControl = false;
+            inputModule.pausaNav = true;
             keyObtenido = null;
             UpdateText(botonTextos[boton], " ");
             botonActual = boton;
@@ -87,6 +88,7 @@ public class RemapearTeclado : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(0.1f);
         inputModule.canControl = true;
+        inputModule.pausaNav = false;
     }
 
     void UpdateText(TextMeshProUGUI boton, string keyName)

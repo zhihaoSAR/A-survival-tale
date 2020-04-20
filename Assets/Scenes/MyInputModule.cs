@@ -28,6 +28,8 @@ namespace UnityEngine.EventSystems
         Dictionary<string, KeyCode> keys;
         public bool canControl = true;
 
+        UIControl control;
+
         protected MyInputModule()
         {
         }
@@ -420,13 +422,21 @@ namespace UnityEngine.EventSystems
         {
             if (eventSystem.currentSelectedGameObject == null)
                 return false;
-
+            
             var data = GetBaseEventData();
             if (Input.GetKeyDown(confirmar) || Input.GetKeyDown(A))
+            {
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
+                control.confirmar();
+            }
+                
 
             if (Input.GetKeyDown(cancelar) || Input.GetKeyDown(B))
+            {
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, data, ExecuteEvents.cancelHandler);
+                control.cancelar();
+            }
+                
             return data.used;
         }
 
@@ -636,7 +646,17 @@ namespace UnityEngine.EventSystems
             Controlador c = GameObject.Find("Control").GetComponent<Controlador>();
             c.inputModule = this;
             c.Mappear();
-
+            control = GetComponent<UIControl>();
+        }
+        public bool dosBotonModo
+        {
+            get { return control.dosBotonModo; }
+            set { control.dosBotonModo = value; }
+        }
+        public bool pausaNav
+        {
+            get { return control.pausaNav; }
+            set { control.pausaNav = value;}
         }
     }
 }
