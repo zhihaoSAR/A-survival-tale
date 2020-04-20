@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 201469188}
   - component: {fileID: 201469187}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Volver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,10 +316,10 @@ RectTransform:
   m_Father: {fileID: 2093117628}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -441.6, y: 328.6}
-  m_SizeDelta: {x: 66.7, y: 40.8}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 86, y: -67}
+  m_SizeDelta: {x: 79.7, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &201469187
 MonoBehaviour:
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502996543}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -711,7 +711,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013c3f085768b2b4eabab18b649b2696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navegable: []
+  navegable:
+  - {fileID: 189180245}
+  - {fileID: 332523632}
   image: {fileID: 0}
 --- !u!1 &757761489
 GameObject:
@@ -1304,6 +1306,7 @@ GameObject:
   - component: {fileID: 1220967050}
   - component: {fileID: 1220967049}
   - component: {fileID: 1220967048}
+  - component: {fileID: 1220967051}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1364,6 +1367,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1220967051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220967047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58917a7a59ddf7b4ea95b74b51f68741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvaActual: {fileID: 2093117629}
+  dosBotonModo: 1
+  pausaNav: 0
+  navTime: 1
+  cuadroMarco: {fileID: 0}
 --- !u!1 &1252558658
 GameObject:
   m_ObjectHideFlags: 0
@@ -2072,5 +2092,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navegable:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 201469185}
+  - {fileID: 502996543}
