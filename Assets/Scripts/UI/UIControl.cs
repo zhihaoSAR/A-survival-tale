@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class UIControl : MonoBehaviour
 {
-    public Pagina canvaActual;
+    public Pagina paginaActual;
     public bool dosBotonModo = true;
     [HideInInspector]
     public bool pausaNav = false;
@@ -13,11 +13,13 @@ public class UIControl : MonoBehaviour
     GameObject[] navegacion;
     int navInd;
     public float navTime = 1f;
+    public float tiempoActual = 0;
     MyInputModule inputModulo;
     EventSystem eventSystem;
     public Sprite cuadroMarco;
     Cuadro actual;
     Coroutine navCorotina;
+    public Controlador control;
 
     void Start()
     {
@@ -25,15 +27,16 @@ public class UIControl : MonoBehaviour
         navIndGuardado = new Stack<int>();
         inputModulo = GetComponent<MyInputModule>();
         eventSystem = GetComponent<EventSystem>();
-        if(dosBotonModo)
+        if(dosBotonModo && paginaActual != null)
         {
-            initNavegacion(canvaActual);
+            initNavegacion(paginaActual);
         }
     }
     public void initNavegacion(Pagina p)
     {
         navegacion = p.navegable;
         navInd = 0;
+        tiempoActual = 0;
         actual = null;
         elegirObjeto(navegacion[0]);
         navCorotina = StartCoroutine("Navegacion");
@@ -42,15 +45,20 @@ public class UIControl : MonoBehaviour
     {
         while(dosBotonModo)
         {
-            yield return new WaitForSecondsRealtime(navTime);
-            if(!pausaNav)
+            if(tiempoActual < navTime)
+            {
+                tiempoActual += Time.unscaledDeltaTime;
+            }
+            else if(!pausaNav)
             {
                 if (++navInd == navegacion.Length)
                 {
                     navInd = 0;
                 }
                 elegirObjeto(navegacion[navInd]);
+                tiempoActual = 0;
             }
+            yield return null;
         }
     }
     void elegirObjeto(GameObject o)
@@ -71,7 +79,6 @@ public class UIControl : MonoBehaviour
 
     public void confirmar()
     {
-        Debug.Log("11111111");
         if (actual != null)
         {
             apilarNavegacion(actual.navegable);
@@ -88,7 +95,6 @@ public class UIControl : MonoBehaviour
     }
     public void apilarNavegacion(GameObject[] navegable)
     {
-        Debug.Log("2222222");
         navGuardado.Push(navegacion);
         navIndGuardado.Push(navInd);
         navegacion = navegable;

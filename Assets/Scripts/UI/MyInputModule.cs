@@ -470,7 +470,7 @@ namespace UnityEngine.EventSystems
         public bool SendMoveEventToSelectedObject()
         {
             float time = Time.unscaledTime;
-
+            
             Vector2 movement = GetMove();
 
             if (Mathf.Approximately(movement.x, 0f) && Mathf.Approximately(movement.y, 0f))
@@ -478,7 +478,7 @@ namespace UnityEngine.EventSystems
                 m_ConsecutiveMoveCount = 0;
                 return false;
             }
-
+            control.tiempoActual = 0;
             bool similarDir = (Vector2.Dot(movement, m_LastMoveVector) > 0);
 
             // If direction didn't change at least 90 degrees, wait for delay before allowing consequtive event.
@@ -643,9 +643,6 @@ namespace UnityEngine.EventSystems
         protected override void Start()
         {
             base.Start();
-            Controlador c = GameObject.Find("Control").GetComponent<Controlador>();
-            c.inputModule = this;
-            c.Mappear();
             control = GetComponent<UIControl>();
         }
         public bool dosBotonModo
