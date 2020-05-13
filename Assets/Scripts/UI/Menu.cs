@@ -13,6 +13,12 @@ public class Menu : MonoBehaviour
     [SerializeField]
     static float tiempoTransicion = 0.3f;
     public Controlador control;
+    public DatosSistema datos;
+
+    void Start()
+    {
+        datos = control.datosSistema;
+    }
 
     public IEnumerator Transcicion(RectTransform entrante,RectTransform saliente,bool izqAder)
     {
@@ -44,6 +50,8 @@ public class Menu : MonoBehaviour
         saliente.anchoredPosition = salienteOri + movimiento;
         control.pausaControl(false);
     }
+
+    
 
 
 }

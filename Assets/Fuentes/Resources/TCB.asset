@@ -151,9 +151,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: TCB SDF
+  m_Name: TCB
   m_EditorClassIdentifier: 
-  hashCode: -1355197372
+  hashCode: 89397
   material: {fileID: -111295746313266130}
   materialHashCode: 279035983
   m_Version: 1.1.0

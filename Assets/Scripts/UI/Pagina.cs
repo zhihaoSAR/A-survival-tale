@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pagina : MonoBehaviour
+public abstract class Pagina : MonoBehaviour
 {
     public GameObject[] navegable;
 
+    public abstract void inicializar(Controlador c);
 }

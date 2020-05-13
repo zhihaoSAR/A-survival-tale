@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: TCM SDF
+  m_Name: TCM
   m_EditorClassIdentifier: 
-  hashCode: -1351574005
+  hashCode: 89402
   material: {fileID: 7295816633022445516}
   materialHashCode: -123991136
   m_Version: 1.1.0

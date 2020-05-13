@@ -64,14 +64,13 @@ public class UIControl : MonoBehaviour
     void elegirObjeto(GameObject o)
     {
         Cuadro cuadro;
-        if(o.TryGetComponent<Cuadro>(out cuadro))
-        {
-            cuadro.image.enabled = true;
-            
-        }
         if (actual != null)
         {
             actual.image.enabled = false;
+        }
+        if (o.TryGetComponent<Cuadro>(out cuadro))
+        {
+            cuadro.image.enabled = true;
         }
         actual = cuadro;
         eventSystem.SetSelectedGameObject(o);
