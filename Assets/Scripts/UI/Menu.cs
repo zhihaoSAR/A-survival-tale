@@ -29,7 +29,10 @@ public class Menu : MonoBehaviour
             dir = 1;
         Vector2 dst = new Vector2( saliente.rect.width,0);
         dst.y = 0f;
-        control.pausaControl(true);
+        bool antes_uicanControl = control.uiCanControl;
+        bool antes_canNavegar = control.canNavegar;
+        control.uiCanControl = false ;
+        control.canNavegar = false;
         entrante.anchoredPosition = saliente.anchoredPosition + dst*dir;
         float now = 0;
         Vector2 movimiento;
@@ -48,7 +51,8 @@ public class Menu : MonoBehaviour
         movimiento = dst * dir ;
         entrante.anchoredPosition = entranteOri + movimiento;
         saliente.anchoredPosition = salienteOri + movimiento;
-        control.pausaControl(false);
+        control.uiCanControl = antes_uicanControl;
+        control.canNavegar = antes_canNavegar;
     }
 
     

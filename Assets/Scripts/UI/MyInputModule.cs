@@ -655,5 +655,6 @@ namespace UnityEngine.EventSystems
             get { return control.pausaNav; }
             set { control.pausaNav = value;}
         }
+        
     }
 }
