@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Controlador : MonoBehaviour
 {
-
-
     public static Dictionary<string, KeyCode> keys;
     public MyInputModule inputModule;
     public DatosSistema datosSistema;
     public UIControl uicontrol;
     static float tiempoTransicion = 0.15f;
+    public EventSystem eventSystem;
 
-    public Canvas canvasActual;
+    public Menu canvasActual;
+    TMP_FontAsset tcm,openDyslexic;
+    [SerializeField]
+    public AudioMixer audioMixer;
     //----------elegir color--------------
     public RectTransform rect_color;
     public Texture2D tex_color;
@@ -28,19 +32,28 @@ public class Controlador : MonoBehaviour
     Vector2 tamanyoColor;
     bool persigueRaton = false;
     int velocidad = 100;
-
+    public bool canControl = true;
+    public Image I_registrando;
+    Action<Color> acabado;
+    //--------------salir-------------
+    bool cerrandoJuego = false;
+    public RectTransform panelSalir;
+    public TextMeshProUGUI[] salirTextos;
+    public GameObject[] salirNav;
+    bool cerrar = false;
 
     void Start()
     {
         SistemaGuardar.cargarDatosSistema(out datosSistema);
         keys = datosSistema.keys;
         Mappear();
-        
+        Application.wantsToQuit += cerrarJuego;
+        canvasActual.abrirMenu(this, 0);
     }
     void Update()
     {
         
-        if(elegiendoColor)
+        if(elegiendoColor && canControl)
         {
 
             Vector2 pos;
@@ -56,6 +69,7 @@ public class Controlador : MonoBehaviour
             {
 
                 persigueRaton = false;
+                registraControl();
             }
             if (persigueRaton)
             {
@@ -96,10 +110,30 @@ public class Controlador : MonoBehaviour
                 }
             }
             MoverMarca(pos);
+            if(Input.GetKeyDown(keys["confirmar"]) || Input.GetKeyDown(keys["A"]))
+            {
+                cerrarElegirColor(true);
+            }
+            else if (Input.GetKeyDown(keys["cancelar"]) || Input.GetKeyDown(keys["B"]) || Input.GetMouseButtonUp(1))
+            {
+                cerrarElegirColor(false);
+            }
         }
     }
 
-    
+    public void cerrarElegirColor(bool confirmar)
+    {
+        registraControl();
+        if(confirmar)
+        {
+            acabado(preview.color);
+        }
+        panelElegirColor.gameObject.SetActive(false);
+        panelElegirColor.parent = transform;
+        canNavegar = true;
+        uiCanControl = true;
+        elegiendoColor = false;
+    }
 
     public void Mappear()
     {
@@ -155,7 +189,7 @@ public class Controlador : MonoBehaviour
     //1:ventana 0:completa
     public void PantallaCompleta(int modo)
     {
-        if (modo == 1)
+        if (modo == 0)
         {
             Screen.fullScreen = false;
         }
@@ -173,6 +207,8 @@ public class Controlador : MonoBehaviour
         bool antes_canNavegar = canNavegar;
         uiCanControl = false;
         canNavegar = false;
+        rect.anchoredPosition = Vector2.zero;
+        yield return null;
         while(now < tiempoTransicion)
         {
             now += Time.unscaledDeltaTime;
@@ -183,21 +219,21 @@ public class Controlador : MonoBehaviour
         uiCanControl = antes_uiCanControl;
         canNavegar = antes_canNavegar;
     }
-
-    //public void ElegirColor(Vector2 pos,Action<Color> acabado)
-    public void ElegirColor()
+    public void ElegirColor(Vector2 pos,Action<Color> acabado)
     {
         canNavegar = false;
         uiCanControl = false;
         panelElegirColor.gameObject.SetActive(true);
         panelElegirColor.parent = canvasActual.transform;
         panelElegirColor.localScale = Vector3.zero;
-        rect_color.position = new Vector2(200,400);
+        rect_color.anchoredPosition = pos;
+        Debug.Log(pos);
         StartCoroutine("PopUp",panelElegirColor);
         elegiendoColor = true ;
         mainCamera = Camera.main;
+        MoverMarca(Vector2.zero);
         tamanyoColor = new Vector2(tex_color.width,tex_color.height);
-        Debug.Log(tamanyoColor);
+        this.acabado = acabado;
     }
     void MoverMarca(Vector2 pos)
     {
@@ -206,6 +242,172 @@ public class Controlador : MonoBehaviour
         pos.y = Mathf.Clamp(pos.y, 0, tamanyoColor.y);
         marca.rectTransform.localPosition = pos;
         preview.color = tex_color.GetPixel((int)pos.x,(int)pos.y);
+        float grayscale = 1- preview.color.grayscale;
+        marca.color = new Color(grayscale, grayscale, grayscale);
+    }
+    public TMP_FontAsset getFont(int tipo)
+    {
+        if(tipo == 0)
+        {
+            if(tcm != null)
+            {
+                return tcm;
+            }
+            else
+            {
+                tcm = Resources.Load<TMP_FontAsset>("TCM");
+                return tcm;
+            }
+        }
+        else
+        {
+            if(openDyslexic != null)
+            {
+                return openDyslexic;
+            }
+            else
+            {
+                openDyslexic = Resources.Load<TMP_FontAsset>("OpenDyslexic");
+                return openDyslexic;
+            }
+        }
+        
     }
 
+    public void CambiarModoSonido(int modo)
+    {
+        if(modo == 0)
+        {
+            AudioSettings.speakerMode = AudioSpeakerMode.Stereo;
+        }
+        else
+        {
+            AudioSettings.speakerMode = AudioSpeakerMode.Mono;
+        }
+
+    }
+    //0:ambiente 1: peligro 2:interaccion 3:interfaz 4:paso
+    public void ModificarVolumen(int tipo,float vol)
+    {
+        float dB = (vol / 100 * 80) - 80;
+        Debug.Log("soy controlador volumen es" + vol);
+        switch(tipo)
+        {
+            case 0:
+                audioMixer.SetFloat("AmbienteVol", dB);
+                datosSistema.ambienteVol = vol;
+                break;
+            case 1:
+                audioMixer.SetFloat("PeligroVol", dB);
+                datosSistema.peligroVol = vol;
+                break;
+            case 2:
+                audioMixer.SetFloat("InteraccionVol", dB);
+                datosSistema.interaccionVol = vol;
+                break;
+            case 3:
+                audioMixer.SetFloat("InterfazVol", dB);
+                datosSistema.interfazVol = vol;
+                break;
+            case 4:
+                audioMixer.SetFloat("PasoVol", dB);
+                datosSistema.pasoVol = vol;
+                break;
+        }
+    }
+
+    public void CambiarControl(int tipo)
+    {
+        datosSistema.tipoControl = tipo;
+        if(tipo == 2)
+        {
+            uicontrol.dosBotonModo = true;
+            GameObject[] nav;
+            if(canvasActual.getActualNavegable(out nav))
+            {
+                uicontrol.initNavegacion(nav);
+            }
+        }
+        else
+        {
+            uicontrol.dosBotonModo = false;
+            uicontrol.LimpiarNav();
+        }
+    }
+
+    public void registraControl()
+    {
+        if (datosSistema.inputTime == 0 || !canControl)
+            return;
+
+        StartCoroutine("registrandoControl");
+        
+    }
+    IEnumerator registrandoControl()
+    {
+        canControl = false;
+        float now = 0;
+        I_registrando.gameObject.SetActive(true);
+        I_registrando.transform.parent = canvasActual.transform;
+        while(now <= datosSistema.inputTime)
+        {
+            now += Time.unscaledDeltaTime;
+            I_registrando. fillAmount = now / datosSistema.inputTime;
+            yield return null;
+        }
+        I_registrando.rectTransform.parent = this.transform;
+        I_registrando.gameObject.SetActive(false);
+        canControl = true;
+    }
+
+    public bool cerrarJuego()
+    {
+        if (cerrar)
+            return true;
+
+        if (cerrandoJuego)
+            return false;
+        
+        cerrandoJuego = true;
+        TMP_FontAsset fuente = getFont(datosSistema.tipoFuente);
+
+        panelSalir.gameObject.SetActive(true);
+        foreach(TextMeshProUGUI text in salirTextos)
+        {
+            text.font = fuente;
+        }
+        uicontrol.apilarNavegacion(salirNav);
+        panelSalir.parent = canvasActual.transform;
+        StartCoroutine(PopUp(panelSalir));
+        return false;
+    }
+    public void cerrarJuego(bool cerrar)
+    {
+        if(cerrar)
+        {
+            #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                this.cerrar = true;
+                Application.Quit();
+            #endif
+        }
+        else
+        {
+            panelSalir.parent = transform;
+            panelSalir.gameObject.SetActive(false);
+            cerrandoJuego = false;
+        }
+    }
+
+    public void cancelar()
+    {
+        if(uiCanControl)
+            canvasActual.cancelar();
+    }
+
+    public void iniNavegacion(GameObject[] nav)
+    {
+        uicontrol.initNavegacion(nav);
+    }
 }

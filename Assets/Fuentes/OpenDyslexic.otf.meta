@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 1cb218f18726516488dd7cf20c4ed38b
+guid: e35171d6ab3d24a4b80ed9fa34fdc965
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
-  fontSize: 60
+  fontSize: 16
   forceTextureCase: -2
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Tw Cen MT
+  fontName: OpenDyslexic
   fontNames:
-  - Tw Cen MT
+  - OpenDyslexic
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

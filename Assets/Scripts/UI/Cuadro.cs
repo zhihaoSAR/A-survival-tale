@@ -1,16 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Cuadro : MonoBehaviour
+public class Cuadro : MonoBehaviour,ISelectHandler,IDeselectHandler
 {
     public GameObject[] navegable;
-    [HideInInspector]
+    [SerializeField]
+    public RectTransform flecha;
+    [SerializeField]
+    public RectTransform posicion;
+    [SerializeField]
     public Image image;
-    void Start()
+    
+
+    public void OnSelect(BaseEventData eventData)
     {
-        image = GetComponent<Image>();
+        flecha.gameObject.SetActive(true);
+        flecha.position = posicion.position;
+    }
+    public void OnDeselect(BaseEventData data)
+    {
+        flecha.gameObject.SetActive(false);
     }
 
 

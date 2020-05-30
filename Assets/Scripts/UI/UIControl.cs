@@ -10,36 +10,50 @@ public class UIControl : MonoBehaviour
     public bool pausaNav = false;
     Stack<int> navIndGuardado;
     Stack<GameObject[]> navGuardado;
+    Stack<Cuadro> cuadrosGuardado;
     GameObject[] navegacion;
     int navInd;
     public float navTime = 1f;
     public float tiempoActual = 0;
     MyInputModule inputModulo;
     EventSystem eventSystem;
-    public Sprite cuadroMarco;
     Cuadro actual;
     Coroutine navCorotina;
     public Controlador control;
 
     void Start()
     {
+        cuadrosGuardado = new Stack<Cuadro>();
         navGuardado = new Stack<GameObject[]>();
         navIndGuardado = new Stack<int>();
         inputModulo = GetComponent<MyInputModule>();
         eventSystem = GetComponent<EventSystem>();
         if(dosBotonModo && paginaActual != null)
         {
-            initNavegacion(paginaActual);
+            //initNavegacion(paginaActual);
         }
     }
-    public void initNavegacion(Pagina p)
+    public void initNavegacion(GameObject[] navegable)
     {
-        navegacion = p.navegable;
+        LimpiarNav();
+        navegacion = navegable;
         navInd = 0;
         tiempoActual = 0;
+        if(actual!= null)
+        {
+            actual.image.enabled = false;
+        }
         actual = null;
-        elegirObjeto(navegacion[0]);
+        eventSystem.SetSelectedGameObject(navegacion[0]);
+        if (navCorotina != null)
+            StopCoroutine(navCorotina);
         navCorotina = StartCoroutine("Navegacion");
+    }
+    public void LimpiarNav()
+    {
+        cuadrosGuardado.Clear();
+        navIndGuardado.Clear();
+        navGuardado.Clear();
     }
     IEnumerator Navegacion()
     {
@@ -55,12 +69,13 @@ public class UIControl : MonoBehaviour
                 {
                     navInd = 0;
                 }
-                elegirObjeto(navegacion[navInd]);
+                eventSystem.SetSelectedGameObject(navegacion[navInd]);
                 tiempoActual = 0;
             }
             yield return null;
         }
     }
+    /*
     void elegirObjeto(GameObject o)
     {
         Cuadro cuadro;
@@ -75,21 +90,46 @@ public class UIControl : MonoBehaviour
         actual = cuadro;
         eventSystem.SetSelectedGameObject(o);
     }
-
+    */
     public void confirmar()
     {
-        if (actual != null)
+        if (!dosBotonModo)
+            return;
+        Cuadro cuadro;
+        if ( navegacion[navInd].TryGetComponent<Cuadro>(out cuadro))
         {
+            cuadro.image.enabled = true;
+            if(actual != null)
+            {
+                actual.image.enabled = false;
+                cuadrosGuardado.Push(actual);
+            }
+            actual = cuadro;
             apilarNavegacion(actual.navegable);
         }
     }
     public void cancelar()
     {
-        if(navGuardado.Count >0)
+        if (!dosBotonModo || !control.uiCanControl)
+            return;
+        if (navGuardado.Count >0)
         {
             navegacion = navGuardado.Pop();
             navInd = navIndGuardado.Pop();
-            elegirObjeto(navegacion[navInd]);
+            eventSystem.SetSelectedGameObject(navegacion[navInd]);
+        }
+        if(actual != null)
+        {
+            actual.image.enabled = false;
+        }
+        if(cuadrosGuardado.Count>0)
+        {
+            actual = cuadrosGuardado.Pop();
+            actual.image.enabled = true;
+        }
+        else
+        {
+            actual = null;
         }
     }
     public void apilarNavegacion(GameObject[] navegable)
@@ -98,9 +138,10 @@ public class UIControl : MonoBehaviour
         navIndGuardado.Push(navInd);
         navegacion = navegable;
         navInd = 0;
-        StopCoroutine(navCorotina);
+        if(navCorotina!=null)
+            StopCoroutine(navCorotina);
         navCorotina = StartCoroutine("Navegacion");
-        elegirObjeto(navegacion[navInd]);
+        eventSystem.SetSelectedGameObject(navegacion[navInd]);
 
     }
 }

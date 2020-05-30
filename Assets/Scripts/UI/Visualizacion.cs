@@ -8,10 +8,9 @@ using UnityEngine.UI;
 public class Visualizacion : Pagina
 {
     //---------------elementos para inicializar----------
-    public TextMeshProUGUI Text_tituloGrande;
-    public TextMeshProUGUI[] Text_tituloOpciones;
-    public TextMeshProUGUI[] Text_botones;
-    public RectTransform[] Rect_botones;
+    public TextMeshProUGUI[] Text_textos;
+    public RectTransform[] Rect_Opciones;
+    public RectTransform[] Rect_fondos;
     public Image[] I_cursoresPrev;
     public Toggle[] T_PantallaCompleta;
     public Toggle[] T_TamanyoLetra;
@@ -19,19 +18,17 @@ public class Visualizacion : Pagina
     public Toggle[] T_CursorTipo;
     public Toggle[] T_CursorTamanyo;
     //------------------publico-------------------
-    //[HideInInspector]
-    public Controlador control;
     
 
     //--------------------privada------------------
     int tipoFuente = 0;
-    int tamanyoFuente = 1;
+    int tamanyoFuente = 0;
     int tipoCursor = 0;
     int tamanyoCursor = 0;
-    
-    public override void inicializar(Controlador c)
+
+    public override void inicializar(Controlador c, Configuracion m)
     {
-        control = c;
+        base.inicializar(c, m);
         DatosSistema datos = control.datosSistema;
         cambiarFuente(datos.tipoFuente);
         cambiarTamanyo(datos.tamanyoFuente);
@@ -50,39 +47,36 @@ public class Visualizacion : Pagina
         switch(tamanyo)
         {
             case 0:
-                Text_tituloGrande.fontSize = 26;
-                proporcion = new Vector2(0.8f, 0.8f);
-                foreach(RectTransform transform in Rect_botones)
+                proporcion = Vector2.one;
+                foreach(RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
-                foreach(TextMeshProUGUI text in Text_tituloOpciones)
+                foreach (RectTransform transform in Rect_fondos)
                 {
-                    text.fontSize = 23;
+                    transform.localScale =new Vector2(proporcion.x,1);
                 }
                 break;
             case 1:
-                Text_tituloGrande.fontSize = 32;
-                proporcion = Vector2.one;
-                foreach (RectTransform transform in Rect_botones)
+                proporcion = new Vector2(1.25f,1.25f);
+                foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
-                foreach (TextMeshProUGUI text in Text_tituloOpciones)
+                foreach (RectTransform transform in Rect_fondos)
                 {
-                    text.fontSize = 28;
+                    transform.localScale = new Vector2(proporcion.x, 1);
                 }
                 break;
             case 2:
-                Text_tituloGrande.fontSize = 39;
-                proporcion = new Vector2(1.2f,1.2f);
-                foreach (RectTransform transform in Rect_botones)
+                proporcion = new Vector2(1.5f,1.5f);
+                foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
-                foreach (TextMeshProUGUI text in Text_tituloOpciones)
+                foreach (RectTransform transform in Rect_fondos)
                 {
-                    text.fontSize = 34;
+                    transform.localScale = new Vector2(proporcion.x, 1);
                 }
                 break;
         }
@@ -94,21 +88,8 @@ public class Visualizacion : Pagina
     {
         if (tipoFuente == tipo)
             return;
-        TMP_FontAsset fuente;
-        if(tipo == 0)
-        {
-            fuente = Resources.Load<TMP_FontAsset>("TCM");
-        }
-        else
-        {
-            fuente = Resources.Load<TMP_FontAsset>("TCB");
-        }
-        Text_tituloGrande.font = fuente;
-        foreach(TextMeshProUGUI text in Text_tituloOpciones)
-        {
-            text.font = fuente;
-        }
-        foreach (TextMeshProUGUI text in Text_botones)
+        TMP_FontAsset fuente =control.getFont(tipo);
+        foreach(TextMeshProUGUI text in Text_textos)
         {
             text.font = fuente;
         }

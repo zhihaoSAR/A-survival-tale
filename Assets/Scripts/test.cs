@@ -9,23 +9,31 @@ public class test : MonoBehaviour
     public Texture2D cursorped;
     public Texture2D cursormed;
     public Texture2D cursorgran;
+    public Controlador c;
+    public Pagina p;
+    public Configuracion conf;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Screen.fullScreen = !Screen.fullScreen;
+            Application.Quit();
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            Cursor.SetCursor(cursorped, new Vector2(4,2), CursorMode.ForceSoftware);
+            // c.uicontrol.initNavegacion(c.uicontrol.paginaActual);
+            Debug.Log("start");
+            StartCoroutine(prueba());
+
         }
-        if (Input.GetKeyDown(KeyCode.S))
+    }
+    IEnumerator prueba()
+    {
+        int x = 0;
+        Debug.Log(x);
+        while(x < 5)
         {
-            Cursor.SetCursor(cursormed, new Vector2(6, 4), CursorMode.ForceSoftware);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            Cursor.SetCursor(cursorgran, new Vector2(8, 6), CursorMode.ForceSoftware);
+            Debug.Log(++x);
+            yield return null;
         }
     }
 }

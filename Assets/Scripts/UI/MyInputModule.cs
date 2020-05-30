@@ -25,10 +25,10 @@ namespace UnityEngine.EventSystems
 
         private PointerEventData m_InputPointerEvent;
 
-        Dictionary<string, KeyCode> keys;
         public bool canControl = true;
 
-        UIControl control;
+        UIControl uicontrol;
+        public Controlador control;
 
         protected MyInputModule()
         {
@@ -252,17 +252,18 @@ namespace UnityEngine.EventSystems
             
             if (!eventSystem.isFocused && ShouldIgnoreEventsOnNoFocus())
                 return;
-            if (!canControl)
-                return;
+            
             bool usedEvent = SendUpdateEventToSelectedObject();
 
             // case 1004066 - touch / mouse events should be processed before navigation events in case
             // they change the current selected gameobject and the submit button is a touch / mouse button.
-
+            if (!control.canControl)
+                return;
             // touch needs to take precedence because of the mouse emulation layer
             if (!ProcessTouchEvents() && input.mousePresent)
                 ProcessMouseEvent();
-
+            if (!canControl )
+                return;
             if (eventSystem.sendNavigationEvents)
             {
                 if (!usedEvent)
@@ -271,6 +272,7 @@ namespace UnityEngine.EventSystems
                 if (!usedEvent)
                     SendSubmitEventToSelectedObject();
             }
+            
             
             
         }
@@ -427,16 +429,19 @@ namespace UnityEngine.EventSystems
             if (Input.GetKeyDown(confirmar) || Input.GetKeyDown(A))
             {
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
-                control.confirmar();
+                uicontrol.confirmar();
+                control.registraControl();
             }
                 
 
             if (Input.GetKeyDown(cancelar) || Input.GetKeyDown(B))
             {
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, data, ExecuteEvents.cancelHandler);
+                uicontrol.cancelar();
                 control.cancelar();
+                control.registraControl();
             }
-                
+            
             return data.used;
         }
 
@@ -478,7 +483,13 @@ namespace UnityEngine.EventSystems
                 m_ConsecutiveMoveCount = 0;
                 return false;
             }
-            control.tiempoActual = 0;
+            uicontrol.tiempoActual = 0;
+            control.registraControl();
+            if(eventSystem.currentSelectedGameObject == null)
+            {
+                eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
+                return false;
+            }
             bool similarDir = (Vector2.Dot(movement, m_LastMoveVector) > 0);
 
             // If direction didn't change at least 90 degrees, wait for delay before allowing consequtive event.
@@ -626,12 +637,19 @@ namespace UnityEngine.EventSystems
                     ExecuteEvents.Execute(pointerEvent.pointerDrag, pointerEvent, ExecuteEvents.initializePotentialDrag);
 
                 m_InputPointerEvent = pointerEvent;
+                
             }
 
             // PointerUp notification
             if (data.ReleasedThisFrame())
             {
                 ReleaseMouse(pointerEvent, currentOverGo);
+                if(data.buttonData.button == PointerEventData.InputButton.Right)
+                {
+                    uicontrol.cancelar();
+                    control.cancelar();
+                }
+                control.registraControl();
             }
         }
 
@@ -643,17 +661,30 @@ namespace UnityEngine.EventSystems
         protected override void Start()
         {
             base.Start();
-            control = GetComponent<UIControl>();
+            uicontrol = GetComponent<UIControl>();
         }
         public bool dosBotonModo
         {
-            get { return control.dosBotonModo; }
-            set { control.dosBotonModo = value; }
+            get { return uicontrol.dosBotonModo; }
+            set { uicontrol.dosBotonModo = value; }
         }
         public bool pausaNav
         {
-            get { return control.pausaNav; }
-            set { control.pausaNav = value;}
+            get { return uicontrol.pausaNav; }
+            set { uicontrol.pausaNav = value;}
+        }
+
+        public void Mappear(Dictionary<string,KeyCode> keys)
+        {
+            arriba = keys["arriba"];
+            abajo = keys["abajo"];
+            izquirda = keys["izquierda"];
+            derecha = keys["derecha"];
+            confirmar = keys["confirmar"];
+            cancelar = keys["cancelar"];
+            A = keys["A"];
+            B = keys["B"];
+
         }
         
     }

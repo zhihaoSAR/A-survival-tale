@@ -5,6 +5,15 @@ using UnityEngine;
 public abstract class Pagina : MonoBehaviour
 {
     public GameObject[] navegable;
+    [HideInInspector]
+    public Controlador control;
+    [HideInInspector]
+    public Configuracion menu;
+    public GameObject primeroElegido;
 
-    public abstract void inicializar(Controlador c);
+    public virtual void inicializar(Controlador c,Configuracion m)
+    {
+        control = c;
+        menu = m;
+    }
 }

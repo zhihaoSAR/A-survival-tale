@@ -163,7 +163,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c4dc17573ffdd040833a999100fb68b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputModule: {fileID: 0}
+  inputModule: {fileID: 1220967048}
+  datosSistema:
+    hash: 0
+    tamanyoFuente: 0
+    tipoFuente: 0
+    tipoCursor: 0
+    tamanyoCursor: 0
+    pantallaCompleta: 0
+    activarNpcAnim: 1
+    activarPeligroAnim: 1
+    activarDecoracionAnim: 1
+    audioModo: 0
+    ambienteVol: 0
+    peligroVol: 0
+    interaccionVol: 0
+    interfazVol: 0
+    pasoVol: 0
+    invencibilidad: 0
+    tipoControl: 0
+    inputTime: 0
+    velocidad: 1
+  uicontrol: {fileID: 1220967051}
+  canvasActual: {fileID: 0}
+  audioMixer: {fileID: 0}
+  rect_color: {fileID: 0}
+  tex_color: {fileID: 0}
+  marca: {fileID: 0}
+  panelElegirColor: {fileID: 0}
+  preview: {fileID: 0}
+  canControl: 1
+  I_registrando: {fileID: 0}
 --- !u!1 &189180245
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,6 +744,8 @@ MonoBehaviour:
   navegable:
   - {fileID: 189180245}
   - {fileID: 332523632}
+  flecha: {fileID: 0}
+  posicion: {fileID: 0}
   image: {fileID: 0}
 --- !u!1 &757761489
 GameObject:
@@ -1327,6 +1359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canControl: 1
+  control: {fileID: 0}
   arriba: 119
   abajo: 115
   izquirda: 97
@@ -1379,11 +1412,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58917a7a59ddf7b4ea95b74b51f68741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvaActual: {fileID: 2093117629}
+  paginaActual: {fileID: 0}
   dosBotonModo: 1
   pausaNav: 0
   navTime: 1
-  cuadroMarco: {fileID: 0}
+  tiempoActual: 0
+  control: {fileID: 128601366}
 --- !u!1 &1252558658
 GameObject:
   m_ObjectHideFlags: 0
