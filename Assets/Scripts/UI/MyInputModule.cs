@@ -510,7 +510,19 @@ namespace UnityEngine.EventSystems
 
             if (axisEventData.moveDir != MoveDirection.None)
             {
+                GameObject last = eventSystem.currentSelectedGameObject;
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, axisEventData, ExecuteEvents.moveHandler);
+                if (!last.Equals(eventSystem.currentSelectedGameObject))
+                {
+                    if(movement.x != 0)
+                    {
+                        control.S_cambioH();
+                    }
+                    else
+                    {
+                        control.S_cambioV();
+                    }
+                }
                 if (!similarDir)
                     m_ConsecutiveMoveCount = 0;
                 m_ConsecutiveMoveCount++;

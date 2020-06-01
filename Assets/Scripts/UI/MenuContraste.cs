@@ -110,11 +110,13 @@ public class MenuContraste : Pagina
         C_Fondo.color = datos.color_fondo;
         C_Interactivo.color = datos.color_interactivo;
         C_Personaje.color = datos.color_personaje;
+        control.S_confirmarToggle();
     }
     public void cambiarFondoColor(float opacidad)
     {
         control.datosSistema.color_fondo.a = opacidad;
         actualizarOpacidad();
+        control.S_confirmarToggle();
     }
     public void cambiarFondoColor(Color color)
     {
@@ -125,7 +127,7 @@ public class MenuContraste : Pagina
     public void cambiarFondoColor()
     {
         control.ElegirColor(posFondo.position, new System.Action<Color>(cambiarFondoColor));
-
+        control.S_confirmarToggle();
     }
     public void cambiarPersonajeColor(float opacidad)
     {
@@ -141,12 +143,13 @@ public class MenuContraste : Pagina
     public void cambiarPersonajeColor()
     {
         control.ElegirColor(posPersonaje.position, new System.Action<Color>(cambiarPersonajeColor));
-
+        control.S_confirmarToggle();
     }
     public void cambiarInteractivoColor(float opacidad)
     {
         control.datosSistema.color_interactivo.a = opacidad;
         actualizarOpacidad();
+        control.S_confirmarToggle();
     }
     public void cambiarInteractivoColor(Color color)
     {
@@ -157,7 +160,7 @@ public class MenuContraste : Pagina
     public void cambiarInteractivoColor()
     {
         control.ElegirColor(posInteractivo.position, new System.Action<Color>(cambiarInteractivoColor));
-
+        control.S_confirmarToggle();
     }
     
     

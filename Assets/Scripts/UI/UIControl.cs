@@ -70,6 +70,14 @@ public class UIControl : MonoBehaviour
                     navInd = 0;
                 }
                 eventSystem.SetSelectedGameObject(navegacion[navInd]);
+                if(navGuardado.Count>0)
+                {
+                    control.S_cambioH();
+                }
+                else
+                {
+                    control.S_cambioV();
+                }
                 tiempoActual = 0;
             }
             yield return null;
@@ -119,6 +127,7 @@ public class UIControl : MonoBehaviour
             navInd = navIndGuardado.Pop();
             eventSystem.SetSelectedGameObject(navegacion[navInd]);
             quedaNav = true;
+            control.S_salirBloque();
         }
         if(actual != null)
         {

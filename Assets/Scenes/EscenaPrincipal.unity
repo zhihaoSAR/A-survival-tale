@@ -11356,7 +11356,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553966913}
-        m_MethodName: cambiarTamanyo
+        m_MethodName: cambiarTamanyoConSonido
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -23461,7 +23461,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553966913}
-        m_MethodName: cambiarTamanyo
+        m_MethodName: cambiarTamanyoConSonido
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28204,7 +28204,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553966913}
-        m_MethodName: cambiarTamanyo
+        m_MethodName: cambiarTamanyoConSonido
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28499,7 +28499,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553966913}
-        m_MethodName: cambiarFuente
+        m_MethodName: cambiarFuenteConSonido
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -33540,6 +33540,8 @@ GameObject:
   - component: {fileID: 1445293925}
   - component: {fileID: 1445293924}
   - component: {fileID: 1445293926}
+  - component: {fileID: 1445293928}
+  - component: {fileID: 1445293927}
   m_Layer: 0
   m_Name: Control
   m_TagString: Untagged
@@ -33586,6 +33588,7 @@ MonoBehaviour:
     finalizadoConf: 0
   uicontrol: {fileID: 323341252}
   eventSystem: {fileID: 323341250}
+  uisonido: {fileID: 1445293927}
   canvasActual: {fileID: 209955037}
   audioMixer: {fileID: 24100000, guid: 44ae4544c08367346b6c90c94dc8f9d4, type: 2}
   rect_color: {fileID: 1108750895}
@@ -33640,6 +33643,126 @@ MonoBehaviour:
   c: {fileID: 1445293924}
   p: {fileID: 790636496}
   conf: {fileID: 209955037}
+--- !u!114 &1445293927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445293923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f400cd345dfedc4dbc7876e0306f8ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jugar: {fileID: 8300000, guid: 08ac3f5be12a0824e95c56e0b44200f8, type: 3}
+  cambioVMenuPrincipal: {fileID: 8300000, guid: 563642f14e2dbf94bbafa185773d4fb3,
+    type: 3}
+  cambioVGeneral: {fileID: 8300000, guid: 817f9a1b521d2f543804413a35ce3af2, type: 3}
+  cambioH: {fileID: 8300000, guid: 485947a39e0162a4aabd5e4efbe1e746, type: 3}
+  confirmarToggle: {fileID: 8300000, guid: 1ed63ed3ae841b54cad62a648db47f6e, type: 3}
+  cambioPagina: {fileID: 8300000, guid: 3698e1ad5c6567346b1cb450bbd47198, type: 3}
+  configuracionfondo: {fileID: 8300000, guid: b2e3f2fc4b21c0a4fbc95ff09149db0e, type: 3}
+  salirBloque: {fileID: 8300000, guid: 94f2b6ad875ea8c4ea2d2f3ad6f11bcf, type: 3}
+  cambioV: {fileID: 8300000, guid: 3698e1ad5c6567346b1cb450bbd47198, type: 3}
+  source: {fileID: 1445293928}
+--- !u!82 &1445293928
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445293923}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -6122744521332166260, guid: 44ae4544c08367346b6c90c94dc8f9d4,
+    type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1449013985
 GameObject:
   m_ObjectHideFlags: 0
@@ -37061,7 +37184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1553966910
 RectTransform:
   m_ObjectHideFlags: 0
@@ -42511,7 +42634,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1553966913}
-        m_MethodName: cambiarFuente
+        m_MethodName: cambiarFuenteConSonido
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

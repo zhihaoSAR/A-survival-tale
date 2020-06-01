@@ -100,14 +100,17 @@ public class MenuControl : Pagina
     public void CambiarControl(int tipo)
     {
         control.CambiarControl(tipo);
+        control.S_confirmarToggle();
     }
     public void CambiarVelocidad(int vel)
     {
         control.datosSistema.velocidad = vel;
+        control.S_confirmarToggle();
     }
     public void CambiarTiempoRegistro(float tiempo)
     {
         control.datosSistema.inputTime = tiempo;
+        control.S_confirmarToggle();
     }
     public void remapeo()
     {

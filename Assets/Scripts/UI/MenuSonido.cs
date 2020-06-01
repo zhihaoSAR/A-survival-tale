@@ -87,5 +87,6 @@ public class MenuSonido : Pagina
     {
         control.datosSistema.audioModo = modo;
         control.CambiarModoSonido(modo);
+        control.S_confirmarToggle();
     }
 }

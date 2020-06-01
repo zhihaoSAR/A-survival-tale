@@ -106,6 +106,7 @@ public class RemapearTeclado : Pagina
             botonActual = boton;
             StartCoroutine(InicializarCaptura());
             keysInversa.Remove(Controlador.keys[boton]);
+            control.S_confirmarToggle();
         }
         
     }

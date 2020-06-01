@@ -90,15 +90,18 @@ public class MenuAnimacion : Pagina
     public void activarNpcAnim(int activar)
     {
         control.datosSistema.activarNpcAnim = activar;
+        control.S_confirmarToggle();
     }
     // 0:desactivar 1:activar
     public void activarPeligroAnim(int activar)
     {
         control.datosSistema.activarPeligroAnim = activar;
+        control.S_confirmarToggle();
     }
     // 0:desactivar 1:activar
     public void activarDecoracionAnim(int activar)
     {
         control.datosSistema.activarDecoracionAnim = activar;
+        control.S_confirmarToggle();
     }
 }

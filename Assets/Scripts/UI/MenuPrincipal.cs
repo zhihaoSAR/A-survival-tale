@@ -87,6 +87,7 @@ public class MenuPrincipal : Pagina
     public void Invencibilidad(int on)
     {
         control.datosSistema.invencibilidad = on;
+        control.S_confirmarToggle();
     }
 
 }

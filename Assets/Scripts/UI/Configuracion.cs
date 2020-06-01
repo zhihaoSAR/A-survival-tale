@@ -16,6 +16,7 @@ public class Configuracion : Menu
     //--------------variables------------------
     Pagina paginaActual;
     Stack<Pagina> paginasAnteriores;
+    bool menuIni;
 
     public override void cancelar()
     {
@@ -28,6 +29,7 @@ public class Configuracion : Menu
         RectTransform pEnt = paginaActual.GetComponent<RectTransform>();
         iniciarPagina();
         StartCoroutine(TranscicionCambiarPagina(pEnt, pSal, true));
+        control.S_cambioPagina();
     }
 
     void Inicializacion(Controlador c)
@@ -47,8 +49,18 @@ public class Configuracion : Menu
         RectTransform pEnt = p.GetComponent<RectTransform>();
         paginasAnteriores.Push(paginaActual);
         paginaActual = p;
+        if(paginaActual.Equals(menuInicio))
+        {
+            menuIni = true;
+        }
+        else
+        {
+            menuIni = false;
+        }
+        control.Set_cambioV(menuIni);
         iniciarPagina();
         StartCoroutine(TranscicionCambiarPagina(pEnt, pSal, false));
+        control.S_cambioPagina();
         
     }
     public void iniciarPagina()
@@ -70,14 +82,23 @@ public class Configuracion : Menu
             control.iniNavegacion(paginaActual.navegable);
         }
     }
+    //op x:
     public override void abrirMenu(Controlador c, int op)
     {
         Inicializacion(c);
-        
+        menuIni = true;
+        control.Set_cambioV(menuIni);
         paginaActual = menuInicio;
         iniciarPagina();
+        control.S_musicaFondo(0);
         StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
     }
+    public override void cerrarMenu()
+    {
+        control.S_musicaFondo(0);
+        StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
+    }
+
 
     public IEnumerator TranscicionCambiarPagina(RectTransform entrante, RectTransform saliente, bool izqAder)
     {

@@ -15,6 +15,7 @@ public class Controlador : MonoBehaviour
     public UIControl uicontrol;
     static float tiempoTransicion = 0.15f;
     public EventSystem eventSystem;
+    public UISonido uisonido;
 
     public Menu canvasActual;
     TMP_FontAsset tcm,openDyslexic;
@@ -133,6 +134,7 @@ public class Controlador : MonoBehaviour
         canNavegar = true;
         uiCanControl = true;
         elegiendoColor = false;
+        S_confirmarToggle();
     }
 
     public void Mappear()
@@ -332,6 +334,7 @@ public class Controlador : MonoBehaviour
         {
             uicontrol.dosBotonModo = false;
             uicontrol.LimpiarNav();
+            eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         }
     }
 
@@ -408,6 +411,10 @@ public class Controlador : MonoBehaviour
             {
                 canvasActual.cancelar();
             }
+            if(cerrandoJuego)
+            {
+                cerrarJuego(false);
+            }
         }
             
     }
@@ -415,5 +422,51 @@ public class Controlador : MonoBehaviour
     public void iniNavegacion(GameObject[] nav)
     {
         uicontrol.iniNavegacion(nav);
+    }
+
+    //---------------------Sonidos--------------------------
+
+    public void S_jugar()
+    {
+
+    }
+    public void S_cambioV()
+    {
+        uisonido.Play_cambioV();
+    }
+    public void S_cambioH()
+    {
+        uisonido.Play_cambioH();
+    }
+    public void S_confirmarToggle()
+    {
+        uisonido.Play_confirmarToggle();
+    }
+    public void S_cambioPagina()
+    {
+        uisonido.Play_cambioPagina();
+    }
+    public void S_salirBloque()
+    {
+        uisonido.Play_salirBloque();
+    }
+    public void S_musicaFondo(int id)
+    {
+        uisonido.Play_BGM(id);
+    }
+    public void S_pararMusica()
+    {
+        uisonido.Stop_BGM();
+    }
+    public void Set_cambioV(bool menuIni)
+    {
+        if(menuIni)
+        {
+            uisonido.cambioV = uisonido.cambioVMenuPrincipal;
+        }
+        else
+        {
+            uisonido.cambioV = uisonido.cambioVGeneral;
+        }
     }
 }

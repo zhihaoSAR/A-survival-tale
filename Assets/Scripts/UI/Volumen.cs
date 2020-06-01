@@ -96,5 +96,6 @@ public class Volumen : Pagina
         int tipo = int.Parse(valores[0]);
         float vol = float.Parse(valores[1]);
         control.ModificarVolumen(tipo,vol);
+        control.S_confirmarToggle();
     }
 }

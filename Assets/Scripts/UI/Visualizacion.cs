@@ -83,6 +83,11 @@ public class Visualizacion : Pagina
         tamanyoFuente = tamanyo;
         control.datosSistema.tamanyoFuente = tamanyo;
     }
+    public void cambiarTamanyoConSonido(int tamanyo)
+    {
+        cambiarTamanyo(tamanyo);
+        control.S_confirmarToggle();
+    }
     //0:tcm 1:tcb
     public void cambiarFuente(int tipo)
     {
@@ -98,6 +103,12 @@ public class Visualizacion : Pagina
             
     }
 
+    public void cambiarFuenteConSonido(int tipo)
+    {
+        control.S_confirmarToggle();
+        cambiarFuente(tipo);
+    }
+
     public void cambiarCursorTamanyo(int tamanyo)
     {
         if (tamanyoCursor == tamanyo)
@@ -105,6 +116,7 @@ public class Visualizacion : Pagina
         control.cambiarCursor(tipoCursor, tamanyo);
         tamanyoCursor = tamanyo;
         control.datosSistema.tamanyoCursor = tamanyo;
+        control.S_confirmarToggle();
     }
     public void cambiarCursorTipo(int tipo)
     {
@@ -114,6 +126,7 @@ public class Visualizacion : Pagina
         tipoCursor = tipo;
         control.datosSistema.tipoCursor = tipo;
         configurarCursorImagen(tipo);
+        control.S_confirmarToggle();
     }
     void configurarCursorImagen(int tipo)
     {
@@ -129,13 +142,14 @@ public class Visualizacion : Pagina
         I_cursoresPrev[0].sprite = Resources.Load<Sprite>(prefijo + "peq");
         I_cursoresPrev[1].sprite = Resources.Load<Sprite>(prefijo + "med");
         I_cursoresPrev[2].sprite = Resources.Load<Sprite>(prefijo + "gran");
-        
+
     }
 
     //1:ventana 0:completa
     public void pantallaCompleta(int modo)
     {
         control.PantallaCompleta(modo);
+        control.S_confirmarToggle();
     }
 
 }
