@@ -428,8 +428,9 @@ namespace UnityEngine.EventSystems
             var data = GetBaseEventData();
             if (Input.GetKeyDown(confirmar) || Input.GetKeyDown(A))
             {
-                ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler);
-                uicontrol.confirmar();
+                
+                if(!ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, data, ExecuteEvents.submitHandler))
+                    uicontrol.confirmar();
                 control.registraControl();
             }
                 
@@ -437,7 +438,6 @@ namespace UnityEngine.EventSystems
             if (Input.GetKeyDown(cancelar) || Input.GetKeyDown(B))
             {
                 ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, data, ExecuteEvents.cancelHandler);
-                uicontrol.cancelar();
                 control.cancelar();
                 control.registraControl();
             }
@@ -646,7 +646,6 @@ namespace UnityEngine.EventSystems
                 ReleaseMouse(pointerEvent, currentOverGo);
                 if(data.buttonData.button == PointerEventData.InputButton.Right)
                 {
-                    uicontrol.cancelar();
                     control.cancelar();
                 }
                 control.registraControl();

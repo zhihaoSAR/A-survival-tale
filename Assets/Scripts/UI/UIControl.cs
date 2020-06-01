@@ -33,7 +33,7 @@ public class UIControl : MonoBehaviour
             //initNavegacion(paginaActual);
         }
     }
-    public void initNavegacion(GameObject[] navegable)
+    public void iniNavegacion(GameObject[] navegable)
     {
         LimpiarNav();
         navegacion = navegable;
@@ -108,15 +108,17 @@ public class UIControl : MonoBehaviour
             apilarNavegacion(actual.navegable);
         }
     }
-    public void cancelar()
+    public bool cancelar()
     {
         if (!dosBotonModo || !control.uiCanControl)
-            return;
+            return false;
+        bool quedaNav = false;
         if (navGuardado.Count >0)
         {
             navegacion = navGuardado.Pop();
             navInd = navIndGuardado.Pop();
             eventSystem.SetSelectedGameObject(navegacion[navInd]);
+            quedaNav = true;
         }
         if(actual != null)
         {
@@ -131,6 +133,7 @@ public class UIControl : MonoBehaviour
         {
             actual = null;
         }
+        return quedaNav;
     }
     public void apilarNavegacion(GameObject[] navegable)
     {

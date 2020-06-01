@@ -64,6 +64,7 @@ public class Configuracion : Menu
         {
             control.eventSystem.SetSelectedGameObject(null);
         }
+        
         if (datos.tipoControl == 2)
         {
             control.iniNavegacion(paginaActual.navegable);

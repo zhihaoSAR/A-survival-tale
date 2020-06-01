@@ -325,7 +325,7 @@ public class Controlador : MonoBehaviour
             GameObject[] nav;
             if(canvasActual.getActualNavegable(out nav))
             {
-                uicontrol.initNavegacion(nav);
+                uicontrol.iniNavegacion(nav);
             }
         }
         else
@@ -403,11 +403,17 @@ public class Controlador : MonoBehaviour
     public void cancelar()
     {
         if(uiCanControl)
-            canvasActual.cancelar();
+        {
+            if(!uicontrol.cancelar())
+            {
+                canvasActual.cancelar();
+            }
+        }
+            
     }
 
     public void iniNavegacion(GameObject[] nav)
     {
-        uicontrol.initNavegacion(nav);
+        uicontrol.iniNavegacion(nav);
     }
 }

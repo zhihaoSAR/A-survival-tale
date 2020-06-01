@@ -4592,7 +4592,7 @@ GameObject:
   m_Component:
   - component: {fileID: 168312445}
   m_Layer: 5
-  m_Name: PFondo
+  m_Name: CPFondo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4960,7 +4960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 174902602}
   m_Layer: 5
-  m_Name: PPersonaje
+  m_Name: CPPersonaje
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5825,7 +5825,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 508051269}
 --- !u!114 &204623887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12417,7 +12417,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 208824667}
 --- !u!114 &450101997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20135,10 +20135,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navegable:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 999053158}
   - {fileID: 1340828014}
   - {fileID: 1055163038}
@@ -22442,6 +22438,7 @@ MonoBehaviour:
   navegable:
   - {fileID: 1315459620}
   - {fileID: 769518439}
+  - {fileID: 35448826}
   flecha: {fileID: 422046805}
   posicion: {fileID: 1410236997}
   image: {fileID: 720307318}
@@ -22887,7 +22884,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navegable:
-  - {fileID: 85157860}
   - {fileID: 338819452}
   - {fileID: 1895980246}
   - {fileID: 69339214}
@@ -25283,7 +25279,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 1
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 208824667}
 --- !u!114 &1056722735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28780,7 +28776,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1244077387}
   m_Layer: 5
-  m_Name: PInteractivos
+  m_Name: CPInteractivos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30970,7 +30966,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 508051269}
 --- !u!114 &1336357876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31620,7 +31616,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 508051269}
 --- !u!114 &1354171709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36302,7 +36298,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 508051269}
 --- !u!114 &1509910606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37968,6 +37964,7 @@ MonoBehaviour:
   navegable:
   - {fileID: 2049729054}
   - {fileID: 1916865014}
+  - {fileID: 246796918}
   flecha: {fileID: 422046805}
   posicion: {fileID: 925684546}
   image: {fileID: 680764914}
@@ -40928,7 +40925,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 208824667}
 --- !u!114 &1721561518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41574,7 +41571,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 1
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 508051269}
 --- !u!114 &1736745641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43886,7 +43883,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 208824667}
 --- !u!114 &1834045585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46310,7 +46307,7 @@ MonoBehaviour:
   - {fileID: 1344015261}
   - {fileID: 469344291}
   flecha: {fileID: 1761052896}
-  posicion: {fileID: 736249789}
+  posicion: {fileID: 62152609}
   image: {fileID: 248649332}
 --- !u!1 &1896607260
 GameObject:
@@ -48704,7 +48701,7 @@ MonoBehaviour:
         m_CallState: 2
   m_IsOn: 0
   flecha: {fileID: 1120220647}
-  posicion: {fileID: 186059880}
+  posicion: {fileID: 208824667}
 --- !u!114 &1972018398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52151,6 +52148,7 @@ MonoBehaviour:
   navegable:
   - {fileID: 731902827}
   - {fileID: 1244798025}
+  - {fileID: 1458879388}
   flecha: {fileID: 422046805}
   posicion: {fileID: 433519552}
   image: {fileID: 1616222489}
