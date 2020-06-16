@@ -29,6 +29,7 @@ namespace UnityEngine.EventSystems
 
         UIControl uicontrol;
         public Controlador control;
+        public bool modojuego = false;
 
         protected MyInputModule()
         {
@@ -660,7 +661,11 @@ namespace UnityEngine.EventSystems
                 {
                     control.cancelar();
                 }
-                control.registraControl();
+                if(!modojuego)
+                {
+                    control.registraControl();
+                }
+                
             }
         }
 

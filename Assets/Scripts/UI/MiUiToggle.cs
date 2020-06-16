@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MiUiToggle : Toggle,ISelectHandler,IDeselectHandler
+public class MiUiToggle : Toggle,ISelectHandler,IDeselectHandler,IPointerEnterHandler,IPointerExitHandler
 {
     [SerializeField]
     public RectTransform flecha;
@@ -21,5 +21,16 @@ public class MiUiToggle : Toggle,ISelectHandler,IDeselectHandler
     {
         flecha.gameObject.SetActive(false);
         base.OnDeselect(data);
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        flecha.gameObject.SetActive(true);
+        flecha.position = posicion.position;
+        base.OnPointerEnter(eventData);
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        flecha.gameObject.SetActive(false);
+        base.OnPointerExit(eventData);
     }
 }
