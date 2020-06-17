@@ -230,9 +230,12 @@ public class Player : MonoBehaviour
     {
         if (Coroutine_moverConCaja == null || accionCancelar())
         {
+            StopCoroutine(Coroutine_moverConCaja);
+            Coroutine_moverConCaja = null;
             estado = Estado.PARADOCONCAJA;
             estadoActual = estadoParadoConCaja;
         }
+        accionMoverConCaja();
     }
 
     bool moverJugadorRaton()
@@ -578,28 +581,6 @@ public class Player : MonoBehaviour
         }
         return false;
 
-        if (!objetivo.Equals(Vector3.zero))
-        {
-            objetivo = rotacionCamara * objetivo;
-            if (Vector3.Dot(caja.dir, objetivo.normalized) >= 0)
-            {
-                objetivo = caja.dir;
-            }
-            else
-            {
-                if (!caja.conAsa)
-                {
-                    disPendiente = 0;
-                    return false;
-                }
-                objetivo = -caja.dir;
-            }
-            dirMoverCaja = objetivo;
-            disPendiente = (objetivo * velMoverCaja * Time.deltaTime).magnitude;
-            return true;
-        }
-
-        return false;
     }
 
     void desactivarSenyales()
@@ -615,6 +596,8 @@ public class Player : MonoBehaviour
         yield return null;
         while(disPendiente > 0.01)
         {
+            if (!playerCanControl || !control.canControl)
+                yield return null;
             Vector3 movimiento = (dirMoverCaja * velMoverCaja * Time.deltaTime);
             float distanciaMovido = movimiento.magnitude;
             transform.Translate(movimiento,Space.World);
