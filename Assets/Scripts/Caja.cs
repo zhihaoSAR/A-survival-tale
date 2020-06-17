@@ -6,10 +6,26 @@ public class Caja : Interactuable
 {
     [SerializeField]
     Transform arriba, derecha, abajo, izquierda;
+    [SerializeField]
+    bool asaArriba, asaDerecha, asaAbajo, asaIzquierda;
+    public Vector3 dir;
+    [HideInInspector]
+    public bool conAsa;
+
+    public Rigidbody rb;
     
-    public override void setEstado()
+    public override void finPreparar()
     {
         player.estadoActual = player.estadoParadoConCaja;
+        obtenerPosicion(player.transform);
+        transform.parent = player.transform;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+    }
+    public override void finInteractuar()
+    {
+        transform.parent = null;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
     }
     public Vector3[] obtenerPosiciones()
     {
@@ -20,17 +36,29 @@ public class Caja : Interactuable
     {
         Vector3 dst = arriba.position;
         float minDis = (posicion.position-arriba.position).sqrMagnitude;
-        Vector3[] posiciones = obtenerPosiciones();
-        for (int i = 1;i < 4;i++)
+        dir = transform.forward*-1;
+        conAsa = asaArriba;
+        if((posicion.position - derecha.position).sqrMagnitude < minDis)
         {
-            if((posiciones[i] -posicion.position).sqrMagnitude < minDis)
-            {
-                dst = posiciones[i];
-                minDis = (posiciones[i] - posicion.position).sqrMagnitude;
-            }
+            dir = transform.right*-1;
+            conAsa = asaDerecha;
+            minDis = (posicion.position - derecha.position).sqrMagnitude;
+            dst = derecha.position;
         }
-
-
+        if ((posicion.position - abajo.position).sqrMagnitude < minDis)
+        {
+            dir = transform.forward;
+            conAsa = asaAbajo;
+            minDis = (posicion.position - abajo.position).sqrMagnitude;
+            dst = abajo.position;
+        }
+        if ((posicion.position - izquierda.position).sqrMagnitude < minDis)
+        {
+            dir = transform.right;
+            conAsa = asaIzquierda;
+            minDis = (posicion.position - izquierda.position).sqrMagnitude;
+            dst = izquierda.position;
+        }
         return dst;
     }
 

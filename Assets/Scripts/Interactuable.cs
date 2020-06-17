@@ -8,6 +8,7 @@ public abstract class Interactuable : MonoBehaviour
     float distanciaInteractuable;
     public enum TipoInteractuable{CAJA,COCO,AVE }
     public TipoInteractuable tipo;
+    [HideInInspector]
     public Player player;
     void Start()
     {
@@ -19,6 +20,6 @@ public abstract class Interactuable : MonoBehaviour
         dir.y = 0;
         return transform.position + dir;
     }
-
-    public abstract void setEstado();
+    public abstract void finPreparar();
+    public abstract void finInteractuar();
 }

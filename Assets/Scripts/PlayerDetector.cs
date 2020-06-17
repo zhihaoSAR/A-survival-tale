@@ -8,18 +8,14 @@ public class PlayerDetector : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if ((transform.position - other.transform.position).sqrMagnitude
-            < objeto.player.sqrDisObjeto)
-        {
-            objeto.player.objeto = objeto;
-        }
+        objeto.player.asigObjeto(objeto);
+        
+        
         
     }
     void OnTriggerExit(Collider other)
     {
-        if(objeto.player.objeto.Equals(objeto))
-        {
-            objeto.player.objeto = null;
-        }
+        objeto.player.desasigObjeto(objeto);
+        
     }
 }
