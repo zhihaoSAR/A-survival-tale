@@ -11,7 +11,8 @@ public class CanvaJuego : Menu
     [HideInInspector]
     public bool recordando = false;
     public RectTransform recordarInteractuar;
-    Coroutine recordarInt;
+    Image I_recordarInteractuar;
+    Coroutine Coroutine_recordarInteractuar;
 
 
     void Start()
@@ -33,7 +34,22 @@ public class CanvaJuego : Menu
         }
         Debug.Log(path);
         Sprite imagenRecordar = Resources.Load<Sprite>(path);
-        recordarInteractuar.GetComponent<Image>().sprite = imagenRecordar;
+        I_recordarInteractuar = recordarInteractuar.GetComponent<Image>();
+        I_recordarInteractuar.sprite = imagenRecordar;
+    }
+    void Update()
+    {
+        if(recordando)
+        {
+            if((Input.mousePosition-recordarInteractuar.position).sqrMagnitude <= 3600)
+            {
+                I_recordarInteractuar.color = new Vector4(1,1,1,0.5f);
+            }
+            else
+            {
+                I_recordarInteractuar.color = new Vector4(1, 1, 1, 1);
+            }
+        }
     }
     public override void abrirMenu(Controlador c, int op)
     {
@@ -99,14 +115,14 @@ public class CanvaJuego : Menu
     {
         if(activar)
         {
-            recordarInt = StartCoroutine(popUp(recordarInteractuar));
+            Coroutine_recordarInteractuar = StartCoroutine(popUp(recordarInteractuar));
             recordando = true;
         }
         else
         {
-            if(recordarInt != null)
+            if(Coroutine_recordarInteractuar != null)
             {
-                StopCoroutine(recordarInt);
+                StopCoroutine(Coroutine_recordarInteractuar);
                 recordarInteractuar.gameObject.SetActive(false);
                 recordando = false;
             }

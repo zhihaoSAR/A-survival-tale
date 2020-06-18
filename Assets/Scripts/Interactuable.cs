@@ -18,7 +18,7 @@ public abstract class Interactuable : MonoBehaviour
     {
         Vector3 dir = posicion.position - transform.position;
         dir.y = 0;
-        return transform.position + dir;
+        return transform.position + dir.normalized*distanciaInteractuable;
     }
     public abstract void finPreparar();
     public abstract void finInteractuar();

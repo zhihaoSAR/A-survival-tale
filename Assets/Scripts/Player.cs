@@ -30,33 +30,39 @@ public class Player : MonoBehaviour
     public Interactuable objeto;
     [HideInInspector]
     public float sqrDisObjeto = 100;
-
     public float distanciaLookAt = 2;
     //distancia cuadrado
-    public float distanciaMaxInteractuable = 0.01f;
+    public float sqrDistanciaMaxInteractuable = 0.25f;
     //timepoAtascado
     float contadorAtascado = 0;
 
     //-------------------estado de la maquina---------------
-    public enum Estado{PARADO,MOVER,PREPARARINTER,PARADOCONCAJA,MOVERCONCAJA }
+    public enum Estado{PARADO,MOVER,PREPARARINTER,PARADOCONCAJA,MOVERCONCAJA,PARADOCONCOCO }
     [HideInInspector]
     public Estado estado;
     public Action estadoActual;
 
     Vector3 destinoPrepararInt;
 
+    //-----------------caja------------------------
     [HideInInspector]
     public Vector3 dirMoverCaja;
     public float velMoverCaja = 3;
     [HideInInspector]
     public float disPendiente;
     Coroutine Coroutine_moverConCaja;
+    //-----------------coco------------------------
+    public Transform posCogerCoco;
+
+
+    //-------------------------------------------------
 
     public Action estadoParado,
             estadoMover,
             estadoPrepararInter,
             estadoParadoConCaja,
-            estadoMoverConCaja;
+            estadoMoverConCaja,
+            estadoParadoConCoco;
 
 
             //-----------------Acciones en cada estado-----------------------
@@ -64,7 +70,8 @@ public class Player : MonoBehaviour
             accionCancelarMover,
             accionInteractuar,
             accionCancelar,
-            accionMoverConCaja;
+            accionMoverConCaja,
+            accionLanzarCoco;
 
     void Start()
     {
@@ -79,6 +86,7 @@ public class Player : MonoBehaviour
         estadoPrepararInter = new Action(ESTADO_PREPARARINTER);
         estadoParadoConCaja = new Action(ESTADO_PARADOCONCAJA);
         estadoMoverConCaja = new Action(ESTADO_MOVERCONCAJA);
+        estadoParadoConCoco = new Action(ESTADO_PARADOCONCOCO);
         estadoActual = estadoParado;
         //----------------------------------------------------------------
         ActualizarDatos();
@@ -100,6 +108,7 @@ public class Player : MonoBehaviour
             accionInteractuar = new Func<bool>(interactuarRaton);
             accionCancelar = new Func<bool>(cancelarRaton);
             accionMoverConCaja = new Func<bool>(accionMoverConCajaRaton);
+            accionLanzarCoco = new Func<bool>(accionLanzarCocoRaton);
         }
         else if(datosSystema.tipoControl == 0)
         {
@@ -108,6 +117,7 @@ public class Player : MonoBehaviour
             accionInteractuar = new Func<bool>(interactuarWASD);
             accionCancelar = new Func<bool>(cancelarWASD);
             accionMoverConCaja = new Func<bool>(accionMoverConCajaWASD);
+            accionLanzarCoco = new Func<bool>(accionLanzarCocoWASD);
         }
         else if (datosSystema.tipoControl == 2)
         {
@@ -116,13 +126,24 @@ public class Player : MonoBehaviour
             accionInteractuar = new Func<bool>(interactuarDosBoton);
             accionCancelar = new Func<bool>(cancelarDosBoton);
             accionMoverConCaja = new Func<bool>(accionMoverConCajaDosBoton);
+            accionLanzarCoco = new Func<bool>(accionLanzarCocoDosBoton);
         }
     }
-
+    Estado ult = Estado.MOVER;
     void Update()
     {
+        if(estado != ult)
+        {
+            Debug.Log(estado);
+            ult = estado;
+        }
         if (!control.canControl || !playerCanControl)
+        {
+            agente.isStopped = true;
             return;
+        }
+        agente.isStopped = false;
+        
         actualizarObjDis();
         estadoActual();
         
@@ -170,6 +191,7 @@ public class Player : MonoBehaviour
     }
     void ESTADO_PREPARARINTER()
     {
+        destinoPrepararInt = objeto.obtenerPosicion(transform);
         agente.destination = destinoPrepararInt;
         if (accionCancelar())
         {
@@ -177,15 +199,14 @@ public class Player : MonoBehaviour
         }
         if (agente.remainingDistance < distanciaLookAt)
         {
-            transform.LookAt(objeto.transform);
+            MiLookAt(objeto.transform.position);
         }
         if (agente.velocity.sqrMagnitude < 0.64f)
         {
             contadorAtascado+= Time.deltaTime;
-            if ((transform.position-destinoPrepararInt).sqrMagnitude <= distanciaMaxInteractuable)
+            if ((transform.position-destinoPrepararInt).sqrMagnitude <= sqrDistanciaMaxInteractuable)
             {
                 transform.position = destinoPrepararInt;
-                estado = Estado.PARADOCONCAJA;
                 objeto.finPreparar();
                 agente.ResetPath();
             }
@@ -202,7 +223,8 @@ public class Player : MonoBehaviour
         
         return;
     irEstadoParado:
-            agente.ResetPath();
+        agente.ResetPath();
+        objeto = null;
             estado = Estado.PARADO;
             estadoActual = estadoParado;
 
@@ -215,6 +237,7 @@ public class Player : MonoBehaviour
             estado = Estado.MOVERCONCAJA;
             estadoActual = estadoMoverConCaja;
             desactivarSenyales();
+            return;
         }
         if (accionCancelar())
         {
@@ -228,14 +251,46 @@ public class Player : MonoBehaviour
     }
     void ESTADO_MOVERCONCAJA()
     {
-        if (Coroutine_moverConCaja == null || accionCancelar())
+        if (Coroutine_moverConCaja == null )
+        {
+            goto irEstadoParado;
+            
+        }
+        if(accionCancelar())
         {
             StopCoroutine(Coroutine_moverConCaja);
             Coroutine_moverConCaja = null;
-            estado = Estado.PARADOCONCAJA;
-            estadoActual = estadoParadoConCaja;
+            goto irEstadoParado;
         }
         accionMoverConCaja();
+        return;
+    irEstadoParado:
+        estado = Estado.PARADOCONCAJA;
+        estadoActual = estadoParadoConCaja;
+    }
+    void ESTADO_PARADOCONCOCO()
+    {
+        if (accionCancelar())
+        {
+            objeto.finInteractuar();
+            objeto = null;
+            estado = Estado.PARADO;
+            estadoActual = estadoParado;
+            desactivarSenyales();
+            return;
+        }
+        if(accionLanzarCoco())
+        {
+            
+            objeto.finInteractuar();
+            Coco coco = objeto as Coco;
+            objeto = null;
+            estado = Estado.PARADO;
+            estadoActual = estadoParado;
+            desactivarSenyales();
+            coco.rb.AddForce((transform.up + transform.forward) * 5, ForceMode.Impulse);
+            
+        }
     }
 
     bool moverJugadorRaton()
@@ -256,22 +311,15 @@ public class Player : MonoBehaviour
     }
     bool moverJugadorWASD()
     {
-        float horizontal = 0, vertical = 0;
-        if (Input.GetKey(datosSystema.keys["arriba"]))
-            vertical += 1;
-        if (Input.GetKey(datosSystema.keys["abajo"]))
-            vertical -= 1;
-        if (Input.GetKey(datosSystema.keys["izquierda"]))
-            horizontal -= 1;
-        if (Input.GetKey(datosSystema.keys["derecha"]))
-            horizontal += 1;
-        if (vertical != 0 || horizontal != 0)
+        Vector3 movimiento = obtenerMovimientoWASD();
+        if (movimiento.x != 0 || movimiento.z != 0)
         {
-            Vector3 dir = (new Vector3(horizontal, 0, vertical)).normalized;
+            Vector3 dir = movimiento.normalized;
             dir = rotacionCamara * dir;
             agente.destination = transform.position + dir * 0.7f;
             return estado.Equals(Estado.PARADO);
         }
+        agente.ResetPath();
         return estado.Equals(Estado.MOVER);
     }
     bool moverJugadorDosBoton()
@@ -402,7 +450,7 @@ public class Player : MonoBehaviour
 
     bool interactuarRaton()
     {
-        if(manejadorRaton.interactuable && Input.GetMouseButtonDown(0))
+        if(manejadorRaton.interactuable && Input.GetMouseButtonUp(0))
         {
             if(manejadorRaton.objeto.tipo.Equals(Interactuable.TipoInteractuable.CAJA))
             {
@@ -411,10 +459,14 @@ public class Player : MonoBehaviour
                     objeto = manejadorRaton.objeto;
                     Caja caja = manejadorRaton.objeto as Caja;
                     HUD.mostrarDireccion(manejadorRaton.posicionPantalla, caja.transform, rotacionCamara,
-                                        caja.obtenerPosiciones(), new Action<Vector3>(preparaInteractuar));
+                                        caja.obtenerPosiciones(), new Action<Vector3>(preparaInteractuarCaja));
                     control.registraControl();
                 }
-                
+            }
+            else
+            {
+                objeto = manejadorRaton.objeto;
+                preparaInteractuar(objeto.obtenerPosicion(transform));
             }
         }
         if(Input.GetMouseButtonDown(1))
@@ -453,6 +505,13 @@ public class Player : MonoBehaviour
         return false;
     }
 
+    void preparaInteractuarCaja(Vector3 posicion)
+    {
+        Caja caja = objeto as Caja;
+        caja.asigPosInt(posicion);
+        preparaInteractuar(posicion);
+    }
+
     void preparaInteractuar(Vector3 posicion)
     {
         HUD.cerrarDireccion();
@@ -460,13 +519,14 @@ public class Player : MonoBehaviour
         estado = Estado.PREPARARINTER;
         estadoActual = estadoPrepararInter;
         RecordarControl(false);
+        contadorAtascado = 0;
         control.registraControl();
 
     }
 
     bool accionMoverConCajaRaton()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonUp(0))
         {
             Caja caja = objeto as Caja;
             Vector3 objetivo = (manejadorRaton.posicionEscena - transform.position);
@@ -492,24 +552,7 @@ public class Player : MonoBehaviour
     bool accionMoverConCajaWASD()
     {
         Caja caja = objeto as Caja;
-        Vector3 objetivo = Vector3.zero;
-        if (Input.GetKey(datosSystema.keys["arriba"]))
-        {
-            objetivo.z+=1;
-        }
-        if (Input.GetKey(datosSystema.keys["derecha"]))
-        {
-            objetivo.x += 1;
-        }
-        if (Input.GetKey(datosSystema.keys["abajo"]))
-        {
-            objetivo.z -= 1;
-        }
-        if (Input.GetKey(datosSystema.keys["izquierda"]))
-        {
-            objetivo.x -= 1;
-        }
-        
+        Vector3 objetivo = obtenerMovimientoWASD();
         if (!objetivo.Equals(Vector3.zero))
         {
             objetivo = rotacionCamara * objetivo;
@@ -583,6 +626,75 @@ public class Player : MonoBehaviour
 
     }
 
+    bool accionLanzarCocoRaton()
+    {
+        if (!flecha.gameObject.activeInHierarchy)
+        {
+            flecha.transform.position = transform.position;
+            flecha.gameObject.SetActive(true);
+        }
+
+        Vector3 dir = manejadorRaton.posicionPantalla - mainCamera.WorldToScreenPoint(transform.position);
+        dir.z = dir.y;
+        dir.y = 0;
+        Vector3 objetivo = transform.position + dir;
+        transform.LookAt(objetivo);
+        flecha.LookAt(objetivo);
+        flecha.eulerAngles = new Vector3(90, flecha.eulerAngles.y - 90, 0);
+        if (Input.GetMouseButtonUp(0))
+        {
+            control.registraControl();
+            return true;
+        }
+        return false;
+    }
+    bool accionLanzarCocoWASD()
+    {
+        if (!flecha.gameObject.activeInHierarchy)
+        {
+            flecha.transform.position = transform.position;
+            flecha.eulerAngles = new Vector3(-90, transform.eulerAngles.y-90, 0);
+            flecha.gameObject.SetActive(true);
+        }
+        if (Input.GetKeyDown(datosSystema.keys["confirmar"]))
+        {
+            control.registraControl();
+            return true;
+        }
+        Vector3 dir = obtenerMovimientoWASD();
+        if (dir.Equals(Vector3.zero))
+            return false;
+        dir = rotacionCamara * dir;
+        Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+        Quaternion objetivo = Quaternion.RotateTowards(transform.rotation, rot, Time.deltaTime * velNavGirar);
+
+        flecha.rotation = objetivo;
+        transform.rotation = objetivo;
+        flecha.eulerAngles = new Vector3(90, flecha.eulerAngles.y - 90, 0);
+        
+        return false;
+    }
+    bool accionLanzarCocoDosBoton()
+    {
+        if (!flecha.gameObject.activeInHierarchy)
+        {
+            flecha.transform.position = transform.position;
+            flecha.eulerAngles = new Vector3(-90, transform.eulerAngles.y - 90, 0);
+            flecha.gameObject.SetActive(true);
+        }
+        if (Input.GetKeyDown(datosSystema.keys["A"]))
+        {
+            control.registraControl();
+            return true;
+        }
+        float angulo = velNavGirar * Time.deltaTime;
+
+        flecha.Rotate(Vector3.up, angulo,Space.World);
+        transform.Rotate(Vector3.up, angulo, Space.World);
+
+        return false;
+    }
+
     void desactivarSenyales()
     {
         flecha.gameObject.SetActive(false);
@@ -650,7 +762,8 @@ public class Player : MonoBehaviour
     {
         if(estado.Equals(Estado.PARADO) || estado.Equals(Estado.MOVER))
         {
-            if (this.objeto.Equals(objeto))
+            
+            if (this.objeto != null &&this.objeto.Equals(objeto))
             {
                 this.objeto = null;
             }
@@ -673,6 +786,34 @@ public class Player : MonoBehaviour
         }
     }
     
-
-
+    void MiLookAt(Vector3 objetivo)
+    {
+        Vector3 miForward = transform.forward;
+        miForward.y = 0;
+        Vector3 dst = (objetivo - transform.position);
+        dst.y = 0;
+        transform.rotation *= Quaternion.FromToRotation(miForward, dst);
+    }
+    //devuelve un vector3 donde x representa horizontal z representa vertical 
+    Vector3 obtenerMovimientoWASD()
+    {
+        Vector3 movimiento = Vector3.zero;
+        if (Input.GetKey(datosSystema.keys["arriba"]))
+        {
+            movimiento.z += 1;
+        }
+        if (Input.GetKey(datosSystema.keys["derecha"]))
+        {
+            movimiento.x += 1;
+        }
+        if (Input.GetKey(datosSystema.keys["abajo"]))
+        {
+            movimiento.z -= 1;
+        }
+        if (Input.GetKey(datosSystema.keys["izquierda"]))
+        {
+            movimiento.x -= 1;
+        }
+        return movimiento;
+    }
 }

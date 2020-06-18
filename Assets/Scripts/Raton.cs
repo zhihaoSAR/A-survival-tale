@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Raton : MonoBehaviour
 {
-    public Vector3 posicionPantalla,
-                    posicionEscena;
+    public Vector3 posicionEscena;
     public bool interactuable;
     public Interactuable objeto;
     Camera mainCamera;
@@ -20,7 +19,6 @@ public class Raton : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            posicionPantalla = Input.mousePosition;
             Ray ray = mainCamera.ScreenPointToRay(posicionPantalla);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit,100,layerMask))
@@ -36,6 +34,17 @@ public class Raton : MonoBehaviour
                 }
                 
             }
+            else
+            {
+                posicionEscena = transform.position;
+            }
+            
         }
+    }
+
+
+    public Vector3 posicionPantalla
+    {
+        get{ return Input.mousePosition; }
     }
 }

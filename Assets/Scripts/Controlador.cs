@@ -51,7 +51,7 @@ public class Controlador : MonoBehaviour
     public static Controlador control;
 
 
-
+    
     void Start()
     {
         SistemaGuardar.cargarDatosSistema(out datosSistema);
@@ -63,6 +63,7 @@ public class Controlador : MonoBehaviour
         control = this;
         inputModule.modojuego = true;
     }
+    
     void Update()
     {
         

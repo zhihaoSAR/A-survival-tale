@@ -11,11 +11,13 @@ public class Caja : Interactuable
     public Vector3 dir;
     [HideInInspector]
     public bool conAsa;
+    Vector3 posicionInt = Vector3.zero;
 
     public Rigidbody rb;
     
     public override void finPreparar()
     {
+        player.estado = Player.Estado.PARADOCONCAJA;
         player.estadoActual = player.estadoParadoConCaja;
         obtenerPosicion(player.transform);
         transform.parent = player.transform;
@@ -25,6 +27,7 @@ public class Caja : Interactuable
     public override void finInteractuar()
     {
         transform.parent = null;
+        posicionInt = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezeAll;
     }
     public Vector3[] obtenerPosiciones()
@@ -34,6 +37,8 @@ public class Caja : Interactuable
     }
     public override Vector3 obtenerPosicion(Transform posicion)
     {
+        if (!posicionInt.Equals(Vector3.zero))
+            return transform.TransformPoint(posicionInt);
         Vector3 dst = arriba.position;
         float minDis = (posicion.position-arriba.position).sqrMagnitude;
         dir = transform.forward*-1;
@@ -59,7 +64,32 @@ public class Caja : Interactuable
             minDis = (posicion.position - izquierda.position).sqrMagnitude;
             dst = izquierda.position;
         }
+        posicionInt = transform.InverseTransformPoint(dst);
         return dst;
     }
-
+    public void asigPosInt(Vector3 pos)
+    {
+        Vector3 dst = arriba.position;
+        dir = transform.forward * -1;
+        conAsa = asaArriba;
+        if (pos.Equals(derecha.position))
+        {
+            dir = transform.right * -1;
+            conAsa = asaDerecha;
+            dst = derecha.position;
+        }
+        if (pos.Equals(abajo.position))
+        {
+            dir = transform.forward;
+            conAsa = asaAbajo;
+            dst = abajo.position;
+        }
+        if (pos.Equals(izquierda.position))
+        {
+            dir = transform.right;
+            conAsa = asaIzquierda;
+            dst = izquierda.position;
+        }
+        posicionInt = transform.InverseTransformPoint(dst);
+    }
 }
