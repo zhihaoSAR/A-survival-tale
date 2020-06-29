@@ -16,6 +16,8 @@ public class Controlador : MonoBehaviour
     static float tiempoTransicion = 0.15f;
     public EventSystem eventSystem;
     public UISonido uisonido;
+    [HideInInspector]
+    public Player player;
 
     public Menu canvasActual;
     TMP_FontAsset tcm,openDyslexic;
@@ -36,21 +38,32 @@ public class Controlador : MonoBehaviour
     public bool canControl = true;
     public Image I_registrando;
     Action<Color> acabado;
+    //----------popUp--------------------
+    bool ultUiCanControl, ultCanControl, ultPlayerCanControl;
     //--------------salir-------------
     bool cerrandoJuego = false;
     public RectTransform panelSalir;
     public TextMeshProUGUI[] salirTextos;
     public GameObject[] salirNav;
     bool cerrar = false;
+    
+    
+    public static Controlador control;
 
+
+    
     void Start()
     {
         SistemaGuardar.cargarDatosSistema(out datosSistema);
         keys = datosSistema.keys;
         Mappear();
         Application.wantsToQuit += cerrarJuego;
-        canvasActual.abrirMenu(this, 0);
+        //canvasActual.abrirMenu(this, 0);
+        uiCanControl = false;
+        control = this;
+        inputModule.modojuego = true;
     }
+    
     void Update()
     {
         
@@ -186,6 +199,13 @@ public class Controlador : MonoBehaviour
         }
         Texture2D cursor = Resources.Load<Texture2D>(prefijo + tamaño);
         UnityEngine.Cursor.SetCursor(cursor, hotspot, CursorMode.ForceSoftware);
+    }
+    public bool playerCanControl
+    {
+        get { if (player != null) return player.playerCanControl;
+            return false;
+        }
+        set { if(player != null) player.playerCanControl = value; }
     }
 
     //1:ventana 0:completa
@@ -381,6 +401,13 @@ public class Controlador : MonoBehaviour
         }
         uicontrol.apilarNavegacion(salirNav);
         panelSalir.parent = canvasActual.transform;
+        ultCanControl = canControl;
+        if (player != null)
+            ultPlayerCanControl = playerCanControl;
+        ultUiCanControl = uiCanControl;
+        canControl = true;
+        playerCanControl = false;
+        uiCanControl = true;
         StartCoroutine(PopUp(panelSalir));
         return false;
     }
@@ -400,6 +427,9 @@ public class Controlador : MonoBehaviour
             panelSalir.parent = transform;
             panelSalir.gameObject.SetActive(false);
             cerrandoJuego = false;
+            uiCanControl = ultUiCanControl;
+            playerCanControl = ultPlayerCanControl;
+            canControl = ultCanControl;
         }
     }
 

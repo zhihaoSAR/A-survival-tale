@@ -4,36 +4,45 @@ using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    public RectTransform entrante;
-    public RectTransform saliente;
-    public Texture2D cursorped;
-    public Texture2D cursormed;
-    public Texture2D cursorgran;
+    public Transform testObj,other;
     public Controlador c;
     public Pagina p;
     public Configuracion conf;
+    Coroutine a = null;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        /*
+        Debug.DrawLine(testObj.transform.position, testObj.transform.position + testObj.transform.forward*5, Color.red);
+        Vector3 perp = testObj.transform.forward;
+        float x = perp.x;
+        perp.x = -perp.z;
+        perp.z = x;
+        Debug.DrawLine(testObj.transform.position, testObj.transform.position+ perp*5, Color.green);
+        */
+        Vector3 forward = testObj.transform.TransformDirection(Vector3.forward);
+        Vector3 toOther = other.position - testObj.transform.position;
+        Debug.DrawLine(testObj.transform.position, testObj.transform.position + forward * 5, Color.red);
+        Debug.DrawLine(testObj.transform.position, testObj.transform.position + toOther * 5, Color.green);
+        if (Vector3.Dot(forward, toOther) < 0)
         {
-            Application.Quit();
+            print("The other transform is behind me!");
         }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            // c.uicontrol.initNavegacion(c.uicontrol.paginaActual);
-            Debug.Log("start");
-            StartCoroutine(prueba());
+        else{
+            print("front");
+        }
+        print(testObj.parent);
 
-        }
+
     }
     IEnumerator prueba()
     {
         int x = 0;
-        Debug.Log(x);
-        while(x < 5)
+        Debug.Log("empiezo");
+        while (x < 5)
         {
-            Debug.Log(++x);
+            x++;
             yield return null;
         }
+        Debug.Log("acabado");
     }
 }

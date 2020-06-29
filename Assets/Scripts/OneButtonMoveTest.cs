@@ -40,7 +40,7 @@ public class OneButtonMoveTest : MonoBehaviour
             {
                 f = Instantiate(flecha) as Transform;
                 state = STATE.DIR;
-                f.position = transform.position;
+                f.position = new Vector3(transform.position.x,transform.position.y-GetComponent<MeshRenderer>().bounds.size.y/3,transform.position.z) ;
                 return;
             }
             if(state == STATE.DIR )
@@ -50,7 +50,7 @@ public class OneButtonMoveTest : MonoBehaviour
                     dir = Quaternion.Euler(0, f.eulerAngles.y, 0) * Vector3.right;
                     state = STATE.DIS;
                     p = Instantiate(punto) as Transform;
-                    p.position = transform.position;
+                    p.position = new Vector3(transform.position.x, transform.position.y - GetComponent<MeshRenderer>().bounds.size.y / 3, transform.position.z);
                     return;
                 }
                 f.Rotate(Vector3.up, 360 * PeriodXSeg * Time.deltaTime, Space.World);
@@ -67,7 +67,7 @@ public class OneButtonMoveTest : MonoBehaviour
 
             if((transform.position-p.position).magnitude>disMax)
             {
-                p.position = transform.position;
+                p.position = new Vector3(transform.position.x, transform.position.y - GetComponent<MeshRenderer>().bounds.size.y / 3, transform.position.z); ;
                 return;
             }
             p.Translate(dir * speed * Time.deltaTime,Space.World);

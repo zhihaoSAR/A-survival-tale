@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 public class LoadTest : MonoBehaviour
 {
     static bool once = false;
     Scene[] myscenes;
+    public NavMeshSurface surface;
     // Update is called once per frame
     void Update()
     {
@@ -21,6 +23,10 @@ public class LoadTest : MonoBehaviour
         if(Input.GetKey(KeyCode.B))
         {
             SceneManager.UnloadSceneAsync(myscenes[0]);
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            surface.BuildNavMesh();
         }
     }
 }

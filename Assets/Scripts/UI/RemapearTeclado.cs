@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class RemapearTeclado : Pagina
 {
-    KeyCode? keyObtenido;
+    KeyCode keyObtenido = KeyCode.None;
     Dictionary<KeyCode, string> keysInversa;
     Dictionary<string, TextMeshProUGUI> botonTextos;
     bool registrando=false;
@@ -101,7 +101,7 @@ public class RemapearTeclado : Pagina
         {
             control.uiCanControl = false;
             control.canNavegar = false;
-            keyObtenido = null;
+            keyObtenido = KeyCode.None;
             UpdateText(botonTextos[boton], " ");
             botonActual = boton;
             StartCoroutine(InicializarCaptura());
@@ -125,7 +125,7 @@ public class RemapearTeclado : Pagina
                 keyObtenido =  Event.current.keyCode;
                 registrando = false;
                 string botonConflicto;
-                if( keysInversa.TryGetValue((KeyCode)keyObtenido, out botonConflicto))
+                if( keysInversa.TryGetValue(keyObtenido, out botonConflicto))
                 {
                     keysInversa.Remove(Controlador.keys[botonConflicto]);
                     Controlador.keys[botonConflicto] = Controlador.keys[botonActual];
@@ -137,8 +137,8 @@ public class RemapearTeclado : Pagina
                     keysInversa.Add(Controlador.keys[botonConflicto], botonConflicto);
                     
                 }
-                Controlador.keys[botonActual] = (KeyCode)keyObtenido;
-                keysInversa.Add((KeyCode)keyObtenido, botonActual);
+                Controlador.keys[botonActual] = keyObtenido;
+                keysInversa.Add(keyObtenido, botonActual);
                 UpdateText(botonTextos[botonActual], keyObtenido.ToString());
                 control.Mappear();
                 StartCoroutine(FinalizarCaptura());
