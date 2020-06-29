@@ -25,7 +25,7 @@ public class Raton : MonoBehaviour
             {
                 if(hit.transform.TryGetComponent<Interactuable>(out objeto))
                 {
-                    interactuable = true;
+                    interactuable = objeto.interactuable;
                 }
                 else
                 {

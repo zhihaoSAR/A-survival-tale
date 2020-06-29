@@ -7,6 +7,7 @@ public abstract class Interactuable : MonoBehaviour
     [SerializeField]
     float distanciaInteractuable;
     public enum TipoInteractuable{CAJA,COCO,AVE }
+    public bool interactuable = true;
     public TipoInteractuable tipo;
     [HideInInspector]
     public Player player;

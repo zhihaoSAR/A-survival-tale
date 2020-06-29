@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     float contadorAtascado = 0;
 
     //-------------------estado de la maquina---------------
-    public enum Estado{PARADO,MOVER,PREPARARINTER,PARADOCONCAJA,MOVERCONCAJA,PARADOCONCOCO }
+    public enum Estado{PARADO,MOVER,PREPARARINTER,PARADOCONCAJA,MOVERCONCAJA,PARADOCONCOCO,PARADOCONAVE,ESTIRARAVE }
     [HideInInspector]
     public Estado estado;
     public Action estadoActual;
@@ -53,6 +53,9 @@ public class Player : MonoBehaviour
     Coroutine Coroutine_moverConCaja;
     //-----------------coco------------------------
     public Transform posCogerCoco;
+    //-----------------ave------------------------
+    public Transform posCogerAve;
+    public bool acabadoEstirar = false;
 
 
     //-------------------------------------------------
@@ -62,7 +65,9 @@ public class Player : MonoBehaviour
             estadoPrepararInter,
             estadoParadoConCaja,
             estadoMoverConCaja,
-            estadoParadoConCoco;
+            estadoParadoConCoco,
+            estadoParadoConAve,
+            estadoEstirarAve;
 
 
             //-----------------Acciones en cada estado-----------------------
@@ -71,7 +76,8 @@ public class Player : MonoBehaviour
             accionInteractuar,
             accionCancelar,
             accionMoverConCaja,
-            accionLanzarCoco;
+            accionLanzarCoco,
+            accionElegirDirAve;
 
     void Start()
     {
@@ -87,6 +93,8 @@ public class Player : MonoBehaviour
         estadoParadoConCaja = new Action(ESTADO_PARADOCONCAJA);
         estadoMoverConCaja = new Action(ESTADO_MOVERCONCAJA);
         estadoParadoConCoco = new Action(ESTADO_PARADOCONCOCO);
+        estadoParadoConAve = new Action(ESTADO_PARADOCONAVE);
+        estadoEstirarAve = new Action(ESTADO_ESTIRARAVE);
         estadoActual = estadoParado;
         //----------------------------------------------------------------
         ActualizarDatos();
@@ -109,6 +117,7 @@ public class Player : MonoBehaviour
             accionCancelar = new Func<bool>(cancelarRaton);
             accionMoverConCaja = new Func<bool>(accionMoverConCajaRaton);
             accionLanzarCoco = new Func<bool>(accionLanzarCocoRaton);
+            accionElegirDirAve = new Func<bool>(accionElegirDirAveRaton);
         }
         else if(datosSystema.tipoControl == 0)
         {
@@ -118,6 +127,7 @@ public class Player : MonoBehaviour
             accionCancelar = new Func<bool>(cancelarWASD);
             accionMoverConCaja = new Func<bool>(accionMoverConCajaWASD);
             accionLanzarCoco = new Func<bool>(accionLanzarCocoWASD);
+            accionElegirDirAve = new Func<bool>(accionElegirDirAveWASD);
         }
         else if (datosSystema.tipoControl == 2)
         {
@@ -127,6 +137,7 @@ public class Player : MonoBehaviour
             accionCancelar = new Func<bool>(cancelarDosBoton);
             accionMoverConCaja = new Func<bool>(accionMoverConCajaDosBoton);
             accionLanzarCoco = new Func<bool>(accionLanzarCocoDosBoton);
+            accionElegirDirAve = new Func<bool>(accionElegirDirAveDosBoton);
         }
     }
     Estado ult = Estado.MOVER;
@@ -292,6 +303,35 @@ public class Player : MonoBehaviour
             
         }
     }
+    void ESTADO_PARADOCONAVE()
+    {
+        if (accionCancelar())
+        {
+            objeto.finInteractuar();
+            objeto = null;
+            estado = Estado.PARADO;
+            estadoActual = estadoParado;
+            desactivarSenyales();
+            return;
+        }
+        if (accionElegirDirAve())
+        {
+            acabadoEstirar = false;
+            estado = Estado.ESTIRARAVE;
+            estadoActual = estadoEstirarAve;
+            (objeto as Ave).EstirarAve();
+            desactivarSenyales();
+
+        }
+    }
+    void ESTADO_ESTIRARAVE()
+    {
+        if(acabadoEstirar)
+        {
+            estado = Estado.PARADOCONAVE;
+            estadoActual = estadoParadoConAve;
+        }
+    }
 
     bool moverJugadorRaton()
     {
@@ -315,7 +355,9 @@ public class Player : MonoBehaviour
         if (movimiento.x != 0 || movimiento.z != 0)
         {
             Vector3 dir = movimiento.normalized;
-            dir = rotacionCamara * dir;
+            Debug.Log(dir);
+            dir = rotacionCamaraXZ * dir;
+            Debug.Log(dir + " fin");
             agente.destination = transform.position + dir * 0.7f;
             return estado.Equals(Estado.PARADO);
         }
@@ -458,7 +500,7 @@ public class Player : MonoBehaviour
                 {
                     objeto = manejadorRaton.objeto;
                     Caja caja = manejadorRaton.objeto as Caja;
-                    HUD.mostrarDireccion(manejadorRaton.posicionPantalla, caja.transform, rotacionCamara,
+                    HUD.mostrarDireccion(manejadorRaton.posicionPantalla, caja.transform, rotacionCamaraXY,
                                         caja.obtenerPosiciones(), new Action<Vector3>(preparaInteractuarCaja));
                     control.registraControl();
                 }
@@ -555,7 +597,7 @@ public class Player : MonoBehaviour
         Vector3 objetivo = obtenerMovimientoWASD();
         if (!objetivo.Equals(Vector3.zero))
         {
-            objetivo = rotacionCamara * objetivo;
+            objetivo = rotacionCamaraXZ * objetivo;
             if (Vector3.Dot(caja.dir, objetivo.normalized) >= 0)
             {
                 objetivo = caja.dir;
@@ -664,7 +706,7 @@ public class Player : MonoBehaviour
         Vector3 dir = obtenerMovimientoWASD();
         if (dir.Equals(Vector3.zero))
             return false;
-        dir = rotacionCamara * dir;
+        dir = rotacionCamaraXZ * dir;
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
         Quaternion objetivo = Quaternion.RotateTowards(transform.rotation, rot, Time.deltaTime * velNavGirar);
 
@@ -693,6 +735,19 @@ public class Player : MonoBehaviour
         transform.Rotate(Vector3.up, angulo, Space.World);
 
         return false;
+    }
+
+    bool accionElegirDirAveRaton()
+    {
+        return accionLanzarCocoRaton();
+    }
+    bool accionElegirDirAveWASD()
+    {
+        return accionLanzarCocoWASD();
+    }
+    bool accionElegirDirAveDosBoton()
+    {
+        return accionLanzarCocoDosBoton();
     }
 
     void desactivarSenyales()
@@ -745,6 +800,10 @@ public class Player : MonoBehaviour
 
     public void asigObjeto(Interactuable objeto)
     {
+        if (objeto.interactuable == false)
+        {
+            return;
+        }
         if (estado.Equals(Player.Estado.PARADO) || estado.Equals(Estado.MOVER))
         {
             if (this.objeto != null && manejadorRaton.enabled == true)
@@ -771,7 +830,7 @@ public class Player : MonoBehaviour
         
     }
 
-    public Quaternion rotacionCamara
+    public Quaternion rotacionCamaraXY
     {
         get
         {
@@ -781,11 +840,27 @@ public class Player : MonoBehaviour
             if (mainCamera.transform.up.y < 0)
             {
                 ori.y = -ori.y;
+                ori.x = -ori.x;
+
             }
-            return Quaternion.FromToRotation(ori, Vector3.up);
+            return Quaternion.FromToRotation(ori,Vector3.up);
         }
     }
-    
+    public Quaternion rotacionCamaraXZ
+    {
+        get
+        {
+            Vector3 dst = mainCamera.transform.forward;
+            dst.y = 0;
+            if (mainCamera.transform.up.y < 0)
+            {
+                dst.z = -dst.z;
+                dst.x = -dst.x;
+            }
+            return Quaternion.FromToRotation(Vector3.forward,dst);
+        }
+    }
+
     void MiLookAt(Vector3 objetivo)
     {
         Vector3 miForward = transform.forward;

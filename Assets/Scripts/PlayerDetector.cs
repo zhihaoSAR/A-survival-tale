@@ -6,6 +6,7 @@ public class PlayerDetector : MonoBehaviour
 {
     public Interactuable objeto;
 
+
     void OnTriggerStay(Collider other)
     {
         objeto.player.asigObjeto(objeto);

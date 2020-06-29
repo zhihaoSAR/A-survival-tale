@@ -7,6 +7,7 @@ public class Coco : Interactuable
 
 
     public Rigidbody rb;
+    public SphereCollider detector;
 
     public override void finPreparar()
     {
@@ -25,5 +26,20 @@ public class Coco : Interactuable
         rb.isKinematic = false;
         rb.detectCollisions = true;
     }
+    public void interactuarConAve(Ave ave)
+    {
+        transform.parent = ave.posicionCoco.transform;
+        rb.detectCollisions = false;
+        rb.isKinematic = true;
+        transform.position = ave.posicionCoco.position;
+        interactuable = false;
+        detector.enabled = false;
 
+    }
+    public void finInteractuarConAve()
+    {
+        finInteractuar();
+        interactuable = true;
+        detector.enabled = true;
+    }
 }
