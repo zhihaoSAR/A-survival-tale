@@ -118,7 +118,7 @@ public class UIControl : MonoBehaviour
     }
     public bool cancelar()
     {
-        if (!dosBotonModo || !control.uiCanControl)
+        if (!dosBotonModo || !control.uiControlable)
             return false;
         bool quedaNav = false;
         if (navGuardado.Count >0)

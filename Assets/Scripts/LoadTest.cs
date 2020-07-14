@@ -7,22 +7,19 @@ using UnityEngine.AI;
 public class LoadTest : MonoBehaviour
 {
     static bool once = false;
-    Scene[] myscenes;
     public NavMeshSurface surface;
     // Update is called once per frame
     void Update()
     {
         
-        if(Input.GetKey(KeyCode.E) & !once)
+        if(Input.GetKeyDown(KeyCode.E))
         {
-            once = true;
             //SceneManager.LoadSceneAsync("Scene2");
             SceneManager.LoadScene("Scene2", LoadSceneMode.Additive);
-            myscenes = SceneManager.GetAllScenes();
         }
-        if(Input.GetKey(KeyCode.B))
+        if(Input.GetKeyDown(KeyCode.B))
         {
-            SceneManager.UnloadSceneAsync(myscenes[0]);
+            SceneManager.UnloadSceneAsync(3);
         }
         if (Input.GetKey(KeyCode.Space))
         {

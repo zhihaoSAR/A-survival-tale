@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Raton : MonoBehaviour
 {
+    [HideInInspector]
     public Vector3 posicionEscena;
+    [HideInInspector]
     public bool interactuable;
+    [HideInInspector]
     public Interactuable objeto;
     Camera mainCamera;
     void Start()

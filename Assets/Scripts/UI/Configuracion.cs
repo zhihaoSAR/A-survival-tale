@@ -108,9 +108,9 @@ public class Configuracion : Menu
         else
             dir = 1;
         Vector2 dst = new Vector2(saliente.rect.width, 0);
-        bool antes_uicanControl = control.uiCanControl;
+        bool antes_uicanControl = control.uiControlable;
         bool antes_canNavegar = control.canNavegar;
-        control.uiCanControl = false;
+        control.uiControlable = false;
         control.canNavegar = false;
         entrante.anchoredPosition = saliente.anchoredPosition + dst * dir;
         float now = 0;
@@ -130,7 +130,7 @@ public class Configuracion : Menu
         movimiento = dst * dir;
         entrante.anchoredPosition = entranteOri + movimiento;
         saliente.anchoredPosition = salienteOri + movimiento;
-        control.uiCanControl = antes_uicanControl;
+        control.uiControlable = antes_uicanControl;
         control.canNavegar = antes_canNavegar;
         saliente.gameObject.SetActive(false);
     }
@@ -150,12 +150,12 @@ public class Configuracion : Menu
             dst = new Vector2(0, rect.rect.height);
             rect.anchoredPosition = Vector2.zero;
         }
-        bool antes_uicanControl = control.uiCanControl;
+        bool antes_uicanControl = control.uiControlable;
         bool antes_canNavegar = control.canNavegar;
-        bool antes_canControl = control.canControl;
-        control.uiCanControl = false;
+        bool antes_canControl = control.controlable;
+        control.uiControlable = false;
         control.canNavegar = false;
-        control.canControl = false;
+        control.controlable = false;
         float now = 0;
         Vector2 movimiento;
         Vector2 rectOri = rect.anchoredPosition;
@@ -170,9 +170,9 @@ public class Configuracion : Menu
         }
         movimiento = dst * dir;
         rect.anchoredPosition = rectOri + movimiento;
-        control.uiCanControl = antes_uicanControl;
+        control.uiControlable = antes_uicanControl;
         control.canNavegar = antes_canNavegar;
-        control.canControl = antes_canControl;
+        control.controlable = antes_canControl;
         if (!ini)
             rect.gameObject.SetActive(false);
     }

@@ -23,27 +23,28 @@ public class MenuContraste : Pagina
     //-------------------privada----------
     int tipoFuente = 0;
     int tamanyoFuente = 0;
-
+    TipoContraste colorCambiado ;
     public override void inicializar(Controlador c,Configuracion m)
     {
         base.inicializar(c, m);
         DatosSistema datos = control.datosSistema;
         cambiarFuente(datos.tipoFuente);
         cambiarTamanyo(datos.tamanyoFuente);
-        T_Fondo[obtenerIndice(datos.color_fondo.a)].isOn = true;
-        T_Personaje[obtenerIndice(datos.color_personaje.a)].isOn = true;
-        T_Interactivos[obtenerIndice(datos.color_interactivo.a)].isOn = true;
+        T_Fondo[obtenerIndice(datos.opacidad_fondo)].isOn = true;
+        T_Personaje[obtenerIndice(datos.opacidad_personaje)].isOn = true;
+        T_Interactivos[obtenerIndice(datos.opacidad_interactivo)].isOn = true;
         actualizarOpacidad();
+        colorCambiado = TipoContraste.NADA;
     }
     public int obtenerIndice(float opacidad)
     {
         if (opacidad == 0)
             return 0;
-        if (opacidad < 0.26f)
+        if (opacidad == 0.25f)
             return 1;
-        if (opacidad < 0.51f)
+        if (opacidad == 0.5f)
             return 2;
-        if (opacidad < 0.76f)
+        if (opacidad == 0.75f)
             return 3;
         return 4;
     }
@@ -110,19 +111,21 @@ public class MenuContraste : Pagina
         C_Fondo.color = datos.color_fondo;
         C_Interactivo.color = datos.color_interactivo;
         C_Personaje.color = datos.color_personaje;
-        control.S_confirmarToggle();
     }
     public void cambiarFondoColor(float opacidad)
     {
-        control.datosSistema.color_fondo.a = opacidad;
+        control.datosSistema.opacidad_fondo = opacidad;
+        obtenerColor(ref control.datosSistema.color_fondo, opacidad);
         actualizarOpacidad();
         control.S_confirmarToggle();
+        colorCambiado = colorCambiado | TipoContraste.FONDO;
     }
     public void cambiarFondoColor(Color color)
     {
-        color.a = control.datosSistema.color_fondo.a;
         control.datosSistema.color_fondo = color;
+        obtenerColor(ref control.datosSistema.color_fondo, control.datosSistema.opacidad_fondo);
         actualizarOpacidad();
+        colorCambiado = colorCambiado | TipoContraste.FONDO;
     }
     public void cambiarFondoColor()
     {
@@ -131,14 +134,18 @@ public class MenuContraste : Pagina
     }
     public void cambiarPersonajeColor(float opacidad)
     {
-        control.datosSistema.color_personaje.a = opacidad;
+        control.datosSistema.opacidad_personaje = opacidad;
+        obtenerColor(ref control.datosSistema.color_personaje, opacidad);
         actualizarOpacidad();
+        control.S_confirmarToggle();
+        colorCambiado = colorCambiado | TipoContraste.PERSONAJE;
     }
     public void cambiarPersonajeColor(Color color)
     {
-        color.a = control.datosSistema.color_personaje.a;
         control.datosSistema.color_personaje = color;
+        obtenerColor(ref control.datosSistema.color_personaje, control.datosSistema.opacidad_personaje);
         actualizarOpacidad();
+        colorCambiado = colorCambiado | TipoContraste.PERSONAJE;
     }
     public void cambiarPersonajeColor()
     {
@@ -147,15 +154,18 @@ public class MenuContraste : Pagina
     }
     public void cambiarInteractivoColor(float opacidad)
     {
-        control.datosSistema.color_interactivo.a = opacidad;
+        control.datosSistema.opacidad_interactivo = opacidad;
+        obtenerColor(ref control.datosSistema.color_interactivo, opacidad);
         actualizarOpacidad();
         control.S_confirmarToggle();
+        colorCambiado = colorCambiado | TipoContraste.INTERACTIVO;
     }
     public void cambiarInteractivoColor(Color color)
     {
-        color.a = control.datosSistema.color_interactivo.a;
         control.datosSistema.color_interactivo = color;
+        obtenerColor(ref control.datosSistema.color_interactivo, control.datosSistema.opacidad_interactivo);
         actualizarOpacidad();
+        colorCambiado = colorCambiado | TipoContraste.INTERACTIVO;
     }
     public void cambiarInteractivoColor()
     {
@@ -163,6 +173,18 @@ public class MenuContraste : Pagina
         control.S_confirmarToggle();
     }
     
-    
-        
+    void obtenerColor(ref Color color,float opacidad)
+    {
+        float h, s, v;
+        Color.RGBToHSV(color,out h,out s,out v);
+        color = Color.HSVToRGB(h, opacidad, 1);
+    }
+
+    void OnDisable()
+    {
+        if(colorCambiado != TipoContraste.NADA)
+        {
+            control.cambiarContraste(colorCambiado);
+        }
+    }
 }

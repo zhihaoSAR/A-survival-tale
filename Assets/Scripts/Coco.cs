@@ -13,11 +13,13 @@ public class Coco : Interactuable
     {
         player.estado = Player.Estado.PARADOCONCOCO;
         player.estadoActual = player.estadoParadoConCoco;
+        player.cogerCocoAnim();
         
-        transform.parent = player.transform;
+        transform.parent = player.posCogerCoco.transform;
         rb.detectCollisions = false;
         rb.isKinematic = true;
         transform.position = player.posCogerCoco.position;
+
         
     }
     public override void finInteractuar()

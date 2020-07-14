@@ -40,6 +40,7 @@ public class Ave : Interactuable
     {
         detector.enabled = true;
         animator.SetBool("alargar", true);
+        player.estirarAve();
         StartCoroutine(alargar());
     }
     IEnumerator alargar()

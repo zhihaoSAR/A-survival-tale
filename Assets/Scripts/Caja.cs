@@ -8,27 +8,43 @@ public class Caja : Interactuable
     Transform arriba, derecha, abajo, izquierda;
     [SerializeField]
     bool asaArriba, asaDerecha, asaAbajo, asaIzquierda;
+    [HideInInspector]
     public Vector3 dir;
     [HideInInspector]
     public bool conAsa;
     Vector3 posicionInt = Vector3.zero;
+    public ObstaculoDetector detector;
 
     public Rigidbody rb;
-    
+
+    enum DetectorPos { ARRIBA =0, DERECHA = 1, ABAJO = 2 ,IZQUIERDA =3, SINVALOR}
+    DetectorPos detectorPos = DetectorPos.SINVALOR;
+
     public override void finPreparar()
     {
         player.estado = Player.Estado.PARADOCONCAJA;
         player.estadoActual = player.estadoParadoConCaja;
         obtenerPosicion(player.transform);
-        transform.parent = player.transform;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        detector.gameObject.SetActive(true);
+        player.activaDetector();
+        activaDetector();
 
+    }
+    void activaDetector()
+    {
+        detector.colisiones[(int)detectorPos].enabled = true;
+    }
+    void desactivaDetector()
+    {
+        detector.colisiones[(int)detectorPos].enabled = false;
     }
     public override void finInteractuar()
     {
-        transform.parent = null;
         posicionInt = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezeAll;
+        desactivaDetector();
+        detector.gameObject.SetActive(false);
     }
     public Vector3[] obtenerPosiciones()
     {
@@ -39,34 +55,44 @@ public class Caja : Interactuable
     {
         if (!posicionInt.Equals(Vector3.zero))
             return transform.TransformPoint(posicionInt);
+        return obtenerPosicion(posicion.position);
+    }
+    public Vector3 obtenerPosicion(Vector3 posicion)
+    {
+        
         Vector3 dst = arriba.position;
-        float minDis = (posicion.position-arriba.position).sqrMagnitude;
-        dir = transform.forward*-1;
+        float minDis = (posicion - arriba.position).sqrMagnitude;
+        dir = transform.forward * -1;
         conAsa = asaArriba;
-        if((posicion.position - derecha.position).sqrMagnitude < minDis)
+        detectorPos = DetectorPos.ABAJO;
+        if ((posicion - derecha.position).sqrMagnitude < minDis)
         {
-            dir = transform.right*-1;
+            dir = transform.right * -1;
             conAsa = asaDerecha;
-            minDis = (posicion.position - derecha.position).sqrMagnitude;
+            minDis = (posicion - derecha.position).sqrMagnitude;
             dst = derecha.position;
+            detectorPos = DetectorPos.IZQUIERDA;
         }
-        if ((posicion.position - abajo.position).sqrMagnitude < minDis)
+        if ((posicion - abajo.position).sqrMagnitude < minDis)
         {
             dir = transform.forward;
             conAsa = asaAbajo;
-            minDis = (posicion.position - abajo.position).sqrMagnitude;
+            minDis = (posicion - abajo.position).sqrMagnitude;
             dst = abajo.position;
+            detectorPos = DetectorPos.ARRIBA;
         }
-        if ((posicion.position - izquierda.position).sqrMagnitude < minDis)
+        if ((posicion - izquierda.position).sqrMagnitude < minDis)
         {
             dir = transform.right;
             conAsa = asaIzquierda;
-            minDis = (posicion.position - izquierda.position).sqrMagnitude;
+            minDis = (posicion- izquierda.position).sqrMagnitude;
             dst = izquierda.position;
+            detectorPos = DetectorPos.DERECHA;
         }
         posicionInt = transform.InverseTransformPoint(dst);
         return dst;
     }
+    /*
     public void asigPosInt(Vector3 pos)
     {
         Vector3 dst = arriba.position;
@@ -91,5 +117,10 @@ public class Caja : Interactuable
             dst = izquierda.position;
         }
         posicionInt = transform.InverseTransformPoint(dst);
+    }*/
+    public void reseteaPos()
+    {
+        posicionInt = Vector3.zero;
+
     }
 }
