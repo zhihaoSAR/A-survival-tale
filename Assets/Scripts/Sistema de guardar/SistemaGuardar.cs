@@ -82,6 +82,10 @@ public static class SistemaGuardar
         datos = new DatosJuego();
         return false;
     }
+    public static bool existeDatoJuego()
+    {
+        return File.Exists(Application.dataPath + "/save.dat");
+    }
 
     static BinaryFormatter generarFormatter()
     {

@@ -113,6 +113,7 @@ MonoBehaviour:
   dir: {x: 0, y: 0, z: 0}
   conAsa: 0
   detector: {fileID: 2774375942762172762}
+  obstaculo: {fileID: 7381683000559234057}
   rb: {fileID: 5457686392130047278}
 --- !u!1 &2127522654119053216
 GameObject:
@@ -330,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cbd87986b8b0fc438dda9611352c3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objeto: {fileID: 0}
+  objeto: {fileID: 6489390467407062822}
 --- !u!1001 &4435406522124297548
 PrefabInstance:
   m_ObjectHideFlags: 0

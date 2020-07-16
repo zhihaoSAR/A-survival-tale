@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     public Animator animator;
     [HideInInspector]
     public Controlador control;
+    public NavMeshSurface surface;
     DatosSistema datosSystema;
     [SerializeField]
     NavMeshAgent agente;
@@ -38,6 +39,7 @@ public class Player : MonoBehaviour
     //timepoAtascado
     float contadorAtascado = 0;
     public ObstaculoDetector obstaculoDetector;
+    public CapsuleCollider collider;
 
     //-------------------estado de la maquina---------------
     public enum Estado{PARADO,MOVER,PREPARARINTER,PARADOCONCAJA,MOVERCONCAJA,PARADOCONCOCO,PARADOCONAVE,ESTIRARAVE,LANZARCOCO }
@@ -50,7 +52,7 @@ public class Player : MonoBehaviour
     //-----------------caja------------------------
     [HideInInspector]
     public Vector3 dirMoverCaja;
-    public float velMoverCaja = 3;
+    public float velMoverCaja = 10;
     [HideInInspector]
     public float disPendiente;
     Coroutine Coroutine_moverConCaja;
@@ -121,15 +123,22 @@ public class Player : MonoBehaviour
         agarrarAve = Animator.StringToHash("agarrarAve");
         activarAve = Animator.StringToHash("activarAve");
         //----------------------------------------------------------------
+        //transform.position = control.datosJuego.playerPos;
         ActualizarDatos();
+        
 
     }
 
-    
+    public void actualizarPath()
+    {
+        surface.BuildNavMesh();
+    }
+
     public void ActualizarDatos()
     {
         manejadorRaton.enabled = false;
-        agente.speed = 3.5f;
+        agente.speed = 30f;
+        velMoverCaja = 10f;
         controlable = true;
         flecha.gameObject.SetActive(false);
         punto.gameObject.SetActive(false);
@@ -173,13 +182,15 @@ public class Player : MonoBehaviour
             Debug.Log(estado);
             ult = estado;
         }
-        if (!control.controlable || !controlable)
+        /*
+        if ((!control.controlable || !controlable) && 
+            (estado == Estado.PREPARARINTER || estado == Estado.MOVER))
         {
             agente.isStopped = true;
             return;
         }
         agente.isStopped = false;
-        
+        */
         actualizarObjDis();
         estadoActual();
         
@@ -264,18 +275,20 @@ public class Player : MonoBehaviour
         if (agente.velocity.sqrMagnitude < 0.64f)
         {
             contadorAtascado+= Time.deltaTime;
-            if(Math.Abs(transform.position.y - destinoPrepararInt.y) >2)
-            {
-                goto irEstadoParado;
-            }
             Vector3 dist = transform.position - destinoPrepararInt;
             dist.y = 0;
             if (dist.sqrMagnitude <= sqrDistanciaMaxInteractuable)
             {
+                if (Math.Abs(transform.position.y - destinoPrepararInt.y) > 2)
+                {
+                    goto irEstadoParado;
+                }
                 transform.position = destinoPrepararInt;
-                objeto.finPreparar();
                 agente.ResetPath();
+                objeto.finPreparar();
+                
                 animator.SetBool(caminar, false);
+                
             }
             
             if(contadorAtascado> 1f)
@@ -301,12 +314,20 @@ public class Player : MonoBehaviour
         animator.SetBool(caminar, false);
 
     }
+    public void prepararConCaja()
+    {
+        estado = Estado.PARADOCONCAJA;
+        estadoActual = estadoParadoConCaja;
+        animator.SetBool(moverCaja, true);
+        obstaculoDetector.gameObject.SetActive(true);
+        collider.height = 2.07f;
+        agente.enabled = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+    }
     void ESTADO_PARADOCONCAJA()
     {
         moverDirCajaAnim = 0;
         animator.SetInteger(moverCajaDir, moverDirCajaAnim);
-        animator.SetBool(moverCaja, true);
-        
         if (accionMoverConCaja())
         {
             Coroutine_moverConCaja = StartCoroutine(MoverCaja());
@@ -316,18 +337,34 @@ public class Player : MonoBehaviour
             return;
         }
         if (accionCancelar() ||
-            (transform.position - objeto.transform.position).sqrMagnitude > 9)
+            (transform.position - objeto.transform.position).sqrMagnitude > 100)
         {
-            objeto.finInteractuar();
-            objeto = null;
-            desactivarDetector();
-            estado = Estado.PARADO;
-            estadoActual = estadoParado;
-            animator.SetBool(moverCaja, false);
-            desactivarSenyales();
+            CancelarInteractuarConCaja();
+
+        }
+    }
+    public void CancelarInteractuarConCaja()
+    {
+        disPendiente = 0;
+        objeto.finInteractuar();
+        objeto = null;
+        obstaculoDetector.gameObject.SetActive(false);
+        estado = Estado.PARADO;
+        estadoActual = estadoParado;
+        animator.SetInteger(moverCajaDir, 0);
+        animator.SetBool(moverCaja, false);
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        agente.enabled = true;
+        collider.height = 1.5f;
+        if(Coroutine_moverConCaja != null)
+        {
+            StopCoroutine(Coroutine_moverConCaja);
+            Coroutine_moverConCaja = null;
         }
         
+        desactivarSenyales();
     }
+
     void ESTADO_MOVERCONCAJA()
     {
         animator.SetInteger(moverCajaDir, moverDirCajaAnim);
@@ -643,10 +680,15 @@ public class Player : MonoBehaviour
 
     void preparaInteractuar(Vector3 posicion)
     {
+        desactivarSenyales();
         HUD.cerrarDireccion();
         destinoPrepararInt = posicion;
         estado = Estado.PREPARARINTER;
         estadoActual = estadoPrepararInter;
+        animator.SetBool(paradoAnim, false);
+        tiempoParado = 0;
+        contadorAtascado = 0;
+        contar = false;
         RecordarControl(false);
         control.registraControl();
 
@@ -657,7 +699,7 @@ public class Player : MonoBehaviour
         if(Input.GetMouseButtonUp(0))
         {
             Caja caja = objeto as Caja;
-            Vector3 objetivo = (manejadorRaton.posicionEscena - transform.position);
+            Vector3 objetivo = (manejadorRaton.posicionEscena - caja.transform.position);
             objetivo = Vector3.Project(objetivo, caja.dir);
             moverDirCajaAnim = Vector3.Dot(caja.dir, objetivo.normalized) < 0?-1:1;
             if (moverDirCajaAnim < 0)
@@ -867,7 +909,7 @@ public class Player : MonoBehaviour
             {
                 break;
             }
-            if( (transform.position - objeto.transform.position).sqrMagnitude > 9)
+            if( (transform.position - objeto.transform.position).sqrMagnitude > 100)
             {
                 break;
             }
@@ -986,14 +1028,8 @@ public class Player : MonoBehaviour
             return Quaternion.FromToRotation(Vector3.forward,dst);
         }
     }
-    public void activaDetector()
-    {
-        obstaculoDetector.gameObject.SetActive(true);
-    }
-    public void desactivarDetector()
-    {
-        obstaculoDetector.gameObject.SetActive(false);
-    }
+
+
     void MiLookAt(Vector3 objetivo)
     {
         Vector3 miForward = transform.forward;

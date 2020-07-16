@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define ESCENA_PRUEBA
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -20,6 +22,9 @@ public class Controlador : MonoBehaviour
     public EscenaControlador escenaControlador;
     [HideInInspector]
     public Player player;
+    public bool controlable = true;
+    [HideInInspector]
+    public bool cargando = false;
 
     public Menu canvasActual;
     TMP_FontAsset tcm,openDyslexic;
@@ -37,7 +42,6 @@ public class Controlador : MonoBehaviour
     Vector2 tamanyoColor;
     bool persigueRaton = false;
     int velocidad = 100;
-    public bool controlable = true;
     public Image I_registrando;
     Action<Color> acabado;
     //----------popUp--------------------
@@ -51,6 +55,8 @@ public class Controlador : MonoBehaviour
     //-----------contraste controlador-------------
     public ContrasteControlador contrastePrefab;
     ContrasteControlador contrasteControlador;
+    //------------pantalla de cargar-------------
+    public RectTransform panelCargar;
     
     public static Controlador control;
     
@@ -59,18 +65,43 @@ public class Controlador : MonoBehaviour
     
     void Start()
     {
+        control = this;
         SistemaGuardar.cargarDatosSistema(out datosSistema);
         SistemaGuardar.cargarDatosJuego(out datosJuego);
         keys = datosSistema.keys;
         Mappear();
         Application.wantsToQuit += cerrarJuego;
-
-        //canvasActual.abrirMenu(this, 0);
-        control = this;
-
-        
+#if ESCENA_PRUEBA
         uiControlable = false;
         inputModule.desactivarRatonRegistrar = true;
+
+#else
+        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(uicontrol.gameObject);
+        DontDestroyOnLoad(canvasActual.gameObject);
+        
+        canvasActual.abrirMenu(1);
+
+#endif
+
+    }
+    public void NuevaPartida()
+    {
+        datosJuego = new DatosJuego();
+        EmpezarJuego();
+    }
+    public void Continuar()
+    {
+         SistemaGuardar.cargarDatosJuego(out datosJuego);
+        EmpezarJuego();
+    }
+
+    public void EmpezarJuego()
+    {
+        canvasActual.cerrarMenu(0);
+        escenaControlador.cargarEscenaIntermedio();
+        escenaControlador.iniciarJuego(datosJuego);
+        StartCoroutine(cargarEscena());
     }
 
     void Update()
@@ -137,6 +168,26 @@ public class Controlador : MonoBehaviour
                 cerrarElegirColor(false);
             }
         }
+    }
+
+    public IEnumerator cargarEscena()
+    {
+        yield return null;
+        controlable = false;
+        cargando = true;
+        panelCargar.gameObject.SetActive(true);
+        panelCargar.SetParent(canvasActual.transform);
+        while(!escenaControlador.finalizado)
+        {
+            yield return null;
+        }
+        
+        panelCargar.gameObject.SetActive(false);
+        panelCargar.SetParent(this.transform);
+        controlable = true;
+        uiControlable = false;
+        cargando = false;
+        inputModule.desactivarRatonRegistrar = true;
     }
 
     public void cerrarElegirColor(bool confirmar)
@@ -420,12 +471,12 @@ public class Controlador : MonoBehaviour
     {
         if(cerrar)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-            #else
+#else
                 this.cerrar = true;
                 Application.Quit();
-            #endif
+#endif
         }
         else
         {
@@ -468,7 +519,7 @@ public class Controlador : MonoBehaviour
 
     public void S_jugar()
     {
-
+        uisonido.Play_jugar();
     }
     public void S_cambioV()
     {

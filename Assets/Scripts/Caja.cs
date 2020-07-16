@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.AI;
 public class Caja : Interactuable
 {
     [SerializeField]
@@ -14,6 +15,8 @@ public class Caja : Interactuable
     public bool conAsa;
     Vector3 posicionInt = Vector3.zero;
     public ObstaculoDetector detector;
+    Action finalizado;
+    public NavMeshObstacle obstaculo;
 
     public Rigidbody rb;
 
@@ -22,12 +25,11 @@ public class Caja : Interactuable
 
     public override void finPreparar()
     {
-        player.estado = Player.Estado.PARADOCONCAJA;
-        player.estadoActual = player.estadoParadoConCaja;
+        
         obtenerPosicion(player.transform);
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         detector.gameObject.SetActive(true);
-        player.activaDetector();
+        player.prepararConCaja();
         activaDetector();
 
     }
@@ -37,7 +39,12 @@ public class Caja : Interactuable
     }
     void desactivaDetector()
     {
-        detector.colisiones[(int)detectorPos].enabled = false;
+        if(detectorPos != DetectorPos.SINVALOR )
+        {
+            detector.colisiones[(int)detectorPos].enabled = false;
+            detectorPos = DetectorPos.SINVALOR;
+        }
+        
     }
     public override void finInteractuar()
     {
@@ -91,6 +98,27 @@ public class Caja : Interactuable
         }
         posicionInt = transform.InverseTransformPoint(dst);
         return dst;
+    }
+    public void Finalizado()
+    {
+        desactivarCaja();
+        finalizado();
+    }
+
+    public void desactivarCaja()
+    {
+        rb.detectCollisions = false;
+        desactivaDetector();
+        enabled = false;
+        GetComponent<BoxCollider>().enabled = false;
+        obstaculo.enabled = false;
+    }
+
+    public void caer(Action fin)
+    {
+        finalizado = fin;
+        player.CancelarInteractuarConCaja();
+        GetComponent<Animator>().SetTrigger("caer");
     }
     /*
     public void asigPosInt(Vector3 pos)

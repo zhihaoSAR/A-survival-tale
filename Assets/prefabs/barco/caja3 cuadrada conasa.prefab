@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8660767788173294895}
   - component: {fileID: 4922093276186752512}
   m_Layer: 9
-  m_Name: caja3 cuadrada (2)
+  m_Name: caja3 cuadrada conasa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,6 +113,7 @@ MonoBehaviour:
   dir: {x: 0, y: 0, z: 0}
   conAsa: 0
   detector: {fileID: 4089457330982420604}
+  obstaculo: {fileID: 8660767788173294895}
   rb: {fileID: 6196288043361278984}
 --- !u!65 &2775670571516010232
 BoxCollider:
@@ -127,19 +128,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.45385742, y: 2.335787, z: 2.9498768}
   m_Center: {x: 1.8317261, y: 0.86971754, z: -0.01244307}
---- !u!65 &6481357428962624367
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4382300574500434007}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 2.9737244, y: 2.3180485, z: 0.44473222}
-  m_Center: {x: -0.018234253, y: 0.8596429, z: -1.7975022}
 --- !u!65 &6181053710445836519
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -153,6 +141,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.49188232, y: 2.2867644, z: 2.9290943}
   m_Center: {x: -1.8041077, y: 0.8433333, z: -0.024772177}
+--- !u!65 &6481357428962624367
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382300574500434007}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 2.9737244, y: 2.3180485, z: 0.44473222}
+  m_Center: {x: -0.018234253, y: 0.8596429, z: -1.7975022}
 --- !u!1 &8569862737258117702
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cbd87986b8b0fc438dda9611352c3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objeto: {fileID: 0}
+  objeto: {fileID: 4922093276186752512}
 --- !u!1 &8675221177511010431
 GameObject:
   m_ObjectHideFlags: 0

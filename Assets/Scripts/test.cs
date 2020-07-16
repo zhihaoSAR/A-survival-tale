@@ -1,32 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class test : MonoBehaviour
 {
-    public Transform testObj,other;
+    public Transform other;
     public Controlador c;
     public Pagina p;
     public Material mymaterial;
     public Configuracion conf;
+    public NavMeshSurface surface;
     Coroutine a = null;
+    public Animator anima;
+    public GameObject testObj;
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            mymaterial.color = Color.blue;
-            Destroy(gameObject);
+            testObj.GetComponent<test2>().func1(); ;
         }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            mymaterial.color = Color.yellow;
-            Destroy(gameObject);
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-        }
-        
+
+
 
     }
     IEnumerator prueba()

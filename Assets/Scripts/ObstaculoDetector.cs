@@ -8,10 +8,9 @@ public class ObstaculoDetector : MonoBehaviour
     [HideInInspector]
     public bool chocado = false;
 
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerStay(Collider collider)
     {
         chocado = true;
-        Debug.Log(collider.name);
     }
     void OnTriggerExit(Collider other)
     {

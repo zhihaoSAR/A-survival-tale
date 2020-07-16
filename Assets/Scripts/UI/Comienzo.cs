@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Comienzo : Pagina
 {
     //---------------elementos para inicializar----------
     public TMPro.TextMeshProUGUI[] Text_textos;
     public RectTransform[] Rect_Opciones;
-
+    public Button continuar;
 
 
     //------------------publico-------------------
@@ -16,12 +17,13 @@ public class Comienzo : Pagina
     int tipoFuente = 0;
     int tamanyoFuente = 0;
 
-    public override void inicializar(Controlador c, Configuracion m)
+    public override void inicializar( Configuracion m)
     {
-        base.inicializar(c, m);
+        base.inicializar(m);
         DatosSistema datos = control.datosSistema;
         cambiarFuente(datos.tipoFuente);
         cambiarTamanyo(datos.tamanyoFuente);
+        continuar.interactable = SistemaGuardar.existeDatoJuego();
     }
     public void cambiarTamanyo(int tamanyo)
     {
@@ -68,5 +70,15 @@ public class Comienzo : Pagina
         tipoFuente = tipo;
         control.datosSistema.tipoFuente = tipo;
 
+    }
+    public void NuevaPartida()
+    {
+        control.S_jugar();
+        control.NuevaPartida();
+    }
+    public void Continuar()
+    {
+        control.S_jugar();
+        control.Continuar();
     }
 }

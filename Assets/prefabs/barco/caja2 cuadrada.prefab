@@ -143,6 +143,7 @@ MonoBehaviour:
   dir: {x: 0, y: 0, z: 0}
   conAsa: 0
   detector: {fileID: 3946428341717676155}
+  obstaculo: {fileID: 8517738488873372968}
   rb: {fileID: 6627485870754769935}
 --- !u!65 &2918620363262340863
 BoxCollider:
@@ -330,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cbd87986b8b0fc438dda9611352c3ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objeto: {fileID: 0}
+  objeto: {fileID: 5353343642045875719}
 --- !u!1001 &45825701106709168
 PrefabInstance:
   m_ObjectHideFlags: 0

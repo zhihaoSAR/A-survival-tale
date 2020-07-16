@@ -20,9 +20,9 @@ public class MenuControl : Pagina
     int tamanyoFuente = 0;
     public Pagina remapeoWASD, remapeo2B;
 
-    public override void inicializar(Controlador c, Configuracion m)
+    public override void inicializar( Configuracion m)
     {
-        base.inicializar(c, m);
+        base.inicializar( m);
         DatosSistema datos = control.datosSistema;
         cambiarFuente(datos.tipoFuente);
         cambiarTamanyo(datos.tamanyoFuente);

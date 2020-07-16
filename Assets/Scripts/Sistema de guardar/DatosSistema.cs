@@ -29,7 +29,7 @@ public class DatosSistema
     public Color color_fondo,color_personaje,color_interactivo;
     public float opacidad_fondo, opacidad_personaje, opacidad_interactivo;
     //-------------------globales-----------------
-    public bool finalizadoConf;
+    public bool finalizadoConf;//para saber si es primera vez
 
 
     
@@ -67,7 +67,7 @@ public class DatosSistema
         //-----------------principal---------------------------
         invencibilidad = 0;
         //---------------control---------------------
-        tipoControl = 0;
+        tipoControl = 1;
         inputTime = 0.5f;
         velocidad = 1;
         //------------------contraste--------------

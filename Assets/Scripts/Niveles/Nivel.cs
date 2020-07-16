@@ -6,8 +6,10 @@ public abstract class Nivel : MonoBehaviour
 {
     public abstract NivelConfig generarConfig(string nivel);
     public int id;
+    [HideInInspector]
+    public bool completado;
 
-    void Start()
+    public virtual void Start()
     {
        if(Controlador.control.escenaControlador.numNivelActual == id)
         {

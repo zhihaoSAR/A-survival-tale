@@ -51,7 +51,7 @@ public class CanvaJuego : Menu
             }
         }
     }
-    public override void abrirMenu(Controlador c, int op)
+    public override void abrirMenu( int op)
     {
         throw new NotImplementedException();
 
@@ -62,7 +62,7 @@ public class CanvaJuego : Menu
         throw new System.NotImplementedException();
     }
 
-    public override void cerrarMenu()
+    public override void cerrarMenu(int op)
     {
         throw new System.NotImplementedException();
     }

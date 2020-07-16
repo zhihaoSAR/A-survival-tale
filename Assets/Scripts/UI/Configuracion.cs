@@ -7,7 +7,8 @@ public class Configuracion : Menu
     //---------------menus-----------------
     public Pagina seleccionControl;
     public Pagina menuInicio;
-    public Pagina configuracionInicion;
+    public Pagina comienzo;
+    public Pagina configuracionInicio;
 
 
     //--------------constantes------------
@@ -32,9 +33,9 @@ public class Configuracion : Menu
         control.S_cambioPagina();
     }
 
-    void Inicializacion(Controlador c)
+    void Inicializacion()
     {
-        control = c;
+        control = Controlador.control;
         datos = control.datosSistema;
         paginasAnteriores = new Stack<Pagina>();
     }
@@ -66,7 +67,7 @@ public class Configuracion : Menu
     public void iniciarPagina()
     {
         paginaActual.gameObject.SetActive(true);
-        paginaActual.inicializar(control, this);
+        paginaActual.inicializar(this);
         control.eventSystem.firstSelectedGameObject = paginaActual.primeroElegido;
         if(datos.tipoControl == 0)
         {
@@ -82,21 +83,47 @@ public class Configuracion : Menu
             control.iniNavegacion(paginaActual.navegable);
         }
     }
-    //op x:
-    public override void abrirMenu(Controlador c, int op)
+    //op 0:configuracion inicio(desde control)
+    //òp 1:desde menu inicio
+    //op 2:abre menu dentro del juego
+    public override void abrirMenu( int op)
     {
-        Inicializacion(c);
-        menuIni = true;
-        control.Set_cambioV(menuIni);
-        paginaActual = menuInicio;
+        Inicializacion();
+        if(op == 0)
+        {
+            paginaActual = seleccionControl;
+            iniciarPagina();
+            control.S_musicaFondo(0);
+            StartCoroutine(TranscicionIniFinMenu(seleccionControl.GetComponent<RectTransform>(), true));
+            return;
+        }
+        if(op == 1)
+        {
+            menuIni = true;
+            control.Set_cambioV(menuIni);
+            paginaActual = menuInicio;
+            iniciarPagina();
+            control.S_musicaFondo(0);
+            StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
+            return;
+        }
+        paginaActual = configuracionInicio;
         iniciarPagina();
         control.S_musicaFondo(0);
-        StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
+        StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), true));
     }
-    public override void cerrarMenu()
+    //op 0: empezar juego
+    //op 1: cerrar menu dentro del juego
+    public override void cerrarMenu(int op)
     {
-        control.S_musicaFondo(0);
-        StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
+        control.S_pararMusica();
+        if(op == 0)
+        {
+            StartCoroutine(TranscicionIniFinMenu(comienzo.GetComponent<RectTransform>(), false));
+            return;
+        }
+
+        StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), false));
     }
 
 

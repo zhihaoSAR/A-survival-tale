@@ -18,8 +18,8 @@ TagManager:
   - PlayerDetector
   - DetectorAve
   - obstaculoDetector
-  - 
-  - 
+  - navSurface
+  - objetoDetector
   - 
   - 
   - 
