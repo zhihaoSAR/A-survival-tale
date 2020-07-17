@@ -8,10 +8,10 @@ public class Player : MonoBehaviour
 {
     //-------------------dos boton--------------
     public Transform flecha, punto;
-    float puntoAltura = 15, flechaAltura = 1;
+    float puntoAltura = 15, flechaAltura = 8;
     bool seleccionaDir = true;
-    float velNavGirar = 60f, velNavMover = 6;
-    float sqrMaxDis = 100;
+    float velNavGirar = 60f, velNavMover = 15;
+    float sqrMaxDis = 1600;
     Vector3 dir;
     //------------------raton--------------
     [SerializeField]
