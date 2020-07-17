@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     public float distanciaLookAt = 2;
     public Rigidbody rb;
     //distancia cuadrado
-    public float sqrDistanciaMaxInteractuable = 0.25f;
+    public float sqrDistanciaMaxInteractuable = 1f;
     //timepoAtascado
     float contadorAtascado = 0;
     public ObstaculoDetector obstaculoDetector;
@@ -482,7 +482,7 @@ public class Player : MonoBehaviour
         {
             Vector3 dir = movimiento.normalized;
             dir = rotacionCamaraXZ * dir;
-            agente.destination = transform.position + dir * 0.7f;
+            agente.destination = transform.position + dir * 3f;
             return estado.Equals(Estado.PARADO);
         }
         agente.ResetPath();

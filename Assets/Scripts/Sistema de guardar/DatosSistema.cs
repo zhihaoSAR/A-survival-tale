@@ -67,7 +67,7 @@ public class DatosSistema
         //-----------------principal---------------------------
         invencibilidad = 0;
         //---------------control---------------------
-        tipoControl = 1;
+        tipoControl = 0;
         inputTime = 0.5f;
         velocidad = 1;
         //------------------contraste--------------

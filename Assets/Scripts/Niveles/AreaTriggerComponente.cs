@@ -10,11 +10,19 @@ public class AreaTriggerComponente : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
+        if (collider.isTrigger)
+        {
+            return;
+        }
         objeto = collider.gameObject;
         areaTrigger.Activar();
     }
     void OnTriggerExit(Collider other)
     {
+        if (other.isTrigger)
+        {
+            return;
+        }
         objeto = null;
         areaTrigger.Desactivar();
     }

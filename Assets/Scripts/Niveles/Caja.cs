@@ -35,12 +35,14 @@ public class Caja : Interactuable
     }
     void activaDetector()
     {
+        Debug.Log((int)detectorPos + "hola");
         detector.colisiones[(int)detectorPos].enabled = true;
     }
     void desactivaDetector()
     {
         if(detectorPos != DetectorPos.SINVALOR )
         {
+            Debug.Log((int)detectorPos + "adios");
             detector.colisiones[(int)detectorPos].enabled = false;
             detectorPos = DetectorPos.SINVALOR;
         }
@@ -51,6 +53,7 @@ public class Caja : Interactuable
         posicionInt = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezeAll;
         desactivaDetector();
+        detector.chocado = false;
         detector.gameObject.SetActive(false);
     }
     public Vector3[] obtenerPosiciones()
@@ -112,6 +115,7 @@ public class Caja : Interactuable
         enabled = false;
         GetComponent<BoxCollider>().enabled = false;
         obstaculo.enabled = false;
+        detector.chocado = false;
     }
 
     public void caer(Action fin)
