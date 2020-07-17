@@ -482,7 +482,7 @@ public class Player : MonoBehaviour
         {
             Vector3 dir = movimiento.normalized;
             dir = rotacionCamaraXZ * dir;
-            agente.destination = transform.position + dir * 3f;
+            agente.destination = transform.position + dir * 6f;
             return estado.Equals(Estado.PARADO);
         }
         agente.ResetPath();
