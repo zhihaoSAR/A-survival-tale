@@ -182,15 +182,14 @@ public class Player : MonoBehaviour
             Debug.Log(estado);
             ult = estado;
         }
-        /*
-        if ((!control.controlable || !controlable) && 
-            (estado == Estado.PREPARARINTER || estado == Estado.MOVER))
+        
+        if ((!control.controlable || !controlable))
         {
-            agente.isStopped = true;
+            //agente.isStopped = true;
             return;
         }
-        agente.isStopped = false;
-        */
+        //agente.isStopped = false;
+        
         actualizarObjDis();
         estadoActual();
         
@@ -201,7 +200,7 @@ public class Player : MonoBehaviour
         if (objeto != null)
             sqrDisObjeto = (objeto.transform.position - transform.position).sqrMagnitude;
         else
-            sqrDisObjeto = 100;
+            sqrDisObjeto = 10000;
     }
     void RecordarControl(bool activar)
     {
@@ -229,6 +228,7 @@ public class Player : MonoBehaviour
         {
             estado = Estado.MOVER;
             estadoActual = estadoMover;
+
             goto salirEstado;
         }
         if(accionInteractuar())
@@ -244,6 +244,7 @@ public class Player : MonoBehaviour
         salirEstado:
         desactivarSenyales();
         animator.SetBool(paradoAnim, false);
+        animator.SetBool(caminar, true);
         tiempoParado = 0;
         contadorAtascado = 0;
         contar = false;
@@ -266,6 +267,7 @@ public class Player : MonoBehaviour
         agente.destination = destinoPrepararInt;
         if (accionCancelar())
         {
+            Debug.Log("cancelado");
             goto irEstadoParado;
         }
         if (agente.remainingDistance < distanciaLookAt)
@@ -279,8 +281,9 @@ public class Player : MonoBehaviour
             dist.y = 0;
             if (dist.sqrMagnitude <= sqrDistanciaMaxInteractuable)
             {
-                if (Math.Abs(transform.position.y - destinoPrepararInt.y) > 2)
+                if (Math.Abs(transform.position.y - destinoPrepararInt.y) > 4)
                 {
+                    Debug.Log("altura");
                     goto irEstadoParado;
                 }
                 transform.position = destinoPrepararInt;
@@ -293,6 +296,7 @@ public class Player : MonoBehaviour
             
             if(contadorAtascado> 1f)
             {
+                Debug.Log("atascado");
                 goto irEstadoParado;
             }
         }
@@ -766,7 +770,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(datosSystema.keys["A"]))
         {
-            objetivo = punto.transform.position-transform.position;
+            objetivo = punto.transform.position-caja.transform.position;
             punto.gameObject.SetActive(false);
             objetivo.y = 0;
             if (Vector3.Dot(caja.dir, objetivo.normalized) >= 0)

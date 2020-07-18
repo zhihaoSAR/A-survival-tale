@@ -35,14 +35,12 @@ public class Caja : Interactuable
     }
     void activaDetector()
     {
-        Debug.Log((int)detectorPos + "hola");
         detector.colisiones[(int)detectorPos].enabled = true;
     }
     void desactivaDetector()
     {
         if(detectorPos != DetectorPos.SINVALOR )
         {
-            Debug.Log((int)detectorPos + "adios");
             detector.colisiones[(int)detectorPos].enabled = false;
             detectorPos = DetectorPos.SINVALOR;
         }

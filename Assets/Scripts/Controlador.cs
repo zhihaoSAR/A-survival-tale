@@ -23,8 +23,7 @@ public class Controlador : MonoBehaviour
     [HideInInspector]
     public Player player;
     public bool controlable = true;
-    [HideInInspector]
-    public bool cargando = false;
+    
 
     public Menu canvasActual;
     TMP_FontAsset tcm,openDyslexic;
@@ -57,7 +56,14 @@ public class Controlador : MonoBehaviour
     ContrasteControlador contrasteControlador;
     //------------pantalla de cargar-------------
     public RectTransform panelCargar;
-    
+    [HideInInspector]
+    public bool cargando = false;
+    //-------------Tutorial------------
+    public RectTransform panelTutorial;
+    public TextMeshProUGUI tutorial_texto;
+    public Image tutorial_imagen;
+    public Sprite imagenDefecto;
+
     public static Controlador control;
     
 
@@ -102,6 +108,89 @@ public class Controlador : MonoBehaviour
         escenaControlador.cargarEscenaIntermedio();
         escenaControlador.iniciarJuego(datosJuego);
         StartCoroutine(cargarEscena());
+    }
+
+    public void mostrarTutorial(Sprite[] imagenes,string[] textos)
+    {
+        jugadorControlable = false;
+        panelTutorial.gameObject.SetActive(true);
+        tutorial_texto.text = textos[0];
+        if(imagenes[0] != null)
+        {
+            tutorial_imagen.sprite = imagenes[0];
+        }
+        else
+        {
+            tutorial_imagen.sprite = imagenDefecto;
+        }
+        int tamanyoFuente;
+        switch(datosSistema.tamanyoFuente)
+        {
+            case 1:tamanyoFuente = 37;
+                break;
+            case 2: tamanyoFuente = 45;
+                break;
+            default:
+                tamanyoFuente = 30;
+                break;
+        }
+        tutorial_texto.fontSize = tamanyoFuente;
+        panelTutorial.SetParent(canvasActual.transform);
+        StartCoroutine(mostrarTutorial_Coroutine(imagenes, textos));
+
+    }
+    IEnumerator mostrarTutorial_Coroutine(Sprite[] imagenes, string[] textos)
+    {
+        StartCoroutine(PopUp(panelTutorial));
+        yield return new WaitForSecondsRealtime(1.5f);
+        bool acabado = false;
+        int ind = 1;
+        while(!acabado)
+        {
+            yield return null;
+            if(datosSistema.tipoControl == 0)
+            {
+                if(Input.GetKeyUp(keys["confirmar"]) || Input.GetKeyUp(keys["cancelar"]))
+                {
+                    goto siguiente;
+                }
+            }
+            if (datosSistema.tipoControl == 1)
+            {
+                if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
+                {
+                    goto siguiente;
+                }
+            }
+            if (datosSistema.tipoControl == 2)
+            {
+                if (Input.GetKeyUp(keys["A"]) || Input.GetKeyUp(keys["B"]))
+                {
+                    goto siguiente;
+                }
+            }
+            continue;
+        siguiente:
+            if(ind < textos.Length)
+            {
+                tutorial_texto.text = textos[ind];
+                if(imagenes[ind] != null)
+                {
+                    tutorial_imagen.sprite = imagenes[ind];
+                }
+                else
+                {
+                    tutorial_imagen.sprite = imagenDefecto;
+                }
+                ind++;
+            }else
+            {
+                acabado = true;
+            }
+        }
+        panelTutorial.SetParent(transform);
+        panelTutorial.gameObject.SetActive(false);
+        jugadorControlable = true;
     }
 
     void Update()
