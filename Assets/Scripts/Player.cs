@@ -123,7 +123,7 @@ public class Player : MonoBehaviour
         agarrarAve = Animator.StringToHash("agarrarAve");
         activarAve = Animator.StringToHash("activarAve");
         //----------------------------------------------------------------
-        //transform.position = control.datosJuego.playerPos;
+        transform.position = control.datosJuego.playerPos;
         ActualizarDatos();
         
 

@@ -1,4 +1,4 @@
-﻿#define ESCENA_PRUEBA
+﻿
 
 using System;
 using System.Collections;
