@@ -277,6 +277,7 @@ public class Controlador : MonoBehaviour
         uiControlable = false;
         cargando = false;
         inputModule.desactivarRatonRegistrar = true;
+        canvasActual = player.HUD;
     }
 
     public void cerrarElegirColor(bool confirmar)

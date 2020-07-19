@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     Camera mainCamera;
     public bool controlable;
     [SerializeField]
-    CanvaJuego HUD;
+    public CanvaJuego HUD;
     [HideInInspector]
     public Interactuable objeto;
     [HideInInspector]
