@@ -1,36 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class test : MonoBehaviour
 {
-    public Transform testObj,other;
+    public Transform other;
     public Controlador c;
     public Pagina p;
+    public Material mymaterial;
     public Configuracion conf;
+    public NavMeshSurface surface;
     Coroutine a = null;
+    public Animator anima;
+    public GameObject testObj;
     void Update()
     {
-        /*
-        Debug.DrawLine(testObj.transform.position, testObj.transform.position + testObj.transform.forward*5, Color.red);
-        Vector3 perp = testObj.transform.forward;
-        float x = perp.x;
-        perp.x = -perp.z;
-        perp.z = x;
-        Debug.DrawLine(testObj.transform.position, testObj.transform.position+ perp*5, Color.green);
-        */
-        Vector3 forward = testObj.transform.TransformDirection(Vector3.forward);
-        Vector3 toOther = other.position - testObj.transform.position;
-        Debug.DrawLine(testObj.transform.position, testObj.transform.position + forward * 5, Color.red);
-        Debug.DrawLine(testObj.transform.position, testObj.transform.position + toOther * 5, Color.green);
-        if (Vector3.Dot(forward, toOther) < 0)
+
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            print("The other transform is behind me!");
+            Controlador.control.cerrarJuego();
         }
-        else{
-            print("front");
-        }
-        print(testObj.parent);
+
 
 
     }

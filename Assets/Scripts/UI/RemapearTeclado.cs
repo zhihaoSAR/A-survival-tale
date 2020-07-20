@@ -23,9 +23,9 @@ public class RemapearTeclado : Pagina
     int tipoFuente = 0;
     int tamanyoFuente = 0;
 
-    public override void inicializar(Controlador c, Configuracion m)
+    public override void inicializar( Configuracion m)
     {
-        base.inicializar(c, m);
+        base.inicializar(m);
         DatosSistema datos = control.datosSistema;
         cambiarFuente(datos.tipoFuente);
         cambiarTamanyo(datos.tamanyoFuente);
@@ -99,7 +99,7 @@ public class RemapearTeclado : Pagina
     {
         if(!registrando)
         {
-            control.uiCanControl = false;
+            control.uiControlable = false;
             control.canNavegar = false;
             keyObtenido = KeyCode.None;
             UpdateText(botonTextos[boton], " ");
@@ -148,7 +148,7 @@ public class RemapearTeclado : Pagina
     IEnumerator FinalizarCaptura()
     {
         yield return new WaitForSecondsRealtime(0.1f);
-        control.uiCanControl = true;
+        control.uiControlable = true;
         control.canNavegar = true;
     }
 

@@ -25,11 +25,11 @@ namespace UnityEngine.EventSystems
 
         private PointerEventData m_InputPointerEvent;
 
-        public bool canControl = true;
+        public bool controlable = true;
 
         UIControl uicontrol;
         public Controlador control;
-        public bool modojuego = false;
+        public bool desactivarRatonRegistrar = false;
 
         protected MyInputModule()
         {
@@ -258,12 +258,12 @@ namespace UnityEngine.EventSystems
 
             // case 1004066 - touch / mouse events should be processed before navigation events in case
             // they change the current selected gameobject and the submit button is a touch / mouse button.
-            if (!control.canControl)
+            if (!control.controlable)
                 return;
             // touch needs to take precedence because of the mouse emulation layer
             if (!ProcessTouchEvents() && input.mousePresent)
                 ProcessMouseEvent();
-            if (!canControl )
+            if (!controlable )
                 return;
             if (eventSystem.sendNavigationEvents)
             {
@@ -661,7 +661,7 @@ namespace UnityEngine.EventSystems
                 {
                     control.cancelar();
                 }
-                if(!modojuego)
+                if(!desactivarRatonRegistrar)
                 {
                     control.registraControl();
                 }

@@ -60,8 +60,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4665bd93c0938646b93bb67ae3764c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canControl: 1
+  controlable: 1
   control: {fileID: 0}
+  desactivarRatonRegistrar: 0
   arriba: 119
   abajo: 115
   izquirda: 97

@@ -11,9 +11,9 @@ public abstract class Pagina : MonoBehaviour
     public Configuracion menu;
     public GameObject primeroElegido;
 
-    public virtual void inicializar(Controlador c,Configuracion m)
+    public virtual void inicializar(Configuracion m)
     {
-        control = c;
+        control = Controlador.control;
         menu = m;
     }
 }

@@ -7,7 +7,8 @@ public class Configuracion : Menu
     //---------------menus-----------------
     public Pagina seleccionControl;
     public Pagina menuInicio;
-    public Pagina configuracionInicion;
+    public Pagina comienzo;
+    public Pagina configuracionInicio;
 
 
     //--------------constantes------------
@@ -32,9 +33,9 @@ public class Configuracion : Menu
         control.S_cambioPagina();
     }
 
-    void Inicializacion(Controlador c)
+    void Inicializacion()
     {
-        control = c;
+        control = Controlador.control;
         datos = control.datosSistema;
         paginasAnteriores = new Stack<Pagina>();
     }
@@ -66,7 +67,7 @@ public class Configuracion : Menu
     public void iniciarPagina()
     {
         paginaActual.gameObject.SetActive(true);
-        paginaActual.inicializar(control, this);
+        paginaActual.inicializar(this);
         control.eventSystem.firstSelectedGameObject = paginaActual.primeroElegido;
         if(datos.tipoControl == 0)
         {
@@ -82,21 +83,47 @@ public class Configuracion : Menu
             control.iniNavegacion(paginaActual.navegable);
         }
     }
-    //op x:
-    public override void abrirMenu(Controlador c, int op)
+    //op 0:configuracion inicio(desde control)
+    //òp 1:desde menu inicio
+    //op 2:abre menu dentro del juego
+    public override void abrirMenu( int op)
     {
-        Inicializacion(c);
-        menuIni = true;
-        control.Set_cambioV(menuIni);
-        paginaActual = menuInicio;
+        Inicializacion();
+        if(op == 0)
+        {
+            paginaActual = seleccionControl;
+            iniciarPagina();
+            control.S_musicaFondo(0);
+            StartCoroutine(TranscicionIniFinMenu(seleccionControl.GetComponent<RectTransform>(), true));
+            return;
+        }
+        if(op == 1)
+        {
+            menuIni = true;
+            control.Set_cambioV(menuIni);
+            paginaActual = menuInicio;
+            iniciarPagina();
+            control.S_musicaFondo(0);
+            StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
+            return;
+        }
+        paginaActual = configuracionInicio;
         iniciarPagina();
         control.S_musicaFondo(0);
-        StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
+        StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), true));
     }
-    public override void cerrarMenu()
+    //op 0: empezar juego
+    //op 1: cerrar menu dentro del juego
+    public override void cerrarMenu(int op)
     {
-        control.S_musicaFondo(0);
-        StartCoroutine(TranscicionIniFinMenu(menuInicio.GetComponent<RectTransform>(), true));
+        control.S_pararMusica();
+        if(op == 0)
+        {
+            StartCoroutine(TranscicionIniFinMenu(comienzo.GetComponent<RectTransform>(), false));
+            return;
+        }
+
+        StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), false));
     }
 
 
@@ -108,9 +135,9 @@ public class Configuracion : Menu
         else
             dir = 1;
         Vector2 dst = new Vector2(saliente.rect.width, 0);
-        bool antes_uicanControl = control.uiCanControl;
+        bool antes_uicanControl = control.uiControlable;
         bool antes_canNavegar = control.canNavegar;
-        control.uiCanControl = false;
+        control.uiControlable = false;
         control.canNavegar = false;
         entrante.anchoredPosition = saliente.anchoredPosition + dst * dir;
         float now = 0;
@@ -130,7 +157,7 @@ public class Configuracion : Menu
         movimiento = dst * dir;
         entrante.anchoredPosition = entranteOri + movimiento;
         saliente.anchoredPosition = salienteOri + movimiento;
-        control.uiCanControl = antes_uicanControl;
+        control.uiControlable = antes_uicanControl;
         control.canNavegar = antes_canNavegar;
         saliente.gameObject.SetActive(false);
     }
@@ -150,12 +177,12 @@ public class Configuracion : Menu
             dst = new Vector2(0, rect.rect.height);
             rect.anchoredPosition = Vector2.zero;
         }
-        bool antes_uicanControl = control.uiCanControl;
+        bool antes_uicanControl = control.uiControlable;
         bool antes_canNavegar = control.canNavegar;
-        bool antes_canControl = control.canControl;
-        control.uiCanControl = false;
+        bool antes_canControl = control.controlable;
+        control.uiControlable = false;
         control.canNavegar = false;
-        control.canControl = false;
+        control.controlable = false;
         float now = 0;
         Vector2 movimiento;
         Vector2 rectOri = rect.anchoredPosition;
@@ -170,9 +197,9 @@ public class Configuracion : Menu
         }
         movimiento = dst * dir;
         rect.anchoredPosition = rectOri + movimiento;
-        control.uiCanControl = antes_uicanControl;
+        control.uiControlable = antes_uicanControl;
         control.canNavegar = antes_canNavegar;
-        control.canControl = antes_canControl;
+        control.controlable = antes_canControl;
         if (!ini)
             rect.gameObject.SetActive(false);
     }

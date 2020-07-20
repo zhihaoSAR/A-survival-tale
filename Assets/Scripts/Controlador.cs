@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,12 +14,16 @@ public class Controlador : MonoBehaviour
     public static Dictionary<string, KeyCode> keys;
     public MyInputModule inputModule;
     public DatosSistema datosSistema;
+    public DatosJuego datosJuego;
     public UIControl uicontrol;
     static float tiempoTransicion = 0.15f;
     public EventSystem eventSystem;
     public UISonido uisonido;
+    public EscenaControlador escenaControlador;
     [HideInInspector]
     public Player player;
+    public bool controlable = true;
+    
 
     public Menu canvasActual;
     TMP_FontAsset tcm,openDyslexic;
@@ -35,39 +41,162 @@ public class Controlador : MonoBehaviour
     Vector2 tamanyoColor;
     bool persigueRaton = false;
     int velocidad = 100;
-    public bool canControl = true;
     public Image I_registrando;
     Action<Color> acabado;
     //----------popUp--------------------
-    bool ultUiCanControl, ultCanControl, ultPlayerCanControl;
+    bool ultUiControlable, ultControlable, ultJugadorControlable;
     //--------------salir-------------
     bool cerrandoJuego = false;
     public RectTransform panelSalir;
     public TextMeshProUGUI[] salirTextos;
     public GameObject[] salirNav;
     bool cerrar = false;
-    
-    
+    //-----------contraste controlador-------------
+    public ContrasteControlador contrastePrefab;
+    ContrasteControlador contrasteControlador;
+    //------------pantalla de cargar-------------
+    public RectTransform panelCargar;
+    [HideInInspector]
+    public bool cargando = false;
+    //-------------Tutorial------------
+    public RectTransform panelTutorial;
+    public TextMeshProUGUI tutorial_texto;
+    public Image tutorial_imagen;
+    public Sprite imagenDefecto;
+
     public static Controlador control;
+    
 
 
     
     void Start()
     {
+        control = this;
         SistemaGuardar.cargarDatosSistema(out datosSistema);
+        SistemaGuardar.cargarDatosJuego(out datosJuego);
         keys = datosSistema.keys;
         Mappear();
         Application.wantsToQuit += cerrarJuego;
-        //canvasActual.abrirMenu(this, 0);
-        uiCanControl = false;
-        control = this;
-        inputModule.modojuego = true;
+#if ESCENA_PRUEBA
+        uiControlable = false;
+        inputModule.desactivarRatonRegistrar = true;
+
+#else
+        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(uicontrol.gameObject);
+        DontDestroyOnLoad(canvasActual.gameObject);
+        
+        canvasActual.abrirMenu(1);
+
+#endif
+
     }
-    
+    public void NuevaPartida()
+    {
+        datosJuego = new DatosJuego();
+        EmpezarJuego();
+    }
+    public void Continuar()
+    {
+         SistemaGuardar.cargarDatosJuego(out datosJuego);
+        EmpezarJuego();
+    }
+
+    public void EmpezarJuego()
+    {
+        canvasActual.cerrarMenu(0);
+        escenaControlador.cargarEscenaIntermedio();
+        escenaControlador.iniciarJuego(datosJuego);
+        StartCoroutine(cargarEscena());
+    }
+
+    public void mostrarTutorial(Sprite[] imagenes,string[] textos)
+    {
+        jugadorControlable = false;
+        panelTutorial.gameObject.SetActive(true);
+        tutorial_texto.text = textos[0];
+        if(imagenes[0] != null)
+        {
+            tutorial_imagen.sprite = imagenes[0];
+        }
+        else
+        {
+            tutorial_imagen.sprite = imagenDefecto;
+        }
+        int tamanyoFuente;
+        switch(datosSistema.tamanyoFuente)
+        {
+            case 1:tamanyoFuente = 37;
+                break;
+            case 2: tamanyoFuente = 45;
+                break;
+            default:
+                tamanyoFuente = 30;
+                break;
+        }
+        tutorial_texto.fontSize = tamanyoFuente;
+        panelTutorial.SetParent(canvasActual.transform);
+        StartCoroutine(mostrarTutorial_Coroutine(imagenes, textos));
+
+    }
+    IEnumerator mostrarTutorial_Coroutine(Sprite[] imagenes, string[] textos)
+    {
+        StartCoroutine(PopUp(panelTutorial));
+        yield return new WaitForSecondsRealtime(1.5f);
+        bool acabado = false;
+        int ind = 1;
+        while(!acabado)
+        {
+            yield return null;
+            if(datosSistema.tipoControl == 0)
+            {
+                if(Input.GetKeyUp(keys["confirmar"]) || Input.GetKeyUp(keys["cancelar"]))
+                {
+                    goto siguiente;
+                }
+            }
+            if (datosSistema.tipoControl == 1)
+            {
+                if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
+                {
+                    goto siguiente;
+                }
+            }
+            if (datosSistema.tipoControl == 2)
+            {
+                if (Input.GetKeyUp(keys["A"]) || Input.GetKeyUp(keys["B"]))
+                {
+                    goto siguiente;
+                }
+            }
+            continue;
+        siguiente:
+            if(ind < textos.Length)
+            {
+                tutorial_texto.text = textos[ind];
+                if(imagenes[ind] != null)
+                {
+                    tutorial_imagen.sprite = imagenes[ind];
+                }
+                else
+                {
+                    tutorial_imagen.sprite = imagenDefecto;
+                }
+                ind++;
+            }else
+            {
+                acabado = true;
+            }
+        }
+        panelTutorial.SetParent(transform);
+        panelTutorial.gameObject.SetActive(false);
+        jugadorControlable = true;
+    }
+
     void Update()
     {
         
-        if(elegiendoColor && canControl)
+        if(elegiendoColor && controlable)
         {
 
             Vector2 pos;
@@ -83,25 +212,19 @@ public class Controlador : MonoBehaviour
             {
 
                 persigueRaton = false;
+                Debug.Log(persigueRaton);
                 registraControl();
             }
             if (persigueRaton)
             {
                 pos = Input.mousePosition;
                 pos = rect_color.transform.InverseTransformPoint(pos);
+                pos.y = 40;
                 MoverMarca(pos);
                 return;
             }
             pos = marca.rectTransform.localPosition;
-                
-            if (Input.GetKey(keys["arriba"]))
-            {
-                pos.y += velocidad*Time.unscaledDeltaTime;
-            }
-            if (Input.GetKey(keys["abajo"]))
-            {
-                pos.y -= velocidad * Time.unscaledDeltaTime;
-            }
+               
             if (Input.GetKey(keys["izquierda"]))
             {
                 pos.x -= velocidad * Time.unscaledDeltaTime;
@@ -118,12 +241,13 @@ public class Controlador : MonoBehaviour
                 if (pos.x > tamanyoColor.x)
                 {
                     pos.x = 0;
-                    pos.y += 66;
-                    if (pos.y > 400)
-                        pos.y = 0;
                 }
             }
-            MoverMarca(pos);
+            if(!pos.Equals(marca.rectTransform.localPosition))
+            {
+                MoverMarca(pos);
+            }
+            
             if(Input.GetKeyDown(keys["confirmar"]) || Input.GetKeyDown(keys["A"]))
             {
                 cerrarElegirColor(true);
@@ -133,6 +257,27 @@ public class Controlador : MonoBehaviour
                 cerrarElegirColor(false);
             }
         }
+    }
+
+    public IEnumerator cargarEscena()
+    {
+        yield return null;
+        controlable = false;
+        cargando = true;
+        panelCargar.gameObject.SetActive(true);
+        panelCargar.SetParent(canvasActual.transform);
+        while(!escenaControlador.finalizado)
+        {
+            yield return null;
+        }
+        
+        panelCargar.gameObject.SetActive(false);
+        panelCargar.SetParent(this.transform);
+        controlable = true;
+        uiControlable = false;
+        cargando = false;
+        inputModule.desactivarRatonRegistrar = true;
+        canvasActual = player.HUD;
     }
 
     public void cerrarElegirColor(bool confirmar)
@@ -145,7 +290,8 @@ public class Controlador : MonoBehaviour
         panelElegirColor.gameObject.SetActive(false);
         panelElegirColor.parent = transform;
         canNavegar = true;
-        uiCanControl = true;
+        uiControlable = true;
+        inputModule.desactivarRatonRegistrar = false;
         elegiendoColor = false;
         S_confirmarToggle();
     }
@@ -162,10 +308,10 @@ public class Controlador : MonoBehaviour
         inputModule.B = keys["B"];
     }
 
-    public bool uiCanControl
+    public bool uiControlable
     {
-        get { return inputModule.canControl; }
-        set { inputModule.canControl = value; }
+        get { return inputModule.controlable; }
+        set { inputModule.controlable = value; }
     }
     public bool canNavegar
     {
@@ -200,12 +346,12 @@ public class Controlador : MonoBehaviour
         Texture2D cursor = Resources.Load<Texture2D>(prefijo + tamaño);
         UnityEngine.Cursor.SetCursor(cursor, hotspot, CursorMode.ForceSoftware);
     }
-    public bool playerCanControl
+    public bool jugadorControlable
     {
-        get { if (player != null) return player.playerCanControl;
+        get { if (player != null) return player.controlable;
             return false;
         }
-        set { if(player != null) player.playerCanControl = value; }
+        set { if(player != null) player.controlable = value; }
     }
 
     //1:ventana 0:completa
@@ -225,9 +371,9 @@ public class Controlador : MonoBehaviour
     IEnumerator PopUp(RectTransform rect)
     {
         float now = 0;
-        bool antes_uiCanControl = uiCanControl;
+        bool antes_uiCanControl = uiControlable;
         bool antes_canNavegar = canNavegar;
-        uiCanControl = false;
+        uiControlable = false;
         canNavegar = false;
         rect.anchoredPosition = Vector2.zero;
         yield return null;
@@ -238,30 +384,30 @@ public class Controlador : MonoBehaviour
             yield return null;
         }
         rect.localScale = Vector3.one;
-        uiCanControl = antes_uiCanControl;
+        uiControlable = antes_uiCanControl;
         canNavegar = antes_canNavegar;
     }
     public void ElegirColor(Vector2 pos,Action<Color> acabado)
     {
         canNavegar = false;
-        uiCanControl = false;
+        uiControlable = false;
+        inputModule.desactivarRatonRegistrar = true;
         panelElegirColor.gameObject.SetActive(true);
         panelElegirColor.parent = canvasActual.transform;
         panelElegirColor.localScale = Vector3.zero;
         rect_color.anchoredPosition = pos;
-        Debug.Log(pos);
         StartCoroutine("PopUp",panelElegirColor);
         elegiendoColor = true ;
         mainCamera = Camera.main;
-        MoverMarca(Vector2.zero);
-        tamanyoColor = new Vector2(tex_color.width,tex_color.height);
+        tamanyoColor = new Vector2(tex_color.width, tex_color.height);
+        MoverMarca(new Vector2(0,40));
         this.acabado = acabado;
     }
     void MoverMarca(Vector2 pos)
     {
-        
         pos.x = Mathf.Clamp(pos.x, 0, tamanyoColor.x);
         pos.y = Mathf.Clamp(pos.y, 0, tamanyoColor.y);
+        
         marca.rectTransform.localPosition = pos;
         preview.color = tex_color.GetPixel((int)pos.x,(int)pos.y);
         float grayscale = 1- preview.color.grayscale;
@@ -360,7 +506,7 @@ public class Controlador : MonoBehaviour
 
     public void registraControl()
     {
-        if (datosSistema.inputTime == 0 || !canControl)
+        if (datosSistema.inputTime == 0 || !controlable)
             return;
 
         StartCoroutine("registrandoControl");
@@ -368,7 +514,7 @@ public class Controlador : MonoBehaviour
     }
     IEnumerator registrandoControl()
     {
-        canControl = false;
+        controlable = false;
         float now = 0;
         I_registrando.gameObject.SetActive(true);
         I_registrando.transform.parent = canvasActual.transform;
@@ -380,7 +526,7 @@ public class Controlador : MonoBehaviour
         }
         I_registrando.rectTransform.parent = this.transform;
         I_registrando.gameObject.SetActive(false);
-        canControl = true;
+        controlable = true;
     }
 
     public bool cerrarJuego()
@@ -401,13 +547,13 @@ public class Controlador : MonoBehaviour
         }
         uicontrol.apilarNavegacion(salirNav);
         panelSalir.parent = canvasActual.transform;
-        ultCanControl = canControl;
+        ultControlable = controlable;
         if (player != null)
-            ultPlayerCanControl = playerCanControl;
-        ultUiCanControl = uiCanControl;
-        canControl = true;
-        playerCanControl = false;
-        uiCanControl = true;
+            ultJugadorControlable = jugadorControlable;
+        ultUiControlable = uiControlable;
+        controlable = true;
+        jugadorControlable = false;
+        uiControlable = true;
         StartCoroutine(PopUp(panelSalir));
         return false;
     }
@@ -415,36 +561,41 @@ public class Controlador : MonoBehaviour
     {
         if(cerrar)
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-            #else
+#else
                 this.cerrar = true;
                 Application.Quit();
-            #endif
+#endif
         }
         else
         {
             panelSalir.parent = transform;
             panelSalir.gameObject.SetActive(false);
             cerrandoJuego = false;
-            uiCanControl = ultUiCanControl;
-            playerCanControl = ultPlayerCanControl;
-            canControl = ultCanControl;
+            uiControlable = ultUiControlable;
+            uicontrol.cancelar();
+            jugadorControlable = ultJugadorControlable;
+            controlable = ultControlable;
+            registraControl();
+
         }
     }
 
     public void cancelar()
     {
-        if(uiCanControl)
+        if(uiControlable)
         {
-            if(!uicontrol.cancelar())
+            if (cerrandoJuego)
+            {
+                cerrarJuego(false);
+                return;
+            }
+            if (!uicontrol.cancelar())
             {
                 canvasActual.cancelar();
             }
-            if(cerrandoJuego)
-            {
-                cerrarJuego(false);
-            }
+            
         }
             
     }
@@ -458,7 +609,7 @@ public class Controlador : MonoBehaviour
 
     public void S_jugar()
     {
-
+        uisonido.Play_jugar();
     }
     public void S_cambioV()
     {
@@ -499,4 +650,46 @@ public class Controlador : MonoBehaviour
             uisonido.cambioV = uisonido.cambioVGeneral;
         }
     }
+    //------------contraste controlador-------------------
+    public void cambiarContraste(TipoContraste mascara)
+    {
+        if (mascara == TipoContraste.NADA)
+            return;
+        contrasteControlador = GameObject.Instantiate<ContrasteControlador>(contrastePrefab);
+        if((TipoContraste.FONDO & mascara) == TipoContraste.FONDO)
+        {
+            if(datosSistema.opacidad_fondo == 0)
+            {
+                contrasteControlador.cambiarAlDefectoFondo();
+            }
+            else
+            {
+                contrasteControlador.cambiarContrasteFondo(datosSistema.color_fondo);
+            }
+        }
+        if ((TipoContraste.PERSONAJE & mascara) == TipoContraste.PERSONAJE)
+        {
+            if (datosSistema.opacidad_personaje == 0)
+            {
+                contrasteControlador.cambiarAlDefectoPersonaje(datosJuego);
+            }
+            else
+            {
+                contrasteControlador.cambiarContrastePesonaje(datosSistema.color_personaje);
+            }
+        }
+        if ((TipoContraste.INTERACTIVO & mascara) == TipoContraste.INTERACTIVO)
+        {
+            if (datosSistema.opacidad_interactivo == 0)
+            {
+                contrasteControlador.cambiarAlDefectoFondo();
+            }
+            else
+            {
+                contrasteControlador.cambiarContrasteInteractuable(datosSistema.color_interactivo);
+            }
+        }
+        Destroy(contrasteControlador);
+    }
+
 }

@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Raton : MonoBehaviour
 {
+    [HideInInspector]
     public Vector3 posicionEscena;
+    [HideInInspector]
     public bool interactuable;
+    [HideInInspector]
     public Interactuable objeto;
     Camera mainCamera;
     void Start()
@@ -21,7 +24,7 @@ public class Raton : MonoBehaviour
         {
             Ray ray = mainCamera.ScreenPointToRay(posicionPantalla);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit,100,layerMask))
+            if (Physics.Raycast(ray, out hit,500,layerMask))
             {
                 if(hit.transform.TryGetComponent<Interactuable>(out objeto))
                 {

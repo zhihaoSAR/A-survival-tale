@@ -17,9 +17,9 @@ TagManager:
   - ObjetoInteractuable
   - PlayerDetector
   - DetectorAve
-  - 
-  - 
-  - 
+  - obstaculoDetector
+  - navSurface
+  - objetoDetector
   - 
   - 
   - 

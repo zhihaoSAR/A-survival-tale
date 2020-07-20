@@ -50,7 +50,10 @@ public class UISonido:MonoBehaviour
     {
         source.PlayOneShot(confirmarToggle);
     }
-
+    public void Play_jugar()
+    {
+        source.PlayOneShot(jugar);
+    }
 
 
 }

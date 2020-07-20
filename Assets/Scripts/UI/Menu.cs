@@ -11,8 +11,8 @@ public abstract class Menu : MonoBehaviour
 
     public abstract bool getActualNavegable(out GameObject[] nav);
     public abstract void cancelar();
-    public abstract void abrirMenu(Controlador c,int op);
-    public abstract void cerrarMenu();
+    public abstract void abrirMenu(int op);
+    public abstract void cerrarMenu(int op);
 
 
 

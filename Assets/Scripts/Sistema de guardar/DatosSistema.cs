@@ -6,7 +6,6 @@ public class DatosSistema
 {
     public Dictionary<string, KeyCode> keys;
     public int hash;
-    
     //------------------visualizacion-----------
     public int tamanyoFuente;//0:30 1:1.25 2: 1.5
     public int tipoFuente;//0: TCM 1:opendyslexic
@@ -28,8 +27,12 @@ public class DatosSistema
     public int velocidad; // 0:lenta 1:media 2:rapida
     //------------------contraste--------------
     public Color color_fondo,color_personaje,color_interactivo;
+    public float opacidad_fondo, opacidad_personaje, opacidad_interactivo;
     //-------------------globales-----------------
-    public bool finalizadoConf;
+    public bool finalizadoConf;//para saber si es primera vez
+
+
+    
 
     public DatosSistema()
     {
@@ -64,17 +67,18 @@ public class DatosSistema
         //-----------------principal---------------------------
         invencibilidad = 0;
         //---------------control---------------------
-        tipoControl = 0;
+        tipoControl = 1;
         inputTime = 0.5f;
         velocidad = 1;
         //------------------contraste--------------
-        color_fondo = Color.clear;
-        color_personaje = Color.clear;
-        color_interactivo = Color.clear;
+        color_fondo = Color.white;
+        color_personaje = Color.white;
+        color_interactivo = Color.white;
+        opacidad_fondo = 0;
+        opacidad_personaje = 0;
+        opacidad_interactivo = 0;
         //-------------------globales-----------------
         finalizadoConf = false;
-        
-        
 
     }
     public bool comprobarDatos()
