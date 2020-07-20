@@ -19,7 +19,7 @@ public class test : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            testObj.GetComponent<test2>().func1(); ;
+            Controlador.control.cerrarJuego();
         }
 
 
