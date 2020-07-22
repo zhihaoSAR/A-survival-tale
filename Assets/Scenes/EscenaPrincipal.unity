@@ -10430,6 +10430,12 @@ PrefabInstance:
       propertyPath: canvasActual
       value: 
       objectReference: {fileID: 209955037}
+    - target: {fileID: 1823960651596220406, guid: ab034a1f885b903489f844aae503e7b8,
+        type: 3}
+      propertyPath: contrastePrefab
+      value: 
+      objectReference: {fileID: 6024934358789928720, guid: 1dcbb621d7bef8343b55e1fe1504a105,
+        type: 3}
     - target: {fileID: 1823960651596220407, guid: ab034a1f885b903489f844aae503e7b8,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -17,6 +17,8 @@ public class ContrasteControlador:MonoBehaviour
     public ColorDefecto colorDefecto;
 
     public Material[] fondos;
+    public Material[] aguas;
+    public Material[] fuegos;
     public Material[] jugador;
     public Material[] interactuables;
 
@@ -25,6 +27,14 @@ public class ContrasteControlador:MonoBehaviour
         for(int i = 0; i< fondos.Length;i++)
         {
             fondos[i].color = color;
+        }
+        for (int i = 0; i < aguas.Length; i++)
+        {
+            aguas[i].SetColor("_BaseColor",color);
+        }
+        for (int i = 0; i < fuegos.Length; i++)
+        {
+            aguas[i].SetColor("_TintColor", color);
         }
     }
     public void cambiarContrastePesonaje(Color color)
@@ -47,6 +57,14 @@ public class ContrasteControlador:MonoBehaviour
         {
             fondos[i].color = colorDefecto.fondos[i];
         }
+        for (int i = 0; i < aguas.Length; i++)
+        {
+            aguas[i].SetColor("_BaseColor", colorDefecto.aguas[i]);
+        }
+        for (int i = 0; i < fuegos.Length; i++)
+        {
+            fuegos[i].SetColor("_TintColor", colorDefecto.fuegos[i]);
+        }
     }
     public void cambiarAlDefectoPersonaje(DatosJuego datos)
     {
@@ -62,6 +80,7 @@ public class ContrasteControlador:MonoBehaviour
         for (int i = 0; i < interactuables.Length; i++)
         {
             interactuables[i].color = colorDefecto.interactuables[i];
+            TerrainData data;
         }
     }
 #if UNITY_EDITOR
