@@ -63,6 +63,8 @@ public class Controlador : MonoBehaviour
     public TextMeshProUGUI tutorial_texto;
     public Image tutorial_imagen;
     public Sprite imagenDefecto;
+    //--------------Animaciones de los efectos--------
+    public AnimacionEfecto animEfec;
 
     public static Controlador control;
     
@@ -77,6 +79,7 @@ public class Controlador : MonoBehaviour
         keys = datosSistema.keys;
         Mappear();
         Application.wantsToQuit += cerrarJuego;
+        ConfEfectoAnimacion();
 #if ESCENA_PRUEBA
         uiControlable = false;
         inputModule.desactivarRatonRegistrar = true;
@@ -85,6 +88,7 @@ public class Controlador : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         DontDestroyOnLoad(uicontrol.gameObject);
         DontDestroyOnLoad(canvasActual.gameObject);
+        
         
         canvasActual.abrirMenu(1);
 
@@ -192,7 +196,10 @@ public class Controlador : MonoBehaviour
         panelTutorial.gameObject.SetActive(false);
         jugadorControlable = true;
     }
-
+    public void ConfEfectoAnimacion()
+    {
+        animEfec.ActualizaAnimacion(datosSistema.activarDecoracionAnim);
+    }
     void Update()
     {
         

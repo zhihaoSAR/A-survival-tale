@@ -102,6 +102,7 @@ public class MenuAnimacion : Pagina
     public void activarDecoracionAnim(int activar)
     {
         control.datosSistema.activarDecoracionAnim = activar;
+        control.ConfEfectoAnimacion();
         control.S_confirmarToggle();
     }
 }

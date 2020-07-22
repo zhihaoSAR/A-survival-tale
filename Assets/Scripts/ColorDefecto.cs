@@ -5,6 +5,8 @@ using UnityEngine;
 public class ColorDefecto : ScriptableObject
 {
     public Color[] fondos;
+    public Color[] aguas;
+    public Color[] fuegos;
     public Color[] jugador;
     public Color[] interactuables;
 }
