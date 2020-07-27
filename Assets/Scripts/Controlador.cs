@@ -69,7 +69,7 @@ public class Controlador : MonoBehaviour
     //--------------Animaciones de los efectos--------
     public AnimacionEfecto animEfec;
     //---------post processing--------------
-    public PostProcessProfile profile;
+    public PostProcessVolume volume;
 
     public static Controlador control;
 
@@ -93,8 +93,10 @@ public class Controlador : MonoBehaviour
 
 #else
         iniciarDatos();
-        
-        configuracion.abrirMenu(1);
+        if(datosSistema.finalizadoConf)
+            configuracion.abrirMenu(1);
+        else
+            configuracion.abrirMenu(0);
 #endif
     }
 
@@ -172,7 +174,7 @@ public class Controlador : MonoBehaviour
     public void modoDicromatico(int modo)
     {
         ColorBlindCorrection colorBlindCorrection;
-        profile.TryGetSettings<ColorBlindCorrection>(out colorBlindCorrection);
+        volume.profile.TryGetSettings<ColorBlindCorrection>(out colorBlindCorrection);
         if(modo == 0)
         {
             colorBlindCorrection.enabled.value = false;
@@ -653,7 +655,9 @@ public class Controlador : MonoBehaviour
             text.font = fuente;
         }
         uicontrol.apilarNavegacion(salirNav);
-        panelSalir.parent = configuracion.transform;
+        panelSalir.SetParent(configuracion.transform);
+        panelSalir.anchoredPosition3D = Vector3.zero;
+        panelSalir.localRotation = Quaternion.identity;
         ultControlable = controlable;
         if (player != null)
             ultJugadorControlable = jugadorControlable;
@@ -690,9 +694,16 @@ public class Controlador : MonoBehaviour
             uicontrol.cancelar();
             jugadorControlable = ultJugadorControlable;
             controlable = ultControlable;
+            StartCoroutine(impedirControl());
             registraControl();
 
         }
+    }
+    IEnumerator impedirControl()
+    {
+        controlable = false;
+        yield return new WaitForSecondsRealtime(0.1f);
+        controlable = true;
     }
 
     public void cancelar()

@@ -116,6 +116,7 @@ public class Configuracion : Menu
         paginaActual = configuracionInicio;
         iniciarPagina();
         control.S_musicaFondo(0);
+        Cursor.visible = true;
         StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), true));
     }
     //op 0: empezar juego
@@ -130,6 +131,10 @@ public class Configuracion : Menu
         }
         control.guardarDatoSistema();
         StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), false));
+        if(control.datosSistema.tipoControl != 1)
+        {
+            Cursor.visible = false;
+        }
     }
 
 

@@ -2415,7 +2415,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 70314873}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1653500929}
+        m_MethodName: elegirControl
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &70314873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5052,7 +5063,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 184972621}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1653500929}
+        m_MethodName: elegirControl
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &184972621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14625,7 +14647,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 521554858}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1653500929}
+        m_MethodName: elegirControl
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &521554858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16501,7 +16534,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "MODO RAT\xD3N\nTodo el juego se controlar\xE1n con el rat\xF3n"
+  m_text: "MODO RAT\xD3N\nTodo el juego se controlar\xE1n con el rat\xF3n\nizquieda
+    confirmar derecha cancelar"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e6173351b898d14bacfb26b98b75409, type: 2}
   m_sharedMaterial: {fileID: 7295816633022445516, guid: 0e6173351b898d14bacfb26b98b75409,
@@ -16571,12 +16605,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 606371608}
-    characterCount: 52
+    characterCount: 88
     spriteCount: 0
-    spaceCount: 9
-    wordCount: 10
+    spaceCount: 13
+    wordCount: 14
     linkCount: 0
-    lineCount: 2
+    lineCount: 3
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -30467,7 +30501,7 @@ RectTransform:
   - {fileID: 482313209}
   - {fileID: 197192308}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -44622,8 +44656,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "MODO WASD\nTodo el juego se controlar\xE1n con las teclas WASD,ENTER Y
-    ESC"
+  m_text: "MODO WASD\nTodo el juego se controlar\xE1n con el teclado\npor defecto
+    wasd enter,esc"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e6173351b898d14bacfb26b98b75409, type: 2}
   m_sharedMaterial: {fileID: 7295816633022445516, guid: 0e6173351b898d14bacfb26b98b75409,
@@ -44693,10 +44727,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1819965120}
-    characterCount: 70
+    characterCount: 80
     spriteCount: 0
-    spaceCount: 12
-    wordCount: 14
+    spaceCount: 13
+    wordCount: 15
     linkCount: 0
     lineCount: 3
     pageCount: 1
@@ -53474,7 +53508,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MODO 2 TECLAS
+  m_text: 'MODO 2 TECLAS
+
+    por defector J,K'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e6173351b898d14bacfb26b98b75409, type: 2}
   m_sharedMaterial: {fileID: 7295816633022445516, guid: 0e6173351b898d14bacfb26b98b75409,
@@ -53544,12 +53580,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 2087644718}
-    characterCount: 13
+    characterCount: 30
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 5
+    wordCount: 7
     linkCount: 0
-    lineCount: 1
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -55512,10 +55548,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1823960653448926170}
   - {fileID: 1285152666}
   - {fileID: 1823960652734670725}
   - {fileID: 1823960653352335241}
-  - {fileID: 1823960653448926170}
   - {fileID: 203579409}
   - {fileID: 1353409811}
   m_Father: {fileID: 0}
@@ -55611,7 +55647,7 @@ MonoBehaviour:
   tutorial_imagen: {fileID: 197192311}
   imagenDefecto: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   animEfec: {fileID: 1015781437884986913}
-  profile: {fileID: 11400000, guid: 510b95861be120c438734d9980fc8e17, type: 2}
+  volume: {fileID: 268243644}
   panelMuerto: {fileID: 1353409811}
 --- !u!1 &1823960651911386740
 GameObject:
@@ -55818,7 +55854,7 @@ RectTransform:
   m_LocalScale: {x: 0.0018518518, y: 0.0018518518, z: 0.0018518518}
   m_Children: []
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -56205,7 +56241,7 @@ RectTransform:
   m_Children:
   - {fileID: 1823960651572480824}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -56259,7 +56295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.8392157}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -56289,7 +56325,7 @@ RectTransform:
   - {fileID: 1823960652850883327}
   - {fileID: 1823960651831986140}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

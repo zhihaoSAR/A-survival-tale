@@ -68,8 +68,8 @@ public class DatosSistema
         //-----------------principal---------------------------
         invencibilidad = 0;
         //---------------control---------------------
-        tipoControl = 1;
-        inputTime = 0.5f;
+        tipoControl = 2;
+        inputTime = 0f;
         velocidad = 1;
         //------------------contraste--------------
         color_fondo = Color.white;

@@ -17,16 +17,7 @@ public class test : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            ColorBlindCorrection colorBlindCorrection;
-            profile.TryGetSettings<ColorBlindCorrection>(out colorBlindCorrection);
-            if(mode < 3)
-            {
-                colorBlindCorrection.enabled.value = true;
-                colorBlindCorrection.mode.value = mode;
-            }
-            else
-                colorBlindCorrection.enabled.value = false;
-            mode = ++mode % 4;
+            Controlador.control.cerrarJuego();
         }
 
     }
