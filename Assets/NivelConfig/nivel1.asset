@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa886b954d423a14d8a722667c2e934a, type: 3}
+  m_Name: nivel1
+  m_EditorClassIdentifier: 
+  vector3:
+  - {x: 160.3, y: 34.21, z: 186.7}
+  - {x: 183.3, y: 34.39, z: 226.2}
+  - {x: 186.5, y: 34.5, z: 183.5}
+  - {x: 159.57, y: 34.21, z: 185.914}
+  - {x: 183.3, y: 34.39, z: 226.2}
+  - {x: 186.5, y: 34.5, z: 183.5}
+  - {x: 266, y: 33.61, z: 221.52}
+  - {x: 217.9718, y: 41.5, z: 232.1897}
+  - {x: 270.58734, y: 27.84774, z: 233.08476}
+  - {x: 239.3376, y: 31.99451, z: 209.90913}
+  - {x: 260.35, y: 41.02, z: 191.4}
+  rotaciones:
+  - {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  - {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  valores: 040000000300000004000000
+  booleanos: 01010101010101010101010000

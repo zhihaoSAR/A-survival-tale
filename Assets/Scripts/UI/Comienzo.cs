@@ -29,25 +29,25 @@ public class Comienzo : Pagina
     {
         if (tamanyoFuente == tamanyo)
             return;
-        Vector2 proporcion;
+        Vector3 proporcion;
         switch (tamanyo)
         {
             case 0:
-                proporcion = Vector2.one;
+                proporcion = Vector3.one;
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 break;
             case 1:
-                proporcion = new Vector2(1.25f, 1.25f);
+                proporcion = new Vector3(1.25f, 1.25f,1f);
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 break;
             case 2:
-                proporcion = new Vector2(1.5f, 1.5f);
+                proporcion = new Vector3(1.5f, 1.5f,1f);
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;

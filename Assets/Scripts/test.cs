@@ -2,27 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.PostProcessing;
 
 public class test : MonoBehaviour
 {
-    public Transform other;
-    public Controlador c;
-    public Pagina p;
-    public Material mymaterial;
-    public Configuracion conf;
-    public NavMeshSurface surface;
-    Coroutine a = null;
-    public Animator anima;
-    public GameObject testObj;
+    public PostProcessProfile profile;
+    int mode = 0;
+    void Start()
+    {
+        Debug.Log("dsafa");
+    }
     void Update()
     {
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            Controlador.control.cerrarJuego();  
+            ColorBlindCorrection colorBlindCorrection;
+            profile.TryGetSettings<ColorBlindCorrection>(out colorBlindCorrection);
+            if(mode < 3)
+            {
+                colorBlindCorrection.enabled.value = true;
+                colorBlindCorrection.mode.value = mode;
+            }
+            else
+                colorBlindCorrection.enabled.value = false;
+            mode = ++mode % 4;
         }
-
-
 
     }
     IEnumerator prueba()

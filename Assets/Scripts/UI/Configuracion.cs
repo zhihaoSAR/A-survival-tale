@@ -24,7 +24,13 @@ public class Configuracion : Menu
         if (paginaActual.gameObject.Equals(seleccionControl.gameObject) || paginaActual.gameObject.Equals(menuInicio.gameObject))
             return;
         if (paginasAnteriores.Count == 0)
+        {
             StartCoroutine(TranscicionIniFinMenu(paginaActual.GetComponent<RectTransform>(), false));
+            control.S_cambioPagina();
+            control.cerrarConfiguracion();
+            return;
+        }
+           
         RectTransform pSal = paginaActual.GetComponent<RectTransform>();
         paginaActual = paginasAnteriores.Pop();
         RectTransform pEnt = paginaActual.GetComponent<RectTransform>();
@@ -122,7 +128,7 @@ public class Configuracion : Menu
             StartCoroutine(TranscicionIniFinMenu(comienzo.GetComponent<RectTransform>(), false));
             return;
         }
-
+        control.guardarDatoSistema();
         StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), false));
     }
 
@@ -136,20 +142,21 @@ public class Configuracion : Menu
             dir = 1;
         Vector2 dst = new Vector2(saliente.rect.width, 0);
         bool antes_uicanControl = control.uiControlable;
-        bool antes_canNavegar = control.canNavegar;
+        bool antes_navegable = control.navegable;
         control.uiControlable = false;
-        control.canNavegar = false;
+        control.navegable = false;
         entrante.anchoredPosition = saliente.anchoredPosition + dst * dir;
         float now = 0;
         Vector2 movimiento;
         Vector2 entranteOri = entrante.anchoredPosition,
                 salienteOri = saliente.anchoredPosition;
         dir *= -1;
+        float tiempoInv = 1 / tiempoTransicion;
         yield return null;
         while (now < tiempoTransicion)
         {
             now += Time.unscaledDeltaTime;
-            movimiento = (now / tiempoTransicion) * dst * dir;
+            movimiento = (now * tiempoInv) * dst * dir;
             entrante.anchoredPosition = entranteOri + movimiento;
             saliente.anchoredPosition = salienteOri + movimiento;
             yield return null;
@@ -158,7 +165,7 @@ public class Configuracion : Menu
         entrante.anchoredPosition = entranteOri + movimiento;
         saliente.anchoredPosition = salienteOri + movimiento;
         control.uiControlable = antes_uicanControl;
-        control.canNavegar = antes_canNavegar;
+        control.navegable = antes_navegable;
         saliente.gameObject.SetActive(false);
     }
     public IEnumerator TranscicionIniFinMenu(RectTransform rect,bool ini)
@@ -178,27 +185,28 @@ public class Configuracion : Menu
             rect.anchoredPosition = Vector2.zero;
         }
         bool antes_uicanControl = control.uiControlable;
-        bool antes_canNavegar = control.canNavegar;
+        bool antes_canNavegar = control.navegable;
         bool antes_canControl = control.controlable;
         control.uiControlable = false;
-        control.canNavegar = false;
+        control.navegable = false;
         control.controlable = false;
         float now = 0;
         Vector2 movimiento;
         Vector2 rectOri = rect.anchoredPosition;
         dir *= -1;
+        float tiempoInv = 1 / tiempoTransicion;
         yield return null;
         while (now < tiempoTransicion)
         {
             now += Time.unscaledDeltaTime;
-            movimiento = (now / tiempoTransicion) * dst * dir;
+            movimiento = (now * tiempoInv) * dst * dir;
             rect.anchoredPosition = rectOri + movimiento;
             yield return null;
         }
         movimiento = dst * dir;
         rect.anchoredPosition = rectOri + movimiento;
         control.uiControlable = antes_uicanControl;
-        control.canNavegar = antes_canNavegar;
+        control.navegable = antes_canNavegar;
         control.controlable = antes_canControl;
         if (!ini)
             rect.gameObject.SetActive(false);

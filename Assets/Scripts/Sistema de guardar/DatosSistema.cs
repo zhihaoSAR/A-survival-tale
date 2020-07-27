@@ -28,6 +28,7 @@ public class DatosSistema
     //------------------contraste--------------
     public Color color_fondo,color_personaje,color_interactivo;
     public float opacidad_fondo, opacidad_personaje, opacidad_interactivo;
+    public int modoDicromatico;//0:desactivado 1:P 2:D 3:T
     //-------------------globales-----------------
     public bool finalizadoConf;//para saber si es primera vez
 
@@ -45,8 +46,8 @@ public class DatosSistema
         keys.Add("cancelar", KeyCode.Escape);
         keys.Add("A", KeyCode.J);
         keys.Add("B", KeyCode.K);
-        keys.Add("deshacerWASD", KeyCode.Z);
-        keys.Add("deshacer2B", KeyCode.L);
+        keys.Add("reintentarWASD", KeyCode.Z);
+        keys.Add("reintentar2B", KeyCode.L);
         //------------------visualizacion-----------
         tamanyoFuente = 0;
         tipoFuente = 0;
@@ -77,6 +78,7 @@ public class DatosSistema
         opacidad_fondo = 0;
         opacidad_personaje = 0;
         opacidad_interactivo = 0;
+        modoDicromatico = 0;
         //-------------------globales-----------------
         finalizadoConf = false;
 

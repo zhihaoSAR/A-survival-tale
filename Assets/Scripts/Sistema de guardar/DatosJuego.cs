@@ -10,6 +10,7 @@ public class DatosJuego
     public NivelConfig[] niveles;
     public int[] escenaActiva;//escenas que estan cargado
     public Vector3 playerPos;
+    public string mapaisala;
     public DatosJuego()
     {
         colorCamisa = new Color(0.5943f,0.0084f,0.0712f,1);
@@ -23,6 +24,7 @@ public class DatosJuego
         escenaActiva[0] = 1;
         nivelActual = 0;
         playerPos = new Vector3(298.84f, 11.96f, 44.95f);
+        mapaisala = "Mapa/Mapa_Inicial";
     }
 
 
@@ -42,6 +44,7 @@ public class DatosJuego
             }
         }
         hashCode += nivelActual;
+        hashCode += mapaisala.GetHashCode() ;
         return hashCode;
     }
     public bool comprobarDatos()

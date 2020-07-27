@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum TipoVolumen {AMBIENTE=0,PELIGRO=1,INTERACCION=2,INTERFAZ=3,PASO=4 }
+
 public class Volumen : Pagina
 {
     //---------------elementos para inicializar----------
@@ -33,40 +35,40 @@ public class Volumen : Pagina
     {
         if (tamanyoFuente == tamanyo)
             return;
-        Vector2 proporcion;
+        Vector3 proporcion;
         switch (tamanyo)
         {
             case 0:
-                proporcion = Vector2.one;
+                proporcion = Vector3.one;
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 foreach (RectTransform transform in Rect_fondos)
                 {
-                    transform.localScale = new Vector2(proporcion.x, 1);
+                    transform.localScale = new Vector3(proporcion.x, 1,1);
                 }
                 break;
             case 1:
-                proporcion = new Vector2(1.25f, 1.25f);
+                proporcion = new Vector3(1.25f, 1.25f,1);
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 foreach (RectTransform transform in Rect_fondos)
                 {
-                    transform.localScale = new Vector2(proporcion.x, 1);
+                    transform.localScale = new Vector3(proporcion.x, 1,1);
                 }
                 break;
             case 2:
-                proporcion = new Vector2(1.5f, 1.5f);
+                proporcion = new Vector3(1.5f, 1.5f,1);
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 foreach (RectTransform transform in Rect_fondos)
                 {
-                    transform.localScale = new Vector2(proporcion.x, 1);
+                    transform.localScale = new Vector3(proporcion.x, 1,1);
                 }
                 break;
         }
@@ -95,7 +97,7 @@ public class Volumen : Pagina
         Debug.Log("soy volumen tipo es" + valores[0]+"     "+ valores[1]);
         int tipo = int.Parse(valores[0]);
         float vol = float.Parse(valores[1]);
-        control.ModificarVolumen(tipo,vol);
+        control.ModificarVolumen((TipoVolumen)tipo,vol);
         control.S_confirmarToggle();
     }
 }

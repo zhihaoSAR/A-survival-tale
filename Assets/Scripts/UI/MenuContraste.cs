@@ -13,10 +13,10 @@ public class MenuContraste : Pagina
     public Toggle[] T_Fondo;
     public Toggle[] T_Personaje;
     public Toggle[] T_Interactivos;
+    public Toggle[] T_Dicromatico;
     public Image C_Fondo;
     public Image C_Personaje;
     public Image C_Interactivo;
-    public RectTransform posFondo, posPersonaje, posInteractivo;
     
 
     //------------------publico-------------------
@@ -52,40 +52,40 @@ public class MenuContraste : Pagina
     {
         if (tamanyoFuente == tamanyo)
             return;
-        Vector2 proporcion;
+        Vector3 proporcion;
         switch (tamanyo)
         {
             case 0:
-                proporcion = Vector2.one;
+                proporcion = Vector3.one;
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 foreach (RectTransform transform in Rect_fondos)
                 {
-                    transform.localScale = new Vector2(proporcion.x, 1);
+                    transform.localScale = new Vector3(proporcion.x, 1,1);
                 }
                 break;
             case 1:
-                proporcion = new Vector2(1.25f, 1.25f);
+                proporcion = new Vector3(1.25f, 1.25f,1);
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 foreach (RectTransform transform in Rect_fondos)
                 {
-                    transform.localScale = new Vector2(proporcion.x, 1);
+                    transform.localScale = new Vector3(proporcion.x, 1,1);
                 }
                 break;
             case 2:
-                proporcion = new Vector2(1.5f, 1.5f);
+                proporcion = new Vector3(1.5f, 1.5f,1);
                 foreach (RectTransform transform in Rect_Opciones)
                 {
                     transform.localScale = proporcion;
                 }
                 foreach (RectTransform transform in Rect_fondos)
                 {
-                    transform.localScale = new Vector2(proporcion.x, 1);
+                    transform.localScale = new Vector3(proporcion.x, 1,1);
                 }
                 break;
         }
@@ -129,7 +129,7 @@ public class MenuContraste : Pagina
     }
     public void cambiarFondoColor()
     {
-        control.ElegirColor(posFondo.position, new System.Action<Color>(cambiarFondoColor));
+        control.ElegirColor(new Vector2(452,766), new System.Action<Color>(cambiarFondoColor));
         control.S_confirmarToggle();
     }
     public void cambiarPersonajeColor(float opacidad)
@@ -149,7 +149,7 @@ public class MenuContraste : Pagina
     }
     public void cambiarPersonajeColor()
     {
-        control.ElegirColor(posPersonaje.position, new System.Action<Color>(cambiarPersonajeColor));
+        control.ElegirColor(new Vector2(504,662), new System.Action<Color>(cambiarPersonajeColor));
         control.S_confirmarToggle();
     }
     public void cambiarInteractivoColor(float opacidad)
@@ -169,16 +169,26 @@ public class MenuContraste : Pagina
     }
     public void cambiarInteractivoColor()
     {
-        control.ElegirColor(posInteractivo.position, new System.Action<Color>(cambiarInteractivoColor));
+        control.ElegirColor(new Vector2(504,549), new System.Action<Color>(cambiarInteractivoColor));
         control.S_confirmarToggle();
     }
     
     void obtenerColor(ref Color color,float opacidad)
     {
+        if(opacidad == 0)
+        {
+            return;
+        }
         float h, s, v;
         Color.RGBToHSV(color,out h,out s,out v);
         color = Color.HSVToRGB(h, opacidad, 1);
     }
+
+    public void modoDicromatico(int modo)
+    {
+        control.modoDicromatico(modo);
+    }
+
 
     void OnDisable()
     {

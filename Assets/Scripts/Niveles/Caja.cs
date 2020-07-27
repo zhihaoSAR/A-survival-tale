@@ -114,8 +114,19 @@ public class Caja : Interactuable
         GetComponent<BoxCollider>().enabled = false;
         obstaculo.enabled = false;
         detector.chocado = false;
+        GetComponent<Animator>().enabled = false;
     }
-
+    public void activarCaja()
+    {
+        rb.detectCollisions = true;
+        enabled = true;
+        GetComponent<BoxCollider>().enabled = true;
+        obstaculo.enabled = true;
+        Animator animator = GetComponent<Animator>();
+        animator.enabled = true;
+        animator.Rebind();
+        
+    }
     public void caer(Action fin)
     {
         finalizado = fin;

@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public Transform flecha, punto;
     float puntoAltura = 15, flechaAltura = 8;
     bool seleccionaDir = true;
-    float velNavGirar = 60f, velNavMover = 15;
+    float velNavGirar = 60f, velNavMover = 20;
     float sqrMaxDis = 1600;
     Vector3 dir;
     //------------------raton--------------
@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
     float contadorAtascado = 0;
     public ObstaculoDetector obstaculoDetector;
     public CapsuleCollider collider;
+    //------ropas-----------
+    public Material camisa, falda;
 
     //-------------------estado de la maquina---------------
     public enum Estado{PARADO,MOVER,PREPARARINTER,PARADOCONCAJA,MOVERCONCAJA,PARADOCONCOCO,PARADOCONAVE,ESTIRARAVE,LANZARCOCO }
@@ -92,7 +94,8 @@ public class Player : MonoBehaviour
             accionCancelar,
             accionMoverConCaja,
             accionLanzarCoco,
-            accionElegirDirAve;
+            accionElegirDirAve,
+            accionReintentar;
 
     void Start()
     {
@@ -137,12 +140,45 @@ public class Player : MonoBehaviour
     public void ActualizarDatos()
     {
         manejadorRaton.enabled = false;
-        agente.speed = 30f;
-        velMoverCaja = 10f;
+        agente.speed = 20f;
+        velMoverCaja = 7f;
         controlable = true;
+        actualizarVelocidad();
+        actualizarControl();
+        actualizarColor();
         flecha.gameObject.SetActive(false);
         punto.gameObject.SetActive(false);
-        if(datosSystema.tipoControl == 1)
+        
+    }
+    public void actualizarColor()
+    {
+        camisa.color = control.datosJuego.colorCamisa;
+        falda.color = control.datosJuego.colorFalda;
+    }
+    public void actualizarVelocidad()
+    {
+        if(datosSystema.velocidad == 0)
+        {
+            velNavMover = 10;
+            velNavGirar = 30;
+            return;
+        }
+        if(datosSystema.velocidad == 1)
+        {
+            velNavMover = 20;
+            velNavGirar = 60;
+            return;
+        }
+        if (datosSystema.velocidad == 2)
+        {
+            velNavMover = 30;
+            velNavGirar = 90;
+        }
+
+    }
+    public void actualizarControl()
+    {
+        if (datosSystema.tipoControl == 1)
         {
             manejadorRaton.enabled = true;
             accionMover = new Func<bool>(moverJugadorRaton);
@@ -152,8 +188,9 @@ public class Player : MonoBehaviour
             accionMoverConCaja = new Func<bool>(accionMoverConCajaRaton);
             accionLanzarCoco = new Func<bool>(accionLanzarCocoRaton);
             accionElegirDirAve = new Func<bool>(accionElegirDirAveRaton);
+            accionReintentar = new Func<bool>(reintentarRaton);
         }
-        else if(datosSystema.tipoControl == 0)
+        else if (datosSystema.tipoControl == 0)
         {
             accionMover = new Func<bool>(moverJugadorWASD);
             accionCancelarMover = new Func<bool>(moverJugadorWASD);
@@ -162,6 +199,7 @@ public class Player : MonoBehaviour
             accionMoverConCaja = new Func<bool>(accionMoverConCajaWASD);
             accionLanzarCoco = new Func<bool>(accionLanzarCocoWASD);
             accionElegirDirAve = new Func<bool>(accionElegirDirAveWASD);
+            accionReintentar = new Func<bool>(reintentarWASD);
         }
         else if (datosSystema.tipoControl == 2)
         {
@@ -172,8 +210,10 @@ public class Player : MonoBehaviour
             accionMoverConCaja = new Func<bool>(accionMoverConCajaDosBoton);
             accionLanzarCoco = new Func<bool>(accionLanzarCocoDosBoton);
             accionElegirDirAve = new Func<bool>(accionElegirDirAveDosBoton);
+            accionReintentar = new Func<bool>(reintentarDosBoton);
         }
     }
+
     Estado ult = Estado.MOVER;
     void Update()
     {
@@ -186,7 +226,17 @@ public class Player : MonoBehaviour
         if ((!control.controlable || !controlable))
         {
             //agente.isStopped = true;
+            if(agente.enabled)
+            {
+                agente.isStopped = true;
+                animator.speed = 0;
+            }
             return;
+        }
+        if(agente.enabled && agente.isStopped)
+        {
+            agente.isStopped = false;
+            animator.speed = 1;
         }
         //agente.isStopped = false;
         
@@ -212,6 +262,7 @@ public class Player : MonoBehaviour
     void ESTADO_PARADO()
     {
         RecordarControl(objeto != null);
+        HUD.activaMiniMapa(true);
         if(tiempoParado > 3)
         {
             animator.SetBool(paradoAnim, true);
@@ -238,11 +289,20 @@ public class Player : MonoBehaviour
             RecordarControl(false);
             goto salirEstado;
         }
+        if(accionCancelar())
+        {
+            HUD.abrirMenu(0);
+        }
+        if(accionReintentar())
+        {
+            HUD.reintentarNivel();
+        }
         tiempoParado += Time.deltaTime;
         return;
 
-        salirEstado:
+    salirEstado:
         desactivarSenyales();
+        HUD.activaMiniMapa(false);
         animator.SetBool(paradoAnim, false);
         animator.SetBool(caminar, true);
         tiempoParado = 0;
@@ -323,7 +383,7 @@ public class Player : MonoBehaviour
         estado = Estado.PARADOCONCAJA;
         estadoActual = estadoParadoConCaja;
         animator.SetBool(moverCaja, true);
-        obstaculoDetector.gameObject.SetActive(true);
+        //obstaculoDetector.gameObject.SetActive(true);
         collider.height = 2.07f;
         agente.enabled = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -343,6 +403,14 @@ public class Player : MonoBehaviour
         if (accionCancelar() ||
             (transform.position - objeto.transform.position).sqrMagnitude > 100)
         {
+            if((transform.position - objeto.transform.position).sqrMagnitude > 100)
+            {
+                Debug.Log("demaciado separado");
+            }
+            else
+            {
+                Debug.Log("cancelado");
+            }
             CancelarInteractuarConCaja();
 
         }
@@ -352,7 +420,7 @@ public class Player : MonoBehaviour
         disPendiente = 0;
         objeto.finInteractuar();
         objeto = null;
-        obstaculoDetector.gameObject.SetActive(false);
+        //obstaculoDetector.gameObject.SetActive(false);
         estado = Estado.PARADO;
         estadoActual = estadoParado;
         animator.SetInteger(moverCajaDir, 0);
@@ -592,7 +660,7 @@ public class Player : MonoBehaviour
 
     bool cancelarRaton()
     {
-        if(Input.GetMouseButtonDown(1))
+        if(Input.GetMouseButtonUp(1))
         {
             control.registraControl();
             return true;
@@ -617,7 +685,33 @@ public class Player : MonoBehaviour
         }
         return false;
     }
-
+    bool reintentarRaton()
+    {
+        if (Input.GetMouseButtonUp(2))
+        {
+            control.registraControl();
+            return true;
+        }
+        return false;
+    }
+    bool reintentarWASD()
+    {
+        if (Input.GetKeyDown(datosSystema.keys["reintentarWASD"]))
+        {
+            control.registraControl();
+            return true;
+        }
+        return false;
+    }
+    bool reintentarDosBoton()
+    {
+        if (Input.GetKeyDown(datosSystema.keys["reintentar2B"]))
+        {
+            control.registraControl();
+            return true;
+        }
+        return false;
+    }
     bool interactuarRaton()
     {
         if(manejadorRaton.interactuable && Input.GetMouseButtonUp(0))
@@ -639,7 +733,7 @@ public class Player : MonoBehaviour
                 preparaInteractuar(objeto.obtenerPosicion(transform));
             }
         }
-        if(Input.GetMouseButtonDown(1))
+        if(Input.GetMouseButtonUp(1))
         {
             if(HUD.P_elegirDirCaja.gameObject.activeInHierarchy)
             {
@@ -907,14 +1001,17 @@ public class Player : MonoBehaviour
             Caja caja = objeto as Caja;
             if (caja.detector.chocado && moverDirCajaAnim>0)
             {
+                Debug.Log("caja chocado");
                 break;
             }
             if (obstaculoDetector.chocado && moverDirCajaAnim < 0)
             {
+                Debug.Log("jugador chocado");
                 break;
             }
             if( (transform.position - objeto.transform.position).sqrMagnitude > 100)
             {
+                Debug.Log("caja caido");
                 break;
             }
             Vector3 movimiento = (dirMoverCaja * velMoverCaja * Time.deltaTime);
@@ -1063,5 +1160,32 @@ public class Player : MonoBehaviour
             movimiento.x -= 1;
         }
         return movimiento;
+    }
+    public void morir(string anim)
+    {
+        controlable = false;
+        
+    }
+    public void cambiarPersona()
+    {
+        control.datosJuego.colorCamisa = new Color(UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1));
+        control.datosJuego.colorCamisa = new Color(UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1));
+        actualizarColor();
+    }
+    public void ReiniciarJugador()
+    {
+        
+        if(objeto != null)
+        {
+            objeto.finInteractuar();
+        }
+        agente.enabled = true;
+        agente.ResetPath();
+        animator.Rebind();
+        collider.height = 1.5f;
+        desactivarSenyales();
+        estadoActual = estadoParado;
+        estado = Estado.PARADO;
+        controlable = true;
     }
 }
