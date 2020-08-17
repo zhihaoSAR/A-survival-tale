@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class Controlador : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class Controlador : MonoBehaviour
     public EscenaControlador escenaControlador;
     [HideInInspector]
     public Player player;
+    public CinemachineVirtualCamera camaraPrincipal;
     public bool controlable = true;
     
 
@@ -77,13 +79,22 @@ public class Controlador : MonoBehaviour
     public RectTransform panelMuerto;
     bool muerto = false;
 
-    
+    static float proporcionX, proporcionY;
+    public static Vector3 posicionRaton()
+    {
+        Vector3 pos = Input.mousePosition;
+        pos.x *= 1920f / Screen.width;
+        pos.y *= 1080f / Screen.height;
+        return pos;
+    }
+
     void Start()
     {
         control = this;
         SistemaGuardar.cargarDatosSistema(out datosSistema);
         Application.wantsToQuit += cerrarJuego;
-
+        proporcionX = 1920f / Screen.width;
+        proporcionY = 1080f / Screen.height;
         keys = datosSistema.keys;
         
 
@@ -278,17 +289,17 @@ public class Controlador : MonoBehaviour
     {
         animEfec.ActualizaAnimacion(datosSistema.activarDecoracionAnim);
     }
+
     void Update()
     {
         
         if(elegiendoColor && controlable)
         {
-
+            
             Vector2 pos;
             if (Input.GetMouseButtonDown(0))
             {
-                pos = Input.mousePosition;
-                
+                pos = posicionRaton();
                 pos -= rect_color.anchoredPosition;
                 Debug.Log(pos);
                 if (pos.x >= 0 && pos.x <= tamanyoColor.x  && 
@@ -303,7 +314,8 @@ public class Controlador : MonoBehaviour
             }
             if (persigueRaton)
             {
-                pos = Input.mousePosition;
+                pos = posicionRaton();
+
                 pos -= rect_color.anchoredPosition; ;
                 pos.y = 40;
                 MoverMarca(pos);
@@ -486,7 +498,7 @@ public class Controlador : MonoBehaviour
         panelElegirColor.gameObject.SetActive(true);
         panelElegirColor.parent = configuracion.transform;
         panelElegirColor.localScale = Vector3.zero;
-        Debug.Log(pos);
+        panelElegirColor.anchoredPosition3D = Vector3.zero;
 
         rect_color.anchoredPosition = pos;
         StartCoroutine("PopUp",panelElegirColor);

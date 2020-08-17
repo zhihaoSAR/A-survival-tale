@@ -187,6 +187,7 @@ public class MenuContraste : Pagina
     public void modoDicromatico(int modo)
     {
         control.modoDicromatico(modo);
+        control.S_confirmarToggle();
     }
 
 

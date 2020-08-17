@@ -31,7 +31,7 @@ public class Nivel1 : Nivel
         //--------------------------------
         //-          BOOL                -
         //--------------------------------
-        bool[] booleanos = new bool[14];
+        bool[] booleanos = new bool[15];
         int ind = 0;
         //--------tutorial----------------
         for (int i = 0;i<tutoriales.Length;i++,ind++)
@@ -206,7 +206,7 @@ public class Nivel1 : Nivel
         NivelConfig config = new NivelConfig();
         NivelConfigObj.Obj2Config(configuracionIni, ref config);
         Controlador.control.player.ReiniciarJugador();
-        Controlador.control.player.transform.position = config.vector3[config.vector3.Length - 1];
+        Controlador.control.player.moverJugador(config.vector3[config.vector3.Length - 1]);
         cargarConf(config);
         
     }

@@ -5550,7 +5550,7 @@ RectTransform:
   m_Children:
   - {fileID: 1396738775}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5959,7 +5959,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 26
   m_TargetDisplay: 0
 --- !u!224 &209955035
 RectTransform:
@@ -26511,19 +26511,6 @@ MonoBehaviour:
   flecha: {fileID: 2024318425}
   posicion: {fileID: 1005850359}
   image: {fileID: 695252656}
---- !u!114 &1082754657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1823960651911386740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a6eae2dcb45e544b885a564dc3d4723, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: 510b95861be120c438734d9980fc8e17, type: 2}
 --- !u!1 &1083065384
 GameObject:
   m_ObjectHideFlags: 0
@@ -30501,7 +30488,7 @@ RectTransform:
   - {fileID: 482313209}
   - {fileID: 197192308}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -32401,7 +32388,7 @@ RectTransform:
   m_Children:
   - {fileID: 1595877705}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -55256,8 +55243,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -55548,12 +55535,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1823960653352335241}
   - {fileID: 1823960653448926170}
   - {fileID: 1285152666}
   - {fileID: 1823960652734670725}
-  - {fileID: 1823960653352335241}
-  - {fileID: 203579409}
   - {fileID: 1353409811}
+  - {fileID: 203579409}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -55620,6 +55607,7 @@ MonoBehaviour:
   uisonido: {fileID: 1823960651911386736}
   escenaControlador: {fileID: 7108210975007615709}
   player: {fileID: 0}
+  camaraPrincipal: {fileID: 0}
   controlable: 1
   canvaActual: {fileID: 209955037}
   configuracion: {fileID: 209955037}
@@ -55664,7 +55652,6 @@ GameObject:
   - component: {fileID: 7108210975007615709}
   - component: {fileID: 2086507132}
   - component: {fileID: 1015781437884986913}
-  - component: {fileID: 1082754657}
   m_Layer: 0
   m_Name: Control
   m_TagString: Untagged
@@ -55854,7 +55841,7 @@ RectTransform:
   m_LocalScale: {x: 0.0018518518, y: 0.0018518518, z: 0.0018518518}
   m_Children: []
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -56241,7 +56228,7 @@ RectTransform:
   m_Children:
   - {fileID: 1823960651572480824}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -56325,7 +56312,7 @@ RectTransform:
   - {fileID: 1823960652850883327}
   - {fileID: 1823960651831986140}
   m_Father: {fileID: 1823960651911386738}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -56377,8 +56364,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

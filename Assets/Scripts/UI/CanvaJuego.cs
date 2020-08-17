@@ -50,7 +50,7 @@ public class CanvaJuego : Menu
     {
         if(recordando)
         {
-            if((Input.mousePosition-recordarInteractuar.position).sqrMagnitude <= 3600)
+            if((Controlador.posicionRaton() -recordarInteractuar.position).sqrMagnitude <= 3600)
             {
                 I_recordarInteractuar.color = new Vector4(1,1,1,0.5f);
             }

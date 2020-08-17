@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
         agarrarAve = Animator.StringToHash("agarrarAve");
         activarAve = Animator.StringToHash("activarAve");
         //----------------------------------------------------------------
-        transform.position = control.datosJuego.playerPos;
+        agente.Warp(control.datosJuego.playerPos);
         ActualizarDatos();
         
 
@@ -291,6 +291,11 @@ public class Player : MonoBehaviour
         }
         if(accionCancelar())
         {
+            if(HUD.P_elegirDirCaja.gameObject.activeInHierarchy)
+            {
+                HUD.cerrarDireccion();
+                return;
+            }
             HUD.abrirMenu(0);
         }
         if(accionReintentar())
@@ -405,7 +410,7 @@ public class Player : MonoBehaviour
         {
             if((transform.position - objeto.transform.position).sqrMagnitude > 100)
             {
-                Debug.Log("demaciado separado");
+                Debug.Log("demaciado separado"+ (transform.position - objeto.transform.position).sqrMagnitude);
             }
             else
             {
@@ -1171,6 +1176,11 @@ public class Player : MonoBehaviour
         control.datosJuego.colorCamisa = new Color(UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1));
         control.datosJuego.colorCamisa = new Color(UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1));
         actualizarColor();
+    }
+    public void moverJugador(Vector3 pos)
+    {
+
+        agente.Warp(pos);
     }
     public void ReiniciarJugador()
     {

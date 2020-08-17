@@ -33,20 +33,41 @@ public class Tutorial_Nivel1 : Tutorial
         {
             if (datos.tipoControl == 0)
             {
-                control.mostrarTutorial(new Sprite[2] { imagenes[3],null},
-                    new string[2] { textos["interactuarWASDoDB"], textos["moverCajaWASD"] });
+                control.mostrarTutorial(new Sprite[1] { imagenes[3]},
+                    new string[1] { textos["interactuarWASDoDB"]});
                 return;
             }
             if (datos.tipoControl == 1)
             {
-                control.mostrarTutorial(new Sprite[2] { imagenes[2], null },
-                    new string[2] { textos["interactuarRaton"], textos["moverCajaRaton"] });
+                control.mostrarTutorial(new Sprite[1] { imagenes[2] },
+                    new string[1] { textos["interactuarRaton"] });
                 return;
             }
             if (datos.tipoControl == 2)
             {
-                control.mostrarTutorial(new Sprite[2] { imagenes[4], null },
-                    new string[2] { textos["interactuarWASDoDB"], textos["moverCajaDB"] });
+                control.mostrarTutorial(new Sprite[1] { imagenes[4]},
+                    new string[1] { textos["interactuarWASDoDB"] });
+                return;
+            }
+        }
+        if(id == 2)
+        {
+            if (datos.tipoControl == 0)
+            {
+                control.mostrarTutorial(new Sprite[1] { null },
+                    new string[1] { textos["moverCajaWASD"] });
+                return;
+            }
+            if (datos.tipoControl == 1)
+            {
+                control.mostrarTutorial(new Sprite[1] { null },
+                    new string[1] { textos["moverCajaRaton"] });
+                return;
+            }
+            if (datos.tipoControl == 2)
+            {
+                control.mostrarTutorial(new Sprite[1] { null },
+                    new string[1] { textos["moverCajaDB"] });
                 return;
             }
         }
