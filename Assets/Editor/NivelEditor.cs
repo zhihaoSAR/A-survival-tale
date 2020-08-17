@@ -17,7 +17,7 @@ public class NivelEditor : Editor
         
         if (GUILayout.Button("Generar ScriptableObjeto"))
         {
-            NivelConfig datos = myScript.generarConfig(nivel);
+            NivelConfig datos = myScript.generarConfig();
             NivelConfigObj config = ScriptableObject.CreateInstance<NivelConfigObj>();
             NivelConfigObj.config2Obj(ref config, datos);
             string path = "Assets/NivelConfig/"+nivel+".asset";

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class UIControl : MonoBehaviour
 {
-    public Pagina paginaActual;
     public bool dosBotonModo = true;
     [HideInInspector]
     public bool pausaNav = false;
@@ -28,10 +27,7 @@ public class UIControl : MonoBehaviour
         navIndGuardado = new Stack<int>();
         inputModulo = GetComponent<MyInputModule>();
         eventSystem = GetComponent<EventSystem>();
-        if(dosBotonModo && paginaActual != null)
-        {
-            //initNavegacion(paginaActual);
-        }
+        
     }
     public void iniNavegacion(GameObject[] navegable)
     {
@@ -82,6 +78,7 @@ public class UIControl : MonoBehaviour
             }
             yield return null;
         }
+        navCorotina = null;
     }
     /*
     void elegirObjeto(GameObject o)

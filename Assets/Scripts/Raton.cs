@@ -22,7 +22,7 @@ public class Raton : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            Ray ray = mainCamera.ScreenPointToRay(posicionPantalla);
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit,500,layerMask))
             {
@@ -48,6 +48,6 @@ public class Raton : MonoBehaviour
 
     public Vector3 posicionPantalla
     {
-        get{ return Input.mousePosition; }
+        get{ return Controlador.posicionRaton() ; }
     }
 }

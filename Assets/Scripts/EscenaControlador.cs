@@ -26,15 +26,27 @@ public class EscenaControlador : MonoBehaviour
             escenaActiva[i] = false;
         }
     }
+    public void asignarNivel(Nivel nivel,int id)
+    {
+        if (nivelActual != null)
+        {
+            Controlador.control.guardarDatoJuego();
+        }
+        numNivelActual = id;
+        nivelActual = nivel;
+    }
     public void cargarEscenaIntermedio()
     {
-        SceneManager.LoadScene(ESCENA_INTERMEDIO);
+        SceneManager.LoadScene(ESCENA_INTERMEDIO,LoadSceneMode.Additive);
+        
     }
     public void iniciarJuego(DatosJuego datos)
     {
+        numNivelActual = datos.nivelActual;
         List<AsyncOperation> lista = new List<AsyncOperation>();
         AsyncOperation op;
         finalizado = false;
+        Controlador.control.iniciarPantallaCargar();
         for(int i = 0; i< datos.escenaActiva.Length;i++)
         {
             if(datos.escenaActiva[i] != 0)
@@ -63,6 +75,12 @@ public class EscenaControlador : MonoBehaviour
             }
             finalizado = true;
         }
+        Controlador control = Controlador.control;
+        control.uiControlable = false;
+        control.inputModule.desactivarRatonRegistrar = true;
+        control.canvaActual = control.player.HUD;
+        control.cargando = false;
+        control.navegable = false;
     }
 
     public AsyncOperation cargarEscena(int id)

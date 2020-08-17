@@ -144,7 +144,7 @@ Material:
     - _GDirectionAB: {r: 0.46914357, g: 0.35405126, b: -0.2, a: 0.1}
     - _GDirectionCD: {r: 0.7033888, g: -0.6799999, b: 0.7175735, a: -0.2}
     - _GFrequency: {r: 0.5, g: 0.38, b: 0.59, a: 0.6}
-    - _GSpeed: {r: -3, g: 2, b: 1, a: 3}
+    - _GSpeed: {r: 0, g: 0, b: 0, a: 0}
     - _GSteepness: {r: 7, g: 2, b: 6, a: 2}
     - _HorizonColor: {r: 0.052907113, g: 0.24486735, b: 0.2835821, a: 1}
     - _InvFadeParemeter: {r: 0.21896552, g: 0.15944828, b: 0.04310345, a: 0}

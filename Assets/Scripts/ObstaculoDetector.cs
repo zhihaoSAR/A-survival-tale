@@ -10,7 +10,7 @@ public class ObstaculoDetector : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        Debug.Log(collider.gameObject.name);
+        
 
         if(collider.isTrigger)
         {

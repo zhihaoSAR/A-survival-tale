@@ -13,11 +13,20 @@ public class CanvaJuego : Menu
     public RectTransform recordarInteractuar;
     Image I_recordarInteractuar;
     Coroutine Coroutine_recordarInteractuar;
+    public RectTransform minimapa;
+    public Mapa mapa;
+
+    public void activaMiniMapa(bool activa)
+    {
+        minimapa.gameObject.SetActive(activa);
+    }
 
 
     void Start()
     {
+
         control = Controlador.control;
+        GetComponent<Canvas>().worldCamera = Camera.main.transform.GetChild(0).GetComponent<Camera>();
         int tipoControl = control.datosSistema.tipoControl;
         string path = "Indicaciones/";
         if (tipoControl == 0)
@@ -41,7 +50,7 @@ public class CanvaJuego : Menu
     {
         if(recordando)
         {
-            if((Input.mousePosition-recordarInteractuar.position).sqrMagnitude <= 3600)
+            if((Controlador.posicionRaton() -recordarInteractuar.position).sqrMagnitude <= 3600)
             {
                 I_recordarInteractuar.color = new Vector4(1,1,1,0.5f);
             }
@@ -53,34 +62,89 @@ public class CanvaJuego : Menu
     }
     public override void abrirMenu( int op)
     {
-        throw new NotImplementedException();
+        Controlador.control.jugadorControlable = false;
+        activaMiniMapa(false);
+        mapa.inicializar();
+        mapa.gameObject.SetActive(true);
+        control.S_cambioPagina();
+        StartCoroutine(abarirMapa());
 
     }
 
     public override void cancelar()
     {
-        throw new System.NotImplementedException();
+        cerrarMenu(0);
+        control.S_cambioPagina();
     }
 
     public override void cerrarMenu(int op)
     {
-        throw new System.NotImplementedException();
+        StartCoroutine(cerrarMapa());
     }
-
+    IEnumerator cerrarMapa()
+    {
+        RectTransform rect_mapa = mapa.GetComponent<RectTransform>();
+        control.controlable = false;
+        control.navegable = false;
+        float now = 0;
+        float tiempoInv = 1 / tiempoTransicion;
+        yield return null;
+        while (now < tiempoTransicion)
+        {
+            now += Time.unscaledDeltaTime;
+            rect_mapa.localScale = Vector3.one *(1 - (now * tiempoInv));
+            yield return null;
+        }
+        control.controlable = true;
+        control.uiControlable = false;
+        control.jugadorControlable = true;
+        mapa.gameObject.SetActive(false);
+    }
     public override bool getActualNavegable(out GameObject[] nav)
     {
-        throw new System.NotImplementedException();
+        nav = mapa.navegables;
+        return true;
     }
 
+    IEnumerator abarirMapa()
+    {
+        RectTransform rect_mapa = mapa.GetComponent<RectTransform>() ;
+        mapa.transform.localScale = Vector3.zero;
+        control.controlable = false;
+        control.navegable = false;
+        float now = 0;
+        float tiempoInv = 1 / tiempoTransicion;
+        yield return null;
+        while (now < tiempoTransicion)
+        {
+            now += Time.unscaledDeltaTime;
+            rect_mapa.localScale = Vector3.one * (now *tiempoInv);
+            yield return null;
+        }
+        control.controlable = true;
+        control.uiControlable = true;
+        control.navegable = true;
+        control.iniNavegacion(mapa.navegables);
+        control.eventSystem.firstSelectedGameObject = mapa.navegables[1];
+    }
+    public void abrirConfiguracion()
+    {
+        control.abrirConfiguracion();
+        control.S_cambioPagina();
+    }
+    public void volverMenuInicio()
+    {
+        control.menuInicio();
+    }
     public void mostrarDireccion(Vector3 posicionPantalla,Transform caja,Quaternion rotacionCamara,Vector3[] posiciones,Action<Vector3> prepararInt)
     {
-        P_elegirDirCaja.position = posicionPantalla;
-        P_elegirDirCaja.eulerAngles = Vector3.zero;
+        P_elegirDirCaja.anchoredPosition = posicionPantalla;
+        P_elegirDirCaja.localEulerAngles = Vector3.zero;
         Vector3 dst = caja.forward;
         dst.y = dst.z;
         dst.z = 0;
-        P_elegirDirCaja.transform.rotation *= Quaternion.FromToRotation( Vector3.up,dst); ;
-        P_elegirDirCaja.transform.rotation *= rotacionCamara;
+        P_elegirDirCaja.localRotation *= Quaternion.FromToRotation( Vector3.up,dst); ;
+        P_elegirDirCaja.localRotation *= rotacionCamara;
         for (int i = 0; i< P_elegirDirCaja.childCount; i++)
         {
             Button dir = P_elegirDirCaja.GetChild(i).GetComponent<Button>();
@@ -102,11 +166,12 @@ public class CanvaJuego : Menu
         rect.localScale = Vector3.zero;
         rect.gameObject.SetActive(true);
         float now = 0;
+        float tiempoInv = 1 / tiempoTransicion;
         yield return null;
         while (now < tiempoTransicion)
         {
             now += Time.unscaledDeltaTime;
-            rect.localScale = Vector3.one * (now / tiempoTransicion);
+            rect.localScale = Vector3.one * (now * tiempoInv);
             yield return null;
         }
         rect.localScale = Vector3.one;
@@ -129,4 +194,23 @@ public class CanvaJuego : Menu
         }
     }
    
+
+    public void reintentarNivel()
+    {
+        if(control.escenaControlador.nivelActual != null &&
+            !control.escenaControlador.nivelActual.completado)
+        {
+
+            StartCoroutine(reintentar());
+
+        }
+    }
+    IEnumerator reintentar()
+    {
+        control.iniciarPantallaCargar();
+        yield return null;
+        control.escenaControlador.nivelActual.reintentarNivel();
+        yield return new WaitForSecondsRealtime(1f);
+        control.cargando = false;
+    }
 }

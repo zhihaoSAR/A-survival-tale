@@ -5,8 +5,8 @@ using UnityEngine.UIElements;
 
 public abstract class Menu : MonoBehaviour
 {
-    
     public Controlador control;
+    [HideInInspector]
     public DatosSistema datos;
 
     public abstract bool getActualNavegable(out GameObject[] nav);

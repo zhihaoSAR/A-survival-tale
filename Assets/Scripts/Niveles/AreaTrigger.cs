@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class AreaTrigger : MonoBehaviour
 {
     public AreaTriggerComponente[] triggers;
-    protected int contador;
+    public int contador;
     public bool unaVez = false;
     void Start()
     {

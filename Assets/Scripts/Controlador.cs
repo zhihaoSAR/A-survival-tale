@@ -8,6 +8,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class Controlador : MonoBehaviour
 {
@@ -16,16 +19,18 @@ public class Controlador : MonoBehaviour
     public DatosSistema datosSistema;
     public DatosJuego datosJuego;
     public UIControl uicontrol;
-    static float tiempoTransicion = 0.15f;
+    static float tiempoTransicion = 0.2f;
     public EventSystem eventSystem;
     public UISonido uisonido;
     public EscenaControlador escenaControlador;
     [HideInInspector]
     public Player player;
+    public CinemachineVirtualCamera camaraPrincipal;
     public bool controlable = true;
     
 
-    public Menu canvasActual;
+    public Menu canvaActual;
+    public Configuracion configuracion;
     TMP_FontAsset tcm,openDyslexic;
     [SerializeField]
     public AudioMixer audioMixer;
@@ -65,34 +70,99 @@ public class Controlador : MonoBehaviour
     public Sprite imagenDefecto;
     //--------------Animaciones de los efectos--------
     public AnimacionEfecto animEfec;
+    //---------post processing--------------
+    public PostProcessVolume volume;
 
     public static Controlador control;
-    
 
+    //--------panel morir-------------
+    public RectTransform panelMuerto;
+    bool muerto = false;
 
-    
+    static float proporcionX, proporcionY;
+    public static Vector3 posicionRaton()
+    {
+        Vector3 pos = Input.mousePosition;
+        pos.x *= 1920f / Screen.width;
+        pos.y *= 1080f / Screen.height;
+        return pos;
+    }
+
     void Start()
     {
         control = this;
         SistemaGuardar.cargarDatosSistema(out datosSistema);
-        SistemaGuardar.cargarDatosJuego(out datosJuego);
-        keys = datosSistema.keys;
-        Mappear();
         Application.wantsToQuit += cerrarJuego;
-        ConfEfectoAnimacion();
+        proporcionX = 1920f / Screen.width;
+        proporcionY = 1080f / Screen.height;
+        keys = datosSistema.keys;
+        
+
 #if ESCENA_PRUEBA
         uiControlable = false;
         inputModule.desactivarRatonRegistrar = true;
 
 #else
-        DontDestroyOnLoad(this.gameObject);
-        DontDestroyOnLoad(uicontrol.gameObject);
-        DontDestroyOnLoad(canvasActual.gameObject);
-        
-        
-        canvasActual.abrirMenu(1);
-
+        iniciarDatos();
+        if(datosSistema.finalizadoConf)
+            configuracion.abrirMenu(1);
+        else
+            configuracion.abrirMenu(0);
 #endif
+    }
+
+    void iniciarDatos()
+    {
+        //--------control-------------
+        Mappear();
+        CambiarControl(datosSistema.tipoControl);
+        //-----pantalla completa------
+        PantallaCompleta(datosSistema.pantallaCompleta);
+        //---------------cursor-----------
+        cambiarCursor(datosSistema.tipoCursor, datosSistema.tamanyoCursor);
+        //---------activar animacion----------
+        ConfEfectoAnimacion();
+        //--------color contraste----------
+        TipoContraste mascara = TipoContraste.NADA;
+        if(datosSistema.opacidad_fondo != 0)
+        {
+            mascara |= TipoContraste.FONDO;
+        }
+        if (datosSistema.opacidad_personaje != 0)
+        {
+            mascara |= TipoContraste.PERSONAJE;
+        }
+        if (datosSistema.opacidad_interactivo != 0)
+        {
+            mascara |= TipoContraste.INTERACTIVO;
+        }
+        cambiarContraste(mascara);
+        //-----------Dicromatico-----------
+        modoDicromatico(datosSistema.modoDicromatico);
+        //--------modo sonido---------------
+        CambiarModoSonido(datosSistema.audioModo);
+        //---------volumen-----------------
+        if(datosSistema.ambienteVol != 100)
+        {
+            ModificarVolumen(TipoVolumen.AMBIENTE, datosSistema.ambienteVol);
+        }
+        if (datosSistema.peligroVol != 100)
+        {
+            ModificarVolumen(TipoVolumen.PELIGRO, datosSistema.peligroVol);
+        }
+        if (datosSistema.interaccionVol != 100)
+        {
+            ModificarVolumen(TipoVolumen.INTERACCION, datosSistema.interaccionVol);
+        }
+        if (datosSistema.interfazVol != 100)
+        {
+            ModificarVolumen(TipoVolumen.INTERFAZ, datosSistema.interfazVol);
+        }
+        if (datosSistema.pasoVol != 100)
+        {
+            ModificarVolumen(TipoVolumen.PASO, datosSistema.pasoVol);
+        }
+
 
     }
     public void NuevaPartida()
@@ -108,12 +178,24 @@ public class Controlador : MonoBehaviour
 
     public void EmpezarJuego()
     {
-        canvasActual.cerrarMenu(0);
+        configuracion.cerrarMenu(0);
         escenaControlador.cargarEscenaIntermedio();
         escenaControlador.iniciarJuego(datosJuego);
-        StartCoroutine(cargarEscena());
     }
-
+    public void modoDicromatico(int modo)
+    {
+        ColorBlindCorrection colorBlindCorrection;
+        volume.profile.TryGetSettings<ColorBlindCorrection>(out colorBlindCorrection);
+        if(modo == 0)
+        {
+            colorBlindCorrection.enabled.value = false;
+        }
+        else
+        {
+            colorBlindCorrection.enabled.value = true;
+            colorBlindCorrection.mode.value = modo - 1;
+        }
+    }
     public void mostrarTutorial(Sprite[] imagenes,string[] textos)
     {
         jugadorControlable = false;
@@ -139,9 +221,35 @@ public class Controlador : MonoBehaviour
                 break;
         }
         tutorial_texto.fontSize = tamanyoFuente;
-        panelTutorial.SetParent(canvasActual.transform);
+        panelTutorial.SetParent(configuracion.transform);
+        panelTutorial.anchoredPosition3D = Vector3.zero;
         StartCoroutine(mostrarTutorial_Coroutine(imagenes, textos));
 
+    }
+    public bool esperaInput()
+    {
+        if (datosSistema.tipoControl == 0)
+        {
+            if (Input.GetKeyUp(keys["confirmar"]) || Input.GetKeyUp(keys["cancelar"]))
+            {
+                return true;
+            }
+        }
+        if (datosSistema.tipoControl == 1)
+        {
+            if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
+            {
+                return true;
+            }
+        }
+        if (datosSistema.tipoControl == 2)
+        {
+            if (Input.GetKeyUp(keys["A"]) || Input.GetKeyUp(keys["B"]))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     IEnumerator mostrarTutorial_Coroutine(Sprite[] imagenes, string[] textos)
     {
@@ -152,44 +260,25 @@ public class Controlador : MonoBehaviour
         while(!acabado)
         {
             yield return null;
-            if(datosSistema.tipoControl == 0)
+            if(esperaInput())
             {
-                if(Input.GetKeyUp(keys["confirmar"]) || Input.GetKeyUp(keys["cancelar"]))
+                if (ind < textos.Length)
                 {
-                    goto siguiente;
-                }
-            }
-            if (datosSistema.tipoControl == 1)
-            {
-                if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
-                {
-                    goto siguiente;
-                }
-            }
-            if (datosSistema.tipoControl == 2)
-            {
-                if (Input.GetKeyUp(keys["A"]) || Input.GetKeyUp(keys["B"]))
-                {
-                    goto siguiente;
-                }
-            }
-            continue;
-        siguiente:
-            if(ind < textos.Length)
-            {
-                tutorial_texto.text = textos[ind];
-                if(imagenes[ind] != null)
-                {
-                    tutorial_imagen.sprite = imagenes[ind];
+                    tutorial_texto.text = textos[ind];
+                    if (imagenes[ind] != null)
+                    {
+                        tutorial_imagen.sprite = imagenes[ind];
+                    }
+                    else
+                    {
+                        tutorial_imagen.sprite = imagenDefecto;
+                    }
+                    ind++;
                 }
                 else
                 {
-                    tutorial_imagen.sprite = imagenDefecto;
+                    acabado = true;
                 }
-                ind++;
-            }else
-            {
-                acabado = true;
             }
         }
         panelTutorial.SetParent(transform);
@@ -200,17 +289,19 @@ public class Controlador : MonoBehaviour
     {
         animEfec.ActualizaAnimacion(datosSistema.activarDecoracionAnim);
     }
+
     void Update()
     {
         
         if(elegiendoColor && controlable)
         {
-
+            
             Vector2 pos;
             if (Input.GetMouseButtonDown(0))
             {
-                pos = Input.mousePosition;
-                pos = rect_color.transform.InverseTransformPoint(pos);
+                pos = posicionRaton();
+                pos -= rect_color.anchoredPosition;
+                Debug.Log(pos);
                 if (pos.x >= 0 && pos.x <= tamanyoColor.x  && 
                     pos.y >= 0 && pos.y <= tamanyoColor.y )
                         persigueRaton = true;
@@ -219,13 +310,13 @@ public class Controlador : MonoBehaviour
             {
 
                 persigueRaton = false;
-                Debug.Log(persigueRaton);
                 registraControl();
             }
             if (persigueRaton)
             {
-                pos = Input.mousePosition;
-                pos = rect_color.transform.InverseTransformPoint(pos);
+                pos = posicionRaton();
+
+                pos -= rect_color.anchoredPosition; ;
                 pos.y = 40;
                 MoverMarca(pos);
                 return;
@@ -266,25 +357,28 @@ public class Controlador : MonoBehaviour
         }
     }
 
-    public IEnumerator cargarEscena()
+    public void iniciarPantallaCargar()
+    {
+        StartCoroutine(pantallaCargar());
+    }
+    IEnumerator pantallaCargar()
     {
         yield return null;
         controlable = false;
         cargando = true;
         panelCargar.gameObject.SetActive(true);
-        panelCargar.SetParent(canvasActual.transform);
-        while(!escenaControlador.finalizado)
+        panelCargar.SetParent(configuracion.transform);
+        panelCargar.localRotation = Quaternion.identity;
+        panelCargar.anchoredPosition3D = Vector3.zero;
+        panelCargar.localScale = Vector3.one;
+        while (cargando)
         {
             yield return null;
         }
-        
+
         panelCargar.gameObject.SetActive(false);
         panelCargar.SetParent(this.transform);
         controlable = true;
-        uiControlable = false;
-        cargando = false;
-        inputModule.desactivarRatonRegistrar = true;
-        canvasActual = player.HUD;
     }
 
     public void cerrarElegirColor(bool confirmar)
@@ -296,7 +390,7 @@ public class Controlador : MonoBehaviour
         }
         panelElegirColor.gameObject.SetActive(false);
         panelElegirColor.parent = transform;
-        canNavegar = true;
+        navegable = true;
         uiControlable = true;
         inputModule.desactivarRatonRegistrar = false;
         elegiendoColor = false;
@@ -320,7 +414,7 @@ public class Controlador : MonoBehaviour
         get { return inputModule.controlable; }
         set { inputModule.controlable = value; }
     }
-    public bool canNavegar
+    public bool navegable
     {
         get { return !uicontrol.pausaNav; }
         set { uicontrol.pausaNav = !value; }
@@ -378,30 +472,34 @@ public class Controlador : MonoBehaviour
     IEnumerator PopUp(RectTransform rect)
     {
         float now = 0;
-        bool antes_uiCanControl = uiControlable;
-        bool antes_canNavegar = canNavegar;
+        bool antes_controlable = controlable;
+        bool antes_canNavegar = navegable;
         uiControlable = false;
-        canNavegar = false;
-        rect.anchoredPosition = Vector2.zero;
+        navegable = false;
+        rect.localScale = Vector3.zero;
+        rect.localRotation = Quaternion.identity;
+        float tiempoInv = 1 / tiempoTransicion;
         yield return null;
         while(now < tiempoTransicion)
         {
             now += Time.unscaledDeltaTime;
-            rect.localScale = Vector3.one * (now / tiempoTransicion);
+            rect.localScale = Vector3.one * (now * tiempoInv);
             yield return null;
         }
         rect.localScale = Vector3.one;
-        uiControlable = antes_uiCanControl;
-        canNavegar = antes_canNavegar;
+        controlable = antes_controlable;
+        navegable = antes_canNavegar;
     }
     public void ElegirColor(Vector2 pos,Action<Color> acabado)
     {
-        canNavegar = false;
+        navegable = false;
         uiControlable = false;
         inputModule.desactivarRatonRegistrar = true;
         panelElegirColor.gameObject.SetActive(true);
-        panelElegirColor.parent = canvasActual.transform;
+        panelElegirColor.parent = configuracion.transform;
         panelElegirColor.localScale = Vector3.zero;
+        panelElegirColor.anchoredPosition3D = Vector3.zero;
+
         rect_color.anchoredPosition = pos;
         StartCoroutine("PopUp",panelElegirColor);
         elegiendoColor = true ;
@@ -462,29 +560,29 @@ public class Controlador : MonoBehaviour
 
     }
     //0:ambiente 1: peligro 2:interaccion 3:interfaz 4:paso
-    public void ModificarVolumen(int tipo,float vol)
+    public void ModificarVolumen(TipoVolumen tipo,float vol)
     {
         float dB = (vol / 100 * 80) - 80;
         Debug.Log("soy controlador volumen es" + vol);
         switch(tipo)
         {
-            case 0:
+            case TipoVolumen.AMBIENTE:
                 audioMixer.SetFloat("AmbienteVol", dB);
                 datosSistema.ambienteVol = vol;
                 break;
-            case 1:
+            case TipoVolumen.PELIGRO:
                 audioMixer.SetFloat("PeligroVol", dB);
                 datosSistema.peligroVol = vol;
                 break;
-            case 2:
+            case TipoVolumen.INTERACCION:
                 audioMixer.SetFloat("InteraccionVol", dB);
                 datosSistema.interaccionVol = vol;
                 break;
-            case 3:
+            case TipoVolumen.INTERFAZ:
                 audioMixer.SetFloat("InterfazVol", dB);
                 datosSistema.interfazVol = vol;
                 break;
-            case 4:
+            case TipoVolumen.PASO:
                 audioMixer.SetFloat("PasoVol", dB);
                 datosSistema.pasoVol = vol;
                 break;
@@ -498,7 +596,7 @@ public class Controlador : MonoBehaviour
         {
             uicontrol.dosBotonModo = true;
             GameObject[] nav;
-            if(canvasActual.getActualNavegable(out nav))
+            if(configuracion.getActualNavegable(out nav))
             {
                 uicontrol.iniNavegacion(nav);
             }
@@ -509,8 +607,22 @@ public class Controlador : MonoBehaviour
             uicontrol.LimpiarNav();
             eventSystem.SetSelectedGameObject(eventSystem.firstSelectedGameObject);
         }
+        if(player != null)
+        {
+            player.actualizarControl();
+        }
     }
-
+    public void menuInicio()
+    {
+        iniciarPantallaCargar();
+        StartCoroutine(volverMenuInicio());
+    }
+    IEnumerator volverMenuInicio()
+    {
+        yield return new WaitForSecondsRealtime(1);
+        guardarDatoJuego();
+        SceneManager.LoadScene(0);
+    }
     public void registraControl()
     {
         if (datosSistema.inputTime == 0 || !controlable)
@@ -524,7 +636,9 @@ public class Controlador : MonoBehaviour
         controlable = false;
         float now = 0;
         I_registrando.gameObject.SetActive(true);
-        I_registrando.transform.parent = canvasActual.transform;
+        I_registrando.transform.parent = configuracion.transform;
+        I_registrando.rectTransform.anchoredPosition3D = new Vector3(65, 65,0);
+        I_registrando.rectTransform.localRotation = Quaternion.identity;
         while(now <= datosSistema.inputTime)
         {
             now += Time.unscaledDeltaTime;
@@ -553,7 +667,9 @@ public class Controlador : MonoBehaviour
             text.font = fuente;
         }
         uicontrol.apilarNavegacion(salirNav);
-        panelSalir.parent = canvasActual.transform;
+        panelSalir.SetParent(configuracion.transform);
+        panelSalir.anchoredPosition3D = Vector3.zero;
+        panelSalir.localRotation = Quaternion.identity;
         ultControlable = controlable;
         if (player != null)
             ultJugadorControlable = jugadorControlable;
@@ -564,10 +680,16 @@ public class Controlador : MonoBehaviour
         StartCoroutine(PopUp(panelSalir));
         return false;
     }
+    
     public void cerrarJuego(bool cerrar)
     {
         if(cerrar)
         {
+            if(!cargando&&!muerto)
+            {
+                guardarDatoJuego();
+                guardarDatoSistema();
+            }
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -584,9 +706,16 @@ public class Controlador : MonoBehaviour
             uicontrol.cancelar();
             jugadorControlable = ultJugadorControlable;
             controlable = ultControlable;
+            StartCoroutine(impedirControl());
             registraControl();
 
         }
+    }
+    IEnumerator impedirControl()
+    {
+        controlable = false;
+        yield return new WaitForSecondsRealtime(0.1f);
+        controlable = true;
     }
 
     public void cancelar()
@@ -600,17 +729,89 @@ public class Controlador : MonoBehaviour
             }
             if (!uicontrol.cancelar())
             {
-                canvasActual.cancelar();
+                canvaActual.cancelar();
             }
             
         }
             
     }
+    public void abrirConfiguracion()
+    {
 
+        canvaActual = configuracion;
+        configuracion.abrirMenu(2);
+    }
+    public void cerrarConfiguracion()
+    {
+        canvaActual = player.HUD;
+        GameObject[] navegables;
+        canvaActual.getActualNavegable(out navegables);
+        iniNavegacion(navegables);
+        eventSystem.firstSelectedGameObject = navegables[1];
+    }
+    public void guardarDatoSistema()
+    {
+        SistemaGuardar.guardarDatosSistema(datosSistema);
+    }
+    public void guardarDatoJuego()
+    {
+        if (player == null)
+            return;
+        datosJuego.nivelActual = escenaControlador.numNivelActual;
+        if(escenaControlador.nivelActual != null)
+        {
+            datosJuego.niveles[datosJuego.nivelActual] = escenaControlador.nivelActual.generarConfig();
+        }
+        datosJuego.playerPos = player.transform.position;
+        SistemaGuardar.guardarDatosJuego(datosJuego);
+
+    }
     public void iniNavegacion(GameObject[] nav)
     {
         uicontrol.iniNavegacion(nav);
     }
+
+    public void morir(string causa)
+    {
+        muerto = true;
+        player.morir(causa);
+        panelMuerto.gameObject.SetActive(true);
+        panelMuerto.SetParent(configuracion.transform);
+        panelMuerto.anchoredPosition3D = Vector3.zero;
+        panelMuerto.localRotation = Quaternion.identity;
+        StartCoroutine(morir_coroutine());
+    }
+    IEnumerator morir_coroutine()
+    {
+        float now = 0;
+        controlable = false;
+        float tiempoInv = 1 / tiempoTransicion;
+        Image imagen = panelMuerto.GetComponent<Image>();
+        yield return null;
+        while (now < tiempoTransicion)
+        {
+            now += Time.unscaledDeltaTime;
+            Color color = imagen.color;
+            color.a = 1 * (now * tiempoInv);
+            imagen.color =color;
+            yield return null;
+        }
+        bool esperandoInput = true;
+        player.cambiarPersona();
+        while(esperandoInput)
+        {
+            if(esperaInput())
+            {
+                esperandoInput = false;
+            }
+            yield return null;
+        }
+        controlable = true;
+        panelMuerto.SetParent(transform);
+        panelMuerto.gameObject.SetActive(false);
+        escenaControlador.nivelActual.reintentarNivel();
+    }
+
 
     //---------------------Sonidos--------------------------
 

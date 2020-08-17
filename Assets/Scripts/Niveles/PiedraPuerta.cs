@@ -9,8 +9,20 @@ public class PiedraPuerta : Puerta
     public bool abierto = false;
     public override void Abrir(bool abrir)
     {
-        if (abierto)
+        if (abierto || !abrir)
             return;
         animator.SetTrigger("abrir");
+    }
+    public void configEstado(bool abierto)
+    {
+        this.abierto = abierto;
+        if (abierto)
+        {
+            animator.enabled = false;
+        }
+        else
+        {
+            animator.Rebind();
+        }
     }
 }

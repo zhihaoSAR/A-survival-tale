@@ -48,11 +48,11 @@ public class RemapearTeclado : Pagina
     {
         if (tamanyoFuente == tamanyo)
             return;
-        Vector2 proporcion;
+        Vector3 proporcion;
         switch (tamanyo)
         {
             case 0:
-                proporcion = Vector2.one;
+                proporcion = Vector3.one;
                 Text_explicacion.fontSize = 30;
                 foreach (RectTransform transform in Rect_Opciones)
                 {
@@ -60,7 +60,7 @@ public class RemapearTeclado : Pagina
                 }
                 break;
             case 1:
-                proporcion = new Vector2(1.25f, 1.25f);
+                proporcion = new Vector3(1.25f, 1.25f,1);
                 Text_explicacion.fontSize = 37;
                 foreach (RectTransform transform in Rect_Opciones)
                 {
@@ -68,7 +68,7 @@ public class RemapearTeclado : Pagina
                 }
                 break;
             case 2:
-                proporcion = new Vector2(1.5f, 1.5f);
+                proporcion = new Vector3(1.5f, 1.5f,1);
                 Text_explicacion.fontSize = 45;
                 foreach (RectTransform transform in Rect_Opciones)
                 {
@@ -100,7 +100,7 @@ public class RemapearTeclado : Pagina
         if(!registrando)
         {
             control.uiControlable = false;
-            control.canNavegar = false;
+            control.navegable = false;
             keyObtenido = KeyCode.None;
             UpdateText(botonTextos[boton], " ");
             botonActual = boton;
@@ -149,7 +149,7 @@ public class RemapearTeclado : Pagina
     {
         yield return new WaitForSecondsRealtime(0.1f);
         control.uiControlable = true;
-        control.canNavegar = true;
+        control.navegable = true;
     }
 
     void UpdateText(TextMeshProUGUI boton, string keyName)
