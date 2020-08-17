@@ -50,7 +50,8 @@ public class Player : MonoBehaviour
     public Action estadoActual;
 
     Vector3 destinoPrepararInt;
-
+    //--------------sonido-----------------
+    public AudioSource sonidoAndar;
     //-----------------caja------------------------
     [HideInInspector]
     public Vector3 dirMoverCaja;
@@ -131,7 +132,11 @@ public class Player : MonoBehaviour
         
 
     }
-
+    public void cambiarSonidoPaso(AudioClip clip)
+    {
+        sonidoAndar.clip = clip;
+        sonidoAndar.Play();
+    }
     public void actualizarPath()
     {
         surface.BuildNavMesh();
@@ -230,6 +235,7 @@ public class Player : MonoBehaviour
             {
                 agente.isStopped = true;
                 animator.speed = 0;
+                sonidoAndar.Pause();
             }
             return;
         }
@@ -237,6 +243,7 @@ public class Player : MonoBehaviour
         {
             agente.isStopped = false;
             animator.speed = 1;
+            sonidoAndar.UnPause();
         }
         //agente.isStopped = false;
         
@@ -261,6 +268,7 @@ public class Player : MonoBehaviour
     }
     void ESTADO_PARADO()
     {
+        sonidoAndar.Stop();
         RecordarControl(objeto != null);
         HUD.activaMiniMapa(true);
         if(tiempoParado > 3)
@@ -313,6 +321,7 @@ public class Player : MonoBehaviour
         tiempoParado = 0;
         contadorAtascado = 0;
         contar = false;
+        sonidoAndar.Play();
     }
     void ESTADO_MOVER()
     {
@@ -323,6 +332,7 @@ public class Player : MonoBehaviour
             estado = Estado.PARADO;
             estadoActual = estadoParado;
             animator.SetBool(caminar, false);
+            sonidoAndar.Stop();
         }
     }
     void ESTADO_PREPARARINTER()
@@ -354,7 +364,7 @@ public class Player : MonoBehaviour
                 transform.position = destinoPrepararInt;
                 agente.ResetPath();
                 objeto.finPreparar();
-                
+                sonidoAndar.Stop();
                 animator.SetBool(caminar, false);
                 
             }
@@ -381,6 +391,7 @@ public class Player : MonoBehaviour
         estado = Estado.PARADO;
         estadoActual = estadoParado;
         animator.SetBool(caminar, false);
+        sonidoAndar.Stop();
 
     }
     public void prepararConCaja()
@@ -389,9 +400,9 @@ public class Player : MonoBehaviour
         estadoActual = estadoParadoConCaja;
         animator.SetBool(moverCaja, true);
         //obstaculoDetector.gameObject.SetActive(true);
-        collider.height = 2.07f;
         agente.enabled = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        collider.height = 2.07f;
     }
     void ESTADO_PARADOCONCAJA()
     {
@@ -430,7 +441,7 @@ public class Player : MonoBehaviour
         estadoActual = estadoParado;
         animator.SetInteger(moverCajaDir, 0);
         animator.SetBool(moverCaja, false);
-        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
         agente.enabled = true;
         collider.height = 1.5f;
         if(Coroutine_moverConCaja != null)
