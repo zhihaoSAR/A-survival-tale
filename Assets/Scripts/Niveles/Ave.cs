@@ -28,7 +28,7 @@ public class Ave : Interactuable
         player.estadoActual = player.estadoParadoConAve;
 
         transform.rotation = player.transform.rotation;
-        transform.parent = player.transform;
+        transform.parent = player.posCogerAve.transform;
         //rb.detectCollisions = false;
         rb.isKinematic = true;
         

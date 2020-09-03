@@ -1,0 +1,596 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AnimacionEfecto" Collapsed="true">
+    <Position X="5.25" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAgAAAACAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\AnimacionEfecto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColorDefecto" Collapsed="true">
+    <Position X="6.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAABAAAAAAAAAAAAAAIAAAAAAAAAABAEAAAA=</HashCode>
+      <FileName>Assets\Scripts\ColorDefecto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ContrasteControlador" Collapsed="true">
+    <Position X="9.25" Y="14.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQABAAAAAABAAAAAQAIAAAAAAIACAAAABAAABIECAAQ=</HashCode>
+      <FileName>Assets\Scripts\ContrasteControlador.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="colorDefecto" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Controlador" Collapsed="true">
+    <Position X="18.25" Y="18.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>wMwLEAMCDWAeJtLYBDyBA4foB8pBHt4LDiAhIAZCAHE=</HashCode>
+      <FileName>Assets\Scripts\Controlador.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="inputModule" />
+      <Field Name="datosSistema" />
+      <Field Name="datosJuego" />
+      <Field Name="uicontrol" />
+      <Field Name="uisonido" />
+      <Field Name="player" />
+      <Field Name="canvaActual" />
+      <Field Name="configuracion" />
+      <Field Name="contrasteControlador" />
+      <Field Name="animEfec" />
+      <Field Name="control" />
+      <Field Name="escenaControlador" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EscenaControlador" Collapsed="true">
+    <Position X="20.25" Y="13.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>EAAABAAAACAAAAAAAACEIACEAACAAAAAEAAAAIEEAAA=</HashCode>
+      <FileName>Assets\Scripts\EscenaControlador.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="nivelActual" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interactuable" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAACAAAAAAAAAAIAgAAAAgAAADAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Interactuable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ActivaCamara" Collapsed="true">
+    <Position X="24.5" Y="18" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\ActivaCamara.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AreaTrigger" Collapsed="true">
+    <Position X="17.5" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAEAAEAAAIEACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\AreaTrigger.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="triggers" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AreaTriggerComponente" Collapsed="true">
+    <Position X="19" Y="20.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQIAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\AreaTriggerComponente.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsignarNivel" Collapsed="true">
+    <Position X="20.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\AsignarNivel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ave" Collapsed="true">
+    <Position X="5" Y="5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>BQIAAAAAAAAACABEAAAAIAAEAAhgAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Ave.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BotonSuelo">
+    <Position X="25.5" Y="22.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAIAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\BotonSuelo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="puerta" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Caja" Collapsed="true">
+    <Position X="18" Y="17" Width="1.25" />
+    <NestedTypes>
+      <Enum Name="Caja.DetectorPos" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Niveles\Caja.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <InheritanceLine Type="Interactuable" FixedToPoint="true">
+      <Path>
+        <Point X="6.219" Y="4.177" />
+        <Point X="6.219" Y="4.625" />
+        <Point X="6.312" Y="4.625" />
+        <Point X="6.312" Y="15.188" />
+        <Point X="6.812" Y="15.188" />
+        <Point X="6.812" Y="16.719" />
+        <Point X="7.167" Y="16.719" Type="JumpStart" />
+        <Point X="7.333" Y="16.719" Type="JumpEnd" />
+        <Point X="8.135" Y="16.719" Type="JumpStart" />
+        <Point X="8.302" Y="16.719" Type="JumpEnd" />
+        <Point X="9.167" Y="16.719" Type="JumpStart" />
+        <Point X="9.333" Y="16.719" Type="JumpEnd" />
+        <Point X="10.807" Y="16.719" Type="JumpStart" />
+        <Point X="10.974" Y="16.719" Type="JumpEnd" />
+        <Point X="11.249" Y="16.719" Type="JumpStart" />
+        <Point X="11.415" Y="16.719" Type="JumpEnd" />
+        <Point X="14.167" Y="16.719" Type="JumpStart" />
+        <Point X="14.333" Y="16.719" Type="JumpEnd" />
+        <Point X="17.854" Y="16.719" Type="JumpStart" />
+        <Point X="18.021" Y="16.719" Type="JumpEnd" />
+        <Point X="18.198" Y="16.719" Type="JumpStart" />
+        <Point X="18.365" Y="16.719" Type="JumpEnd" />
+        <Point X="18.625" Y="16.719" />
+        <Point X="18.625" Y="17" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AQBQABAABiAAERAMCAJAMAAAAAAwABAAEARAABCAAEA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Caja.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="detector" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Coco" Collapsed="true">
+    <Position X="7.5" Y="5" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAEAAAAIAAAAAAgBAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Coco.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CompletarNivel" Collapsed="true">
+    <Position X="20.25" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\CompletarNivel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DetectorAve" Collapsed="true">
+    <Position X="5" Y="6.25" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\DetectorAve.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="ave" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DetectorCajaCaer" Collapsed="true">
+    <Position X="17.5" Y="21.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAEACAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\DetectorCajaCaer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MiCamara" Collapsed="true">
+    <Position X="24.5" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAACAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\MiCamara.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nivel" Collapsed="true">
+    <Position X="20.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAABAIAAAABAAAAgAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Nivel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nivel1" Collapsed="true">
+    <Position X="20.25" Y="18.5" Width="1.5" />
+    <AssociationLine Name="configuracionIni" Type="NivelConfigObj">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.035" Y="0.018" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAoABQIAQCAEAAAAgAAAAIAAAAAAhAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Nivel1\Nivel1.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="configuracionIni" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Tutorial_MoverCaja" Collapsed="true">
+    <Position X="19.5" Y="22.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Nivel1\Tutorial_MoverCaja.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tutorial_Nivel1" Collapsed="true">
+    <Position X="24.75" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAACAEAABAAAAAAAAAAAAAAAQIAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Nivel1\Tutorial_Nivel1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tutorial_posTrigger" Collapsed="true">
+    <Position X="21.75" Y="21.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Nivel1\Tutorial_posTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NivelConfig" Collapsed="true">
+    <Position X="22.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAAAAAAAAAAAAAAgAAAAAIAAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\NivelConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NivelConfigObj" Collapsed="true">
+    <Position X="22.25" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAAAEAAAAAAAAAAgAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\NivelConfigObj.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PiedraPuerta" Collapsed="true">
+    <Position X="23.75" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BABAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\PiedraPuerta.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Puerta" Collapsed="true">
+    <Position X="23.75" Y="22" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Puerta.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SonidoPaso" Collapsed="true">
+    <Position X="24.5" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\SonidoPaso.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tutorial">
+    <Position X="22.75" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\Tutorial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TutorialTrigger" Collapsed="true">
+    <Position X="20.75" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\TutorialTrigger.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="tutorial" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ZonaMorir" Collapsed="true">
+    <Position X="18.25" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQQAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Niveles\ZonaMorir.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ObstaculoDetector" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAABAAIAEAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ObstaculoDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="18" Y="17.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>j548yBAQADiEPwj0gDRCCAKk4iSg28asDsC6e61mFUA=</HashCode>
+      <FileName>Assets\Scripts\Player.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="manejadorRaton" />
+      <Field Name="control" />
+      <Field Name="HUD" />
+      <Field Name="objeto" />
+      <Field Name="obstaculoDetector" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PlayerDetector" Collapsed="true">
+    <Position X="6.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAQIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\PlayerDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColorBlindCorrection" Collapsed="true">
+    <Position X="35.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\PostProcess\ColorBlindCorrection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColorBlindCorrectionRenderer" Collapsed="true">
+    <Position X="34.25" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\PostProcess\ColorBlindCorrection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Raton" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAIAAAAAAUAACAAAgAEAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Raton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColorSerializationSurrogate" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="13.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Sistema de guardar\ColorSerializationSurrogate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DatosJuego" Collapsed="true">
+    <Position X="22.25" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAgAAAAAAACAABEAAAAAAAAAICAAAAAAAgoAAA=</HashCode>
+      <FileName>Assets\Scripts\Sistema de guardar\DatosJuego.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="niveles" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DatosSistema" Collapsed="true">
+    <Position X="9.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAJAAIAEEiBABAAAAEQAAEIpCEABiAIAAABkA=</HashCode>
+      <FileName>Assets\Scripts\Sistema de guardar\DatosSistema.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuaternionSerializationSurrogate" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="14" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Sistema de guardar\QuaternionSerializationSurrogate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SistemaGuardar" Collapsed="true">
+    <Position X="18" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAEAAAAgAAAAAAAAAAQAAAAAEBAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Sistema de guardar\SistemaGuardar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector3SerializationSurrogate" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="14.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Sistema de guardar\Vector3SerializationSurrogate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CanvaJuego" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAABEAAGAkBAIJAAIAAYCAAQACAEMAIAAAIAIAACA=</HashCode>
+      <FileName>Assets\Scripts\UI\CanvaJuego.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mapa" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Comienzo" Collapsed="true">
+    <Position X="12.75" Y="20" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAhgAAAAIAAAgIAAAAAAAAAAAAAACAAAIAAAE=</HashCode>
+      <FileName>Assets\Scripts\UI\Comienzo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Configuracion" Collapsed="true">
+    <Position X="9.25" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEEAAACCAABJAABEICgAIBACAIAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\UI\Configuracion.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="paginaActual" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Cuadro" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="21" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAEAAAAIAAAAAACAAEIAA=</HashCode>
+      <FileName>Assets\Scripts\UI\Cuadro.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Inicio" Collapsed="true">
+    <Position X="11.5" Y="20" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAhAAAIAAAAAgIAAAAAAAAAAAAAACAAAIACAA=</HashCode>
+      <FileName>Assets\Scripts\UI\Inicio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mapa" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABCBAAAhCAoBAAAAAgKAAIAAAAAAAAAAACAAAIAABA=</HashCode>
+      <FileName>Assets\Scripts\UI\Mapa.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Menu" Collapsed="true">
+    <Position X="10" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAABAAAAAAAAIAAAAAAAAKAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\UI\Menu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuAnimacion" Collapsed="true">
+    <Position X="6.5" Y="19.25" Width="1.5" />
+    <InheritanceLine Type="Pagina" ManuallyRouted="true">
+      <Path>
+        <Point X="9.25" Y="18.677" />
+        <Point X="9.25" Y="13.45" />
+        <Point X="7.25" Y="13.45" />
+        <Point X="7.25" Y="19.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAhAAAAAAAAAgIAAAAAAAAQIAEAACIAAIABgA=</HashCode>
+      <FileName>Assets\Scripts\UI\MenuAnimacion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuContraste" Collapsed="true">
+    <Position X="11" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACgABAjAABAGAgAAgIgAAIAAAAAAAIAEDAAAIAgAA=</HashCode>
+      <FileName>Assets\Scripts\UI\MenuContraste.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuControl" Collapsed="true">
+    <Position X="12.5" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAACAAAAhAAIgAAKAQoIAAEAAAAIAAAAAACAAAIAAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\MenuControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuPrincipal" Collapsed="true">
+    <Position X="6.5" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAQAAhAAAAAAAAAgIAAAAAAAAAAAAAACAgAIAAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\MenuPrincipal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuSonido" Collapsed="true">
+    <Position X="9" Y="20" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>ACACAAAAhAAAAAAAAAgIAAAAAAAAAAAAAACAAAIAACA=</HashCode>
+      <FileName>Assets\Scripts\UI\MenuSonido.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MiUiBoton" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAgAAAAAAAACQAEIAA=</HashCode>
+      <FileName>Assets\Scripts\UI\MiUiBoton.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MiUiToggle" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAgAAAAAAAACQAEIAA=</HashCode>
+      <FileName>Assets\Scripts\UI\MiUiToggle.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Pagina" Collapsed="true">
+    <Position X="8.5" Y="18" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAABAAAAAAAAAgAAAAAAIAAAAAAAAIAAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\Pagina.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RemapearTeclado" Collapsed="true">
+    <Position X="7.75" Y="19.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAIKAAAAhAgIAAAAEIgIAAAAAAAAAAAAgADAAAIAJAI=</HashCode>
+      <FileName>Assets\Scripts\UI\RemapearTeclado.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeleccionControl" Collapsed="true">
+    <Position X="9.5" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAgAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\SeleccionControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIControl" Collapsed="true">
+    <Position X="9.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBAAAAAAAWBADAAAEAiEAAaAIAAAEAAAAAAAAAQSACA=</HashCode>
+      <FileName>Assets\Scripts\UI\UIControl.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="inputModulo" />
+      <Field Name="control" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="UISonido" Collapsed="true">
+    <Position X="8" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASAIAAQAAAAAAcIgIAAFAAAQAAAAAQABAEAAAIAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\UISonido.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visualizacion" Collapsed="true">
+    <Position X="7.75" Y="20" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAIApAAAQAgAAAgICBAQUAAABAAABACAAAJACAA=</HashCode>
+      <FileName>Assets\Scripts\UI\Visualizacion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Volumen" Collapsed="true">
+    <Position X="10.25" Y="20" Width="1.25" />
+    <TypeIdentifier>
+      <HashCode>RAACAAAAhAACAAAAAAgIAAAAAAAAAAAACADAAAIAAAI=</HashCode>
+      <FileName>Assets\Scripts\UI\Volumen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityEngine.EventSystems.MyInputModule" Collapsed="true">
+    <Position X="9.75" Y="4.5" Width="1.5" />
+    <AssociationLine Name="uicontrol" Type="UIControl" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.625" Y="5.177" />
+        <Point X="10.625" Y="5.427" />
+        <Point X="10.5" Y="5.427" />
+        <Point X="10.5" Y="4.927" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>ANBCUEAlMSBEFBiAgoSkwAAAAggAAAkQACQAoCkBACA=</HashCode>
+      <FileName>Assets\Scripts\UI\MyInputModule.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="uicontrol" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="TipoContraste">
+    <Position X="12.5" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAABAEAAAA=</HashCode>
+      <FileName>Assets\Scripts\ContrasteControlador.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TipoVolumen">
+    <Position X="11" Y="17" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAABIAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\UI\Volumen.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

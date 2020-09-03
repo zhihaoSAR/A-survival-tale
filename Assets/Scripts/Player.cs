@@ -518,6 +518,7 @@ public class Player : MonoBehaviour
         {
             objeto.finInteractuar();
             objeto = null;
+            animator.SetBool(agarrarAve, false);
             estado = Estado.PARADO;
             estadoActual = estadoParado;
             desactivarSenyales();
@@ -928,6 +929,7 @@ public class Player : MonoBehaviour
         Vector3 dir = manejadorRaton.posicionPantalla - mainCamera.WorldToScreenPoint(transform.position);
         dir.z = dir.y;
         dir.y = 0;
+        dir = rotacionCamaraXZ*dir;
         Vector3 objetivo = transform.position + dir;
         transform.LookAt(objetivo);
         flecha.LookAt(objetivo);
@@ -1135,7 +1137,7 @@ public class Player : MonoBehaviour
     {
         get
         {
-            Vector3 dst = mainCamera.transform.forward;
+            Vector3 dst = mainCamera.transform.forward; 
             dst.y = 0;
             if (mainCamera.transform.up.y < 0)
             {
