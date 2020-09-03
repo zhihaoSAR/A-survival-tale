@@ -25,9 +25,10 @@ public class Configuracion : Menu
             return;
         if (paginasAnteriores.Count == 0)
         {
-            StartCoroutine(TranscicionIniFinMenu(paginaActual.GetComponent<RectTransform>(), false));
+            
             control.S_cambioPagina();
             control.cerrarConfiguracion();
+            cerrarMenu(1);
             return;
         }
            
@@ -127,14 +128,15 @@ public class Configuracion : Menu
         if(op == 0)
         {
             StartCoroutine(TranscicionIniFinMenu(comienzo.GetComponent<RectTransform>(), false));
+            if (control.datosSistema.tipoControl != 1)
+            {
+                Cursor.visible = false;
+            }
             return;
         }
         control.guardarDatoSistema();
         StartCoroutine(TranscicionIniFinMenu(configuracionInicio.GetComponent<RectTransform>(), false));
-        if(control.datosSistema.tipoControl != 1)
-        {
-            Cursor.visible = false;
-        }
+        
     }
 
 

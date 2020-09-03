@@ -1,4 +1,4 @@
-﻿
+﻿//#define ESCENA_PRUEBA
 
 using System;
 using System.Collections;
@@ -488,6 +488,7 @@ public class Controlador : MonoBehaviour
         }
         rect.localScale = Vector3.one;
         controlable = antes_controlable;
+        uiControlable = true;
         navegable = antes_canNavegar;
     }
     public void ElegirColor(Vector2 pos,Action<Color> acabado)
@@ -625,7 +626,7 @@ public class Controlador : MonoBehaviour
     }
     public void registraControl()
     {
-        if (datosSistema.inputTime == 0 || !controlable)
+        if (!controlable)
             return;
 
         StartCoroutine("registrandoControl");
@@ -634,6 +635,11 @@ public class Controlador : MonoBehaviour
     IEnumerator registrandoControl()
     {
         controlable = false;
+        if(datosSistema.inputTime == 0)
+        {
+            yield return new WaitForEndOfFrame();
+            goto final;
+        }
         float now = 0;
         I_registrando.gameObject.SetActive(true);
         I_registrando.transform.parent = configuracion.transform;
@@ -647,6 +653,7 @@ public class Controlador : MonoBehaviour
         }
         I_registrando.rectTransform.parent = this.transform;
         I_registrando.gameObject.SetActive(false);
+     final:
         controlable = true;
     }
 
@@ -701,6 +708,7 @@ public class Controlador : MonoBehaviour
         {
             panelSalir.parent = transform;
             panelSalir.gameObject.SetActive(false);
+            eventSystem.SetSelectedGameObject(null);
             cerrandoJuego = false;
             uiControlable = ultUiControlable;
             uicontrol.cancelar();
@@ -739,6 +747,7 @@ public class Controlador : MonoBehaviour
     {
 
         canvaActual = configuracion;
+        inputModule.desactivarRatonRegistrar = false;
         configuracion.abrirMenu(2);
     }
     public void cerrarConfiguracion()
@@ -748,10 +757,12 @@ public class Controlador : MonoBehaviour
         canvaActual.getActualNavegable(out navegables);
         iniNavegacion(navegables);
         eventSystem.firstSelectedGameObject = navegables[1];
+        inputModule.desactivarRatonRegistrar = true;
     }
     public void guardarDatoSistema()
     {
         SistemaGuardar.guardarDatosSistema(datosSistema);
+        Debug.Log("guardando");
     }
     public void guardarDatoJuego()
     {

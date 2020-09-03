@@ -80,6 +80,10 @@ public class CanvaJuego : Menu
     public override void cerrarMenu(int op)
     {
         StartCoroutine(cerrarMapa());
+        if (control.datosSistema.tipoControl != 1)
+        {
+            Cursor.visible = false;
+        }
     }
     IEnumerator cerrarMapa()
     {

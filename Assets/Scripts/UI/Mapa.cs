@@ -46,8 +46,6 @@ public class Mapa : MonoBehaviour
     }
     public void inicializar()
     {
-        Debug.Log(Controlador.control);
-        Debug.Log(control.datosSistema);
         DatosSistema datos = control.datosSistema;
         actualizarPos();
         reintentar.enabled = (control.escenaControlador.nivelActual != null &&

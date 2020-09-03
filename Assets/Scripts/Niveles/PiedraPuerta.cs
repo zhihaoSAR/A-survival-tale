@@ -25,4 +25,5 @@ public class PiedraPuerta : Puerta
             animator.Rebind();
         }
     }
+
 }
