@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     bool seleccionaDir = true;
     float velNavGirar = 60f, velNavMover = 20;
     float sqrMaxDis = 1600;
+    float tiempoEspera = 0;
     Vector3 dir;
     //------------------raton--------------
     [SerializeField]
@@ -584,6 +585,7 @@ public class Player : MonoBehaviour
             {
                 flecha.gameObject.SetActive(true);
                 flecha.transform.position = transform.position+new Vector3(0, flechaAltura, 0);
+                tiempoEspera = 1;
             }
             if (Input.GetKeyDown(datosSystema.keys["A"]))
             {
@@ -592,9 +594,17 @@ public class Player : MonoBehaviour
                 flecha.gameObject.SetActive(false);
                 control.registraControl();
             }
-            flecha.transform.eulerAngles = new Vector3(-90,
+            if(tiempoEspera < 0)
+            {
+                flecha.transform.eulerAngles = new Vector3(-90,
                                         flecha.transform.eulerAngles.y + velNavGirar * Time.deltaTime,
                                         0);
+            }
+            else
+            {
+                tiempoEspera -= Time.deltaTime;
+            }
+            
             return false;
         }
         else
