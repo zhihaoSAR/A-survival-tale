@@ -26,7 +26,7 @@ public class CanvaJuego : Menu
     {
 
         control = Controlador.control;
-        GetComponent<Canvas>().worldCamera = Camera.main.transform.GetChild(0).GetComponent<Camera>();
+        //GetComponent<Canvas>().worldCamera = Camera.main.transform.GetChild(0).GetComponent<Camera>();
         int tipoControl = control.datosSistema.tipoControl;
         string path = "Indicaciones/";
         if (tipoControl == 0)

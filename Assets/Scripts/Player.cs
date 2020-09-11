@@ -128,7 +128,7 @@ public class Player : MonoBehaviour
         agarrarAve = Animator.StringToHash("agarrarAve");
         activarAve = Animator.StringToHash("activarAve");
         //----------------------------------------------------------------
-        agente.Warp(control.datosJuego.playerPos);
+        //agente.Warp(control.datosJuego.playerPos);
         ActualizarDatos();
         
 
@@ -506,7 +506,7 @@ public class Player : MonoBehaviour
             objeto.finInteractuar();
             Coco coco = objeto as Coco;
             objeto = null;
-            coco.rb.AddForce((transform.up + transform.forward) * 5, ForceMode.Impulse);
+            coco.rb.AddForce((transform.up + transform.forward) * 10, ForceMode.Impulse);
             estado = Estado.PARADO;
             estadoActual = estadoParado;
         }
@@ -521,6 +521,7 @@ public class Player : MonoBehaviour
             objeto = null;
             estado = Estado.PARADO;
             estadoActual = estadoParado;
+            animator.SetBool(agarrarAve, false);
             desactivarSenyales();
             return;
         }
@@ -938,7 +939,7 @@ public class Player : MonoBehaviour
         Vector3 dir = manejadorRaton.posicionPantalla - mainCamera.WorldToScreenPoint(transform.position);
         dir.z = dir.y;
         dir.y = 0;
-        Vector3 objetivo = transform.position + dir;
+        Vector3 objetivo = transform.position + rotacionCamaraXZ*dir;
         transform.LookAt(objetivo);
         flecha.LookAt(objetivo);
         flecha.eulerAngles = new Vector3(90, flecha.eulerAngles.y - 90, 0);
